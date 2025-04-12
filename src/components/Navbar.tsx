@@ -44,8 +44,8 @@ const Navbar = () => {
             <Link to="/#services" className="font-noto text-neutral-700 hover:text-primary transition-colors">서비스</Link>
             <Link to="/#regions" className="font-noto text-neutral-700 hover:text-primary transition-colors">지역별 데스크</Link>
             <Link to="/experts" className="font-noto text-neutral-700 hover:text-primary transition-colors">전문가</Link>
-            <Link to="/#simulator" className="font-noto text-neutral-700 hover:text-primary transition-colors">시뮬레이터</Link>
             <Link to="/insights" className="font-noto text-neutral-700 hover:text-primary transition-colors">인사이트</Link>
+            <Link to="/success-stories" className="font-noto text-neutral-700 hover:text-primary transition-colors">성공 스토리</Link>
           </div>
           <Link 
             to="/#contact"
@@ -73,8 +73,8 @@ const Navbar = () => {
           <Link to="/#services" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">서비스</Link>
           <Link to="/#regions" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">지역별 데스크</Link>
           <Link to="/experts" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">전문가</Link>
-          <Link to="/#simulator" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">시뮬레이터</Link>
           <Link to="/insights" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">인사이트</Link>
+          <Link to="/success-stories" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">성공 스토리</Link>
           <Link 
             to="/#contact"
             className="bg-accent text-white font-pretendard font-medium px-5 py-2 rounded-md text-center"
