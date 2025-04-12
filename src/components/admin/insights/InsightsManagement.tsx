@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, Edit, Trash2, Eye, Plus } from 'lucide-react';
 
-// Mock insights data
+// Updated mock insights data to include 5 insights
 const mockInsights = [
   {
     id: 1,
@@ -43,6 +43,28 @@ const mockInsights = [
     date: '2023-02-20',
     image: 'https://images.unsplash.com/photo-1581360742512-021d5b2157d8?q=80&w=2069&auto=format&fit=crop',
     views: 1560
+  },
+  {
+    id: 4,
+    title: '의료기관 재무 관리의 핵심 지표',
+    excerpt: '의료기관의 건전한 재무 상태를 유지하기 위한 핵심 재무 지표와 관리 방법을 소개합니다.',
+    content: '의료기관의 재무 건전성을 평가하기 위한 핵심 지표로는 1) 수익성 지표, 2) 유동성 지표, 3) 활동성 지표, 4) 안정성 지표가 있으며, 각 지표별 목표 수치와 개선 방법을 제시합니다.',
+    category: 'finance',
+    author: '최재무',
+    date: '2023-03-10',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
+    views: 1120
+  },
+  {
+    id: 5,
+    title: '의료진 채용 및 관리 베스트 프랙티스',
+    excerpt: '효과적인 의료진 채용 전략과 장기적 인력 관리 방안에 대한 가이드를 제공합니다.',
+    content: '의료기관의 성공은 우수한 인력 확보와 유지에 달려있습니다. 채용 과정의 투명성, 지속적인 교육 기회 제공, 공정한 평가 시스템, 적절한 보상체계 구축이 핵심입니다.',
+    category: 'recruitment',
+    author: '정인사',
+    date: '2023-04-05',
+    image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=2070&auto=format&fit=crop',
+    views: 890
   }
 ];
 

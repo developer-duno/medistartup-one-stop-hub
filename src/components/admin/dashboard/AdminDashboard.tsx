@@ -7,8 +7,11 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
 
 const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: string) => void }) => {
+  const { toast } = useToast();
+  
   const stats = [
     { 
       title: '총 전문가', 
@@ -21,13 +24,27 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
       title: '이번 달 상담 신청', 
       value: '24건', 
       change: '+12%', 
-      icon: <MessageSquare className="h-8 w-8 text-secondary" /> 
+      icon: <MessageSquare className="h-8 w-8 text-secondary" />,
+      onClick: () => {
+        toast({
+          title: "상담 신청 관리",
+          description: "상담 신청 관리 기능은 준비 중입니다.",
+          variant: "default",
+        });
+      }
     },
     { 
       title: '페이지 조회수', 
       value: '1,248', 
       change: '+18%', 
-      icon: <Eye className="h-8 w-8 text-accent" /> 
+      icon: <Eye className="h-8 w-8 text-accent" />,
+      onClick: () => {
+        toast({
+          title: "통계 확인",
+          description: "페이지 조회수 상세 통계 기능은 준비 중입니다.",
+          variant: "default",
+        });
+      }
     },
     { 
       title: '성공사례', 
@@ -47,6 +64,14 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
     { title: '성공사례 추가', icon: <Trophy className="h-5 w-5" />, section: 'success' }
   ];
 
+  const handleConsultationDetails = () => {
+    toast({
+      title: "상담 상세정보",
+      description: "상담 상세정보 보기 기능은 준비 중입니다.",
+      variant: "default",
+    });
+  };
+
   return (
     <div>
       <h2 className="font-pretendard font-bold text-2xl mb-6">대시보드</h2>
@@ -55,8 +80,8 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
         {stats.map((stat, index) => (
           <Card 
             key={index} 
-            className={stat.section ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
-            onClick={stat.section ? () => setActiveSection(stat.section) : undefined}
+            className={stat.section || stat.onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
+            onClick={stat.section ? () => setActiveSection(stat.section) : stat.onClick}
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -96,7 +121,18 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
 
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-pretendard font-semibold text-xl">최근 상담 신청</h3>
-        <Button variant="ghost" size="sm" className="text-primary">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-primary"
+          onClick={() => {
+            toast({
+              title: "상담 신청 관리",
+              description: "모든 상담 신청 관리 기능은 준비 중입니다.",
+              variant: "default",
+            });
+          }}
+        >
           모든 상담 보기
           <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
@@ -123,7 +159,7 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
                 <td className="p-4">2023-04-10</td>
                 <td className="p-4"><span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">진행중</span></td>
                 <td className="p-4">
-                  <Button variant="outline" size="sm">상세보기</Button>
+                  <Button variant="outline" size="sm" onClick={handleConsultationDetails}>상세보기</Button>
                 </td>
               </tr>
               <tr className="border-b">
@@ -133,7 +169,7 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
                 <td className="p-4">2023-04-09</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
                 <td className="p-4">
-                  <Button variant="outline" size="sm">상세보기</Button>
+                  <Button variant="outline" size="sm" onClick={handleConsultationDetails}>상세보기</Button>
                 </td>
               </tr>
               <tr>
@@ -143,7 +179,7 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
                 <td className="p-4">2023-04-08</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
                 <td className="p-4">
-                  <Button variant="outline" size="sm">상세보기</Button>
+                  <Button variant="outline" size="sm" onClick={handleConsultationDetails}>상세보기</Button>
                 </td>
               </tr>
             </tbody>
@@ -179,7 +215,19 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
                       <p className="text-sm text-muted-foreground">신규 등록</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm">프로필</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      toast({
+                        title: "전문가 프로필",
+                        description: `${expert} 전문가의 상세 프로필 보기 기능은 준비 중입니다.`,
+                        variant: "default",
+                      });
+                    }}
+                  >
+                    프로필
+                  </Button>
                 </div>
               ))}
             </div>
@@ -214,7 +262,19 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
                     </div>
                     <p className="font-medium line-clamp-1">{insight}</p>
                   </div>
-                  <Button variant="outline" size="sm">보기</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      toast({
+                        title: "인사이트 보기",
+                        description: `${insight.substring(0, 15)}... 인사이트 상세 보기 기능은 준비 중입니다.`,
+                        variant: "default",
+                      });
+                    }}
+                  >
+                    보기
+                  </Button>
                 </div>
               ))}
             </div>
