@@ -4,7 +4,6 @@ import {
   Users, Settings, FileText, BarChart3, 
   MapPin, Trophy, Eye, MessageSquare 
 } from 'lucide-react';
-import { Insight } from '../../insights/types';
 
 export interface Stat {
   title: string; 
@@ -27,6 +26,16 @@ export interface Service {
   consultations: number;
   change: string;
   trend: 'up' | 'down';
+}
+
+export interface Insight {
+  id: number;
+  title: string;
+  category: string;
+  date: string;
+  views: number;
+  image: string;
+  excerpt: string;
 }
 
 export const stats: Stat[] = [
