@@ -9,9 +9,10 @@ import { Badge } from '@/components/ui/badge';
 
 interface ExpertsTableProps {
   experts: Expert[];
+  onEditExpert: (expert: Expert) => void;
 }
 
-const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
+const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) => {
   const { deleteExpert, toggleExpertMainVisibility, updateExpertsOrder } = useExperts();
   const { toast } = useToast();
   
@@ -21,15 +22,6 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
     }
   };
   
-  const handleEdit = (expert: Expert) => {
-    // For now just show a toast, we'll implement the edit form later
-    toast({
-      title: "전문가 수정",
-      description: `${expert.name} 전문가 수정 기능은 준비 중입니다.`,
-      variant: "default",
-    });
-  };
-
   const handleToggleVisibility = (id: number, name: string, currentVisibility: boolean) => {
     toggleExpertMainVisibility(id);
     toast({
@@ -206,7 +198,7 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                       variant="ghost" 
                       size="sm" 
                       className="text-blue-600 hover:text-blue-900"
-                      onClick={() => handleEdit(expert)}
+                      onClick={() => onEditExpert(expert)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

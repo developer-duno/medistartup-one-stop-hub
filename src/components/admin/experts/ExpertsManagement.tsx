@@ -5,15 +5,27 @@ import { Button } from '@/components/ui/button';
 import AddExpertForm from './AddExpertForm';
 import ExpertsTable from './ExpertsTable';
 import { useExperts } from '@/contexts/ExpertsContext';
+import { Expert } from '@/types/expert';
 
 const ExpertsManagement: React.FC = () => {
   const [isAddingExpert, setIsAddingExpert] = useState(false);
+  const [editingExpert, setEditingExpert] = useState<Expert | null>(null);
   const { experts } = useExperts();
   
   const handleExpertAdded = useCallback(() => {
     console.log("Expert added, resetting form state");
     setIsAddingExpert(false);
   }, []);
+
+  const handleEditExpert = (expert: Expert) => {
+    setEditingExpert(expert);
+    setIsAddingExpert(true);
+  };
+
+  const handleCancel = () => {
+    setEditingExpert(null);
+    setIsAddingExpert(false);
+  };
 
   const sortedExperts = [...experts].sort((a, b) => 
     (a.displayOrder !== undefined && b.displayOrder !== undefined) 
@@ -22,7 +34,13 @@ const ExpertsManagement: React.FC = () => {
   );
 
   if (isAddingExpert) {
-    return <AddExpertForm onCancel={() => setIsAddingExpert(false)} onSubmit={handleExpertAdded} />;
+    return (
+      <AddExpertForm 
+        onCancel={handleCancel} 
+        onSubmit={handleExpertAdded}
+        expertToEdit={editingExpert} 
+      />
+    );
   }
   
   return (
@@ -40,7 +58,10 @@ const ExpertsManagement: React.FC = () => {
         </Button>
       </div>
       
-      <ExpertsTable experts={sortedExperts} />
+      <ExpertsTable 
+        experts={sortedExperts} 
+        onEditExpert={handleEditExpert}
+      />
     </>
   );
 };
