@@ -19,6 +19,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
   const { addExpert } = useExperts();
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const form = useForm<NewExpert>({
     defaultValues: {
@@ -62,6 +63,10 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
   };
 
   const handleFormSubmit = (data: NewExpert) => {
+    if (isSubmitting) return; // Prevent duplicate submissions
+    
+    setIsSubmitting(true);
+    
     // Ensure regions and services are included in the submission
     const expertData: NewExpert = {
       ...data,
@@ -69,11 +74,15 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       services: selectedServices
     };
 
+    console.log("Submitting expert data:", expertData);
+
     // Add the expert to our context
     addExpert(expertData);
     
     // Also call the original onSubmit for any additional logic
     onSubmit(expertData);
+    
+    setIsSubmitting(false);
   };
 
   return (

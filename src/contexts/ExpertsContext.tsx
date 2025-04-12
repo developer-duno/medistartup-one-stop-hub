@@ -1,5 +1,4 @@
-
-import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback, useEffect } from 'react';
 import { Expert, NewExpert } from '../types/expert';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -128,6 +127,11 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   const [experts, setExperts] = useState<Expert[]>(initialExperts);
   const { toast } = useToast();
 
+  // Log experts whenever it changes (for debugging)
+  useEffect(() => {
+    console.log("Experts state updated:", experts);
+  }, [experts]);
+
   const addExpert = useCallback((newExpert: NewExpert) => {
     // Ensure regions and services are arrays
     const expertWithArrays: NewExpert = {
@@ -136,54 +140,70 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       services: Array.isArray(newExpert.services) ? newExpert.services : []
     };
 
-    // Create new ID by finding the max ID and adding 1
-    const newId = Math.max(0, ...experts.map(expert => expert.id)) + 1;
-    const expertWithId: Expert = { ...expertWithArrays, id: newId };
-    
-    // Use functional update to ensure we're working with the latest state
-    setExperts(prevExperts => [...prevExperts, expertWithId]);
-    
-    // Display success toast
-    toast({
-      title: "전문가 추가 완료",
-      description: `${newExpert.name} 전문가가 성공적으로 등록되었습니다.`,
-      variant: "default",
-    });
+    setExperts(prevExperts => {
+      // Create new ID by finding the max ID and adding 1
+      const newId = Math.max(0, ...prevExperts.map(expert => expert.id)) + 1;
+      const expertWithId: Expert = { ...expertWithArrays, id: newId };
+      
+      // Use functional update to ensure we're working with the latest state
+      const updatedExperts = [...prevExperts, expertWithId];
+      
+      // Display success toast
+      toast({
+        title: "전문가 추가 완료",
+        description: `${newExpert.name} 전문가가 성공적으로 등록되었습니다.`,
+        variant: "default",
+      });
 
-    console.log("Expert added:", expertWithId);
-    console.log("Updated experts list:", [...experts, expertWithId]);
-  }, [experts, toast]);
+      console.log("Expert added:", expertWithId);
+      console.log("Updated experts list:", updatedExperts);
+      
+      return updatedExperts;
+    });
+  }, [toast]);
 
   const updateExpert = useCallback((updatedExpert: Expert) => {
-    setExperts(prevExperts => 
-      prevExperts.map(expert => 
-        expert.id === updatedExpert.id ? updatedExpert : expert
-      )
-    );
+    // Ensure regions and services are arrays
+    const expertWithArrays: Expert = {
+      ...updatedExpert,
+      regions: Array.isArray(updatedExpert.regions) ? updatedExpert.regions : [],
+      services: Array.isArray(updatedExpert.services) ? updatedExpert.services : []
+    };
     
-    toast({
-      title: "전문가 정보 업데이트",
-      description: `${updatedExpert.name} 전문가 정보가 업데이트되었습니다.`,
-      variant: "default",
+    setExperts(prevExperts => {
+      const updatedExperts = prevExperts.map(expert => 
+        expert.id === expertWithArrays.id ? expertWithArrays : expert
+      );
+      
+      toast({
+        title: "전문가 정보 업데이트",
+        description: `${updatedExpert.name} 전문가 정보가 업데이트되었습니다.`,
+        variant: "default",
+      });
+      
+      return updatedExperts;
     });
   }, [toast]);
 
   const deleteExpert = useCallback((id: number) => {
-    const expertToDelete = experts.find(expert => expert.id === id);
-    
-    setExperts(prevExperts => prevExperts.filter(expert => expert.id !== id));
-    
-    if (expertToDelete) {
-      toast({
-        title: "전문가 삭제 완료",
-        description: `${expertToDelete.name} 전문가가 삭제되었습니다.`,
-        variant: "default",
-      });
+    setExperts(prevExperts => {
+      const expertToDelete = prevExperts.find(expert => expert.id === id);
+      const filteredExperts = prevExperts.filter(expert => expert.id !== id);
       
-      console.log("Expert deleted:", expertToDelete);
-      console.log("Remaining experts:", experts.filter(expert => expert.id !== id));
-    }
-  }, [experts, toast]);
+      if (expertToDelete) {
+        toast({
+          title: "전문가 삭제 완료",
+          description: `${expertToDelete.name} 전문가가 삭제되었��니다.`,
+          variant: "default",
+        });
+        
+        console.log("Expert deleted:", expertToDelete);
+        console.log("Remaining experts:", filteredExperts);
+      }
+      
+      return filteredExperts;
+    });
+  }, [toast]);
 
   const contextValue = {
     experts,

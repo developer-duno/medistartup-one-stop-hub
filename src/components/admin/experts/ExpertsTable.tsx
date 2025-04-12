@@ -76,26 +76,34 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-wrap gap-1">
-                      {expert.regions && expert.regions.map((region) => (
-                        <span 
-                          key={region} 
-                          className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
-                        >
-                          {region}
-                        </span>
-                      ))}
+                      {expert.regions && expert.regions.length > 0 ? (
+                        expert.regions.map((region) => (
+                          <span 
+                            key={region} 
+                            className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
+                          >
+                            {region}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-xs text-gray-500">지역 없음</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-wrap gap-1">
-                      {expert.services && expert.services.map((service) => (
-                        <span 
-                          key={service} 
-                          className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
-                        >
-                          {service}
-                        </span>
-                      ))}
+                      {expert.services && expert.services.length > 0 ? (
+                        expert.services.map((service) => (
+                          <span 
+                            key={service} 
+                            className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
+                          >
+                            {service}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="text-xs text-gray-500">서비스 없음</span>
+                      )}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

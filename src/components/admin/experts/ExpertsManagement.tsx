@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddExpertForm from './AddExpertForm';
@@ -10,9 +10,10 @@ const ExpertsManagement: React.FC = () => {
   const [isAddingExpert, setIsAddingExpert] = useState(false);
   const { experts } = useExperts();
   
-  const handleExpertAdded = () => {
+  const handleExpertAdded = useCallback(() => {
+    console.log("Expert added, resetting form state");
     setIsAddingExpert(false);
-  };
+  }, []);
 
   if (isAddingExpert) {
     return <AddExpertForm onCancel={() => setIsAddingExpert(false)} onSubmit={handleExpertAdded} />;
