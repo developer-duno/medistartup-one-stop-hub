@@ -1,21 +1,18 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users } from 'lucide-react';
-import { ExpertItem } from './dashboardData';
+import { useToast } from '@/components/ui/use-toast';
 
 interface RecentExpertsCardProps {
-  experts: ExpertItem[];
-  onViewAllClick: () => void;
-  onProfileClick: (expertName: string) => void;
+  setActiveSection: (section: string) => void;
 }
 
-const RecentExpertsCard: React.FC<RecentExpertsCardProps> = ({ 
-  experts, 
-  onViewAllClick,
-  onProfileClick
-}) => {
+const RecentExpertsCard: React.FC<RecentExpertsCardProps> = ({ setActiveSection }) => {
+  const { toast } = useToast();
+  const experts = ['윤재호', '한지민', '정서연'];
+
   return (
     <Card>
       <CardHeader>
@@ -25,7 +22,7 @@ const RecentExpertsCard: React.FC<RecentExpertsCardProps> = ({
             variant="ghost" 
             size="sm" 
             className="text-primary"
-            onClick={onViewAllClick}
+            onClick={() => setActiveSection('experts')}
           >
             모두 보기
           </Button>
@@ -40,14 +37,20 @@ const RecentExpertsCard: React.FC<RecentExpertsCardProps> = ({
                   <Users className="h-4 w-4 text-primary" />
                 </div>
                 <div>
-                  <p className="font-medium">{expert.name}</p>
+                  <p className="font-medium">{expert}</p>
                   <p className="text-sm text-muted-foreground">신규 등록</p>
                 </div>
               </div>
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => onProfileClick(expert.name)}
+                onClick={() => {
+                  toast({
+                    title: "전문가 프로필",
+                    description: `${expert} 전문가의 상세 프로필 보기 기능은 준비 중입니다.`,
+                    variant: "default",
+                  });
+                }}
               >
                 프로필
               </Button>

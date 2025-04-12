@@ -1,38 +1,50 @@
 
 import React from 'react';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { StatItem } from './dashboardData';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface StatsCardProps {
-  stat: StatItem;
-  onCardClick: (section: string | undefined) => void;
+  title: string;
+  value: string;
+  change: string;
+  icon: React.ReactNode;
+  onClick?: () => void;
+  section?: string;
+  setActiveSection?: (section: string) => void;
 }
 
-const StatsCard: React.FC<StatsCardProps> = ({ stat, onCardClick }) => {
+const StatsCard: React.FC<StatsCardProps> = ({ 
+  title, 
+  value, 
+  change, 
+  icon, 
+  onClick, 
+  section, 
+  setActiveSection 
+}) => {
   const handleClick = () => {
-    if (stat.section) {
-      onCardClick(stat.section);
-    } else if (stat.onClick) {
-      stat.onClick();
+    if (section && setActiveSection) {
+      setActiveSection(section);
+    } else if (onClick) {
+      onClick();
     }
   };
 
   return (
     <Card 
-      className={stat.section || stat.onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
+      className={section || onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
       onClick={handleClick}
     >
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
-          {stat.title}
+          {title}
         </CardTitle>
-        {stat.icon}
+        {icon}
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{stat.value}</div>
+        <div className="text-2xl font-bold">{value}</div>
         <p className="text-xs text-muted-foreground mt-1">
-          <span className={stat.change.includes('+') ? 'text-green-500' : 'text-red-500'}>
-            {stat.change}
+          <span className={change.includes('+') ? 'text-green-500' : 'text-red-500'}>
+            {change}
           </span> 전월 대비
         </p>
       </CardContent>
