@@ -25,28 +25,30 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
-          <Route path="/services/waste-management" element={<WasteManagement />} />
-          <Route path="/services/location-analysis" element={<LocationAnalysis />} />
-          <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
-          <Route path="/services/design-interior" element={<DesignInterior />} />
-          <Route path="/services/licensing" element={<Licensing />} />
-          <Route path="/services/recruitment" element={<Recruitment />} />
-          <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/expert/:id" element={<ExpertProfile />} />
-          <Route path="/experts" element={<ExpertList />} />
-          <Route path="/success-stories" element={<SuccessStories />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <div className="min-h-screen bg-white text-neutral-900"> {/* 기본 스타일 클래스 추가 */}
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
+            <Route path="/services/waste-management" element={<WasteManagement />} />
+            <Route path="/services/location-analysis" element={<LocationAnalysis />} />
+            <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
+            <Route path="/services/design-interior" element={<DesignInterior />} />
+            <Route path="/services/licensing" element={<Licensing />} />
+            <Route path="/services/recruitment" element={<Recruitment />} />
+            <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/expert/:id" element={<ExpertProfile />} />
+            <Route path="/experts" element={<ExpertList />} />
+            <Route path="/success-stories" element={<SuccessStories />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
     </TooltipProvider>
   </QueryClientProvider>
 );
