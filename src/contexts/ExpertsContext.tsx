@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { ExpertsContextType, ExpertsProviderProps } from './expertsTypes';
 import { useExpertOperations } from './expertsOperations';
 import { initialExperts } from '../data/initialExperts';
@@ -13,9 +13,37 @@ const ExpertsContext = createContext<ExpertsContextType>({
   deleteExpert: () => {},
 });
 
+// Local storage key for experts data
+const EXPERTS_STORAGE_KEY = 'medistartup_experts';
+
 // Provider component
 export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) => {
-  const [experts, setExperts] = useState<Expert[]>(initialExperts);
+  // Initialize state from local storage or use initial data as fallback
+  const [experts, setExperts] = useState<Expert[]>(() => {
+    try {
+      const storedExperts = localStorage.getItem(EXPERTS_STORAGE_KEY);
+      if (storedExperts) {
+        const parsedExperts = JSON.parse(storedExperts);
+        console.log('Loaded experts from local storage:', parsedExperts);
+        return parsedExperts;
+      }
+    } catch (error) {
+      console.error('Error loading experts from local storage:', error);
+    }
+    
+    console.log('Using initial experts data');
+    return initialExperts;
+  });
+  
+  // Save experts to local storage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(EXPERTS_STORAGE_KEY, JSON.stringify(experts));
+      console.log('Saved experts to local storage:', experts);
+    } catch (error) {
+      console.error('Error saving experts to local storage:', error);
+    }
+  }, [experts]);
   
   // Get the operations from our custom hook
   const { addExpert, updateExpert, deleteExpert } = useExpertOperations(setExperts);
