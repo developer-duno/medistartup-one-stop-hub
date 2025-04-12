@@ -13,7 +13,8 @@ export const useExpertOperations = (
     const expertWithArrays: NewExpert = {
       ...newExpert,
       regions: Array.isArray(newExpert.regions) ? newExpert.regions : [],
-      services: Array.isArray(newExpert.services) ? newExpert.services : []
+      services: Array.isArray(newExpert.services) ? newExpert.services : [],
+      certifications: Array.isArray(newExpert.certifications) ? newExpert.certifications : []
     };
 
     setExperts(prevExperts => {
@@ -43,7 +44,8 @@ export const useExpertOperations = (
     const expertWithArrays: Expert = {
       ...updatedExpert,
       regions: Array.isArray(updatedExpert.regions) ? updatedExpert.regions : [],
-      services: Array.isArray(updatedExpert.services) ? updatedExpert.services : []
+      services: Array.isArray(updatedExpert.services) ? updatedExpert.services : [],
+      certifications: Array.isArray(updatedExpert.certifications) ? updatedExpert.certifications : []
     };
     
     setExperts(prevExperts => {

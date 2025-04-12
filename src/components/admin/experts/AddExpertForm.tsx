@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, Save } from 'lucide-react';
+import { X, Save, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -19,6 +19,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
   const { addExpert } = useExperts();
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [certifications, setCertifications] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const form = useForm<NewExpert>({
@@ -30,8 +31,13 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       experience: '',
       projects: '',
       description: '',
+      education: '',
+      achievements: '',
+      contact: '',
+      email: '',
       regions: [],
-      services: []
+      services: [],
+      certifications: []
     }
   });
 
@@ -61,17 +67,36 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       }
     });
   };
+  
+  const addCertificationField = () => {
+    setCertifications([...certifications, '']);
+  };
+  
+  const removeCertificationField = (index: number) => {
+    const updatedCertifications = certifications.filter((_, i) => i !== index);
+    setCertifications(updatedCertifications);
+  };
+  
+  const handleCertificationChange = (index: number, value: string) => {
+    const updatedCertifications = [...certifications];
+    updatedCertifications[index] = value;
+    setCertifications(updatedCertifications);
+  };
 
   const handleFormSubmit = (data: NewExpert) => {
     if (isSubmitting) return; // Prevent duplicate submissions
     
     setIsSubmitting(true);
     
+    // Filter out empty certifications
+    const filteredCertifications = certifications.filter(cert => cert.trim() !== '');
+    
     // Ensure regions and services are included in the submission
     const expertData: NewExpert = {
       ...data,
       regions: selectedRegions,
-      services: selectedServices
+      services: selectedServices,
+      certifications: filteredCertifications
     };
 
     console.log("Submitting expert data:", expertData);
@@ -99,7 +124,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       </div>
       
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4 max-h-[80vh] overflow-y-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -184,6 +209,48 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
                 </FormItem>
               )}
             />
+            
+            <FormField
+              control={form.control}
+              name="education"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>학력</FormLabel>
+                  <FormControl>
+                    <Input placeholder="OO대학교 OO학과 졸업" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="contact"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>연락처 (관리용)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="010-0000-0000" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>이메일 (관리용)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="example@email.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           
           <FormField
@@ -204,6 +271,59 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="achievements"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>주요 성과</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    className="w-full p-2 border border-input rounded-md"
+                    rows={3}
+                    placeholder="주요 성과 및 실적을 입력하세요"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <div>
+            <FormLabel>자격증 및 수료</FormLabel>
+            {certifications.map((cert, index) => (
+              <div key={index} className="flex items-center gap-2 mt-2">
+                <Input
+                  placeholder={`자격증 ${index + 1}`}
+                  value={cert}
+                  onChange={(e) => handleCertificationChange(index, e.target.value)}
+                  className="flex-1"
+                />
+                {index > 0 && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => removeCertificationField(index)}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
+                )}
+                {index === certifications.length - 1 && (
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={addCertificationField}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>

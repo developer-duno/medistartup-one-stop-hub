@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, Calendar, Award, ArrowRight } from 'lucide-react';
+import { Award, ArrowRight } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useExperts } from '@/contexts/ExpertsContext';
@@ -26,7 +26,7 @@ const ExpertsSection = () => {
             <div key={expert.id} className="bg-white rounded-xl shadow-md overflow-hidden group">
               <div className="relative h-60 overflow-hidden">
                 <img 
-                  src={expert.image} 
+                  src={expert.image || "/placeholder.svg"} 
                   alt={expert.name} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -70,27 +70,15 @@ const ExpertsSection = () => {
                   {expert.description}
                 </p>
                 
-                <div className="flex gap-2">
-                  <CustomButton 
-                    variant="outline" 
-                    size="sm"
-                    className="flex-1 flex items-center justify-center gap-1"
-                    asChild
-                  >
-                    <Link to="/contact">
-                      <MessageSquare className="h-4 w-4" />
-                      상담하기
-                    </Link>
-                  </CustomButton>
+                <div className="mt-auto">
                   <CustomButton 
                     variant="primary" 
-                    size="sm"
-                    className="flex-1 flex items-center justify-center gap-1"
+                    className="w-full flex items-center justify-center gap-1"
                     asChild
                   >
                     <Link to={`/expert/${expert.id}`}>
-                      <Calendar className="h-4 w-4" />
                       프로필 보기
+                      <ArrowRight className="h-4 w-4 ml-1" />
                     </Link>
                   </CustomButton>
                 </div>

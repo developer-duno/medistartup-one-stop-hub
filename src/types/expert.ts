@@ -10,6 +10,11 @@ export interface Expert {
   description: string;
   regions: string[];
   services: string[];
+  education?: string;
+  certifications?: string[];
+  contact?: string;
+  email?: string;
+  achievements?: string;
 }
 
 export interface NewExpert extends Omit<Expert, 'id'> {}
