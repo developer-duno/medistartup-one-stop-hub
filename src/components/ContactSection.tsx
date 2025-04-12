@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, MapPin, Phone, Mail, Clock, Users } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from '@/components/ui/use-toast';
 
 const ContactSection = () => {
@@ -62,20 +61,6 @@ const ContactSection = () => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setFormState(prev => ({ ...prev, [name]: checked }));
-  };
-
-  const handleExpertChange = (expertId: number, checked: boolean) => {
-    if (checked) {
-      setFormState(prev => ({
-        ...prev,
-        selectedExperts: [...prev.selectedExperts, experts.find(e => e.id === expertId)]
-      }));
-    } else {
-      setFormState(prev => ({
-        ...prev,
-        selectedExperts: prev.selectedExperts.filter(e => e.id !== expertId)
-      }));
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -241,41 +226,28 @@ const ContactSection = () => {
                     </div>
                   </div>
                   
-                  {/* Expert Selection */}
-                  <div>
-                    <label className="block font-noto text-sm text-neutral-700 mb-2">
-                      상담 희망 전문가 (다중 선택 가능)
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 border border-neutral-300 rounded-md p-3 bg-neutral-50">
-                      {experts.map((expert) => (
-                        <label key={expert.id} className="flex items-center gap-2 p-2 hover:bg-neutral-100 rounded cursor-pointer">
-                          <Checkbox 
-                            checked={formState.selectedExperts.some(e => e.id === expert.id)}
-                            onCheckedChange={(checked) => {
-                              handleExpertChange(expert.id, !!checked);
-                            }}
-                          />
-                          <div>
-                            <p className="text-sm font-medium">{expert.name}</p>
-                            <p className="text-xs text-neutral-500">{expert.service}</p>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                    {formState.selectedExperts.length > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-1">
-                        {formState.selectedExperts.map((expert) => (
-                          <div 
-                            key={expert.id}
-                            className="bg-primary-50 text-primary text-xs px-2 py-1 rounded flex items-center gap-1"
-                          >
-                            <Users className="h-3 w-3" />
-                            {expert.name} ({expert.service})
-                          </div>
-                        ))}
+                  {/* Selected Experts Display */}
+                  {formState.selectedExperts.length > 0 && (
+                    <div>
+                      <label className="block font-noto text-sm text-neutral-700 mb-2">
+                        선택한 상담 전문가
+                      </label>
+                      <div className="border border-neutral-300 rounded-md p-4 bg-neutral-50">
+                        <div className="flex flex-wrap gap-2">
+                          {formState.selectedExperts.map((expert) => (
+                            <div 
+                              key={expert.id}
+                              className="bg-primary-50 text-primary text-sm px-3 py-2 rounded-md flex items-center gap-1.5"
+                            >
+                              <Users className="h-4 w-4" />
+                              <span>{expert.name}</span>
+                              <span className="text-primary-600 text-xs">({expert.service})</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
 
                   <div>
                     <label htmlFor="message" className="block font-noto text-sm text-neutral-700 mb-1">
