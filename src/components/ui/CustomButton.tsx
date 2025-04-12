@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from '@/lib/utils';
 
 interface CustomButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -8,6 +9,7 @@ interface CustomButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   fullWidth?: boolean;
   children: React.ReactNode;
   className?: string;
+  asChild?: boolean;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -16,6 +18,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   size = 'md',
   fullWidth = false,
   className,
+  asChild = false,
   ...props
 }) => {
   const baseStyles = "inline-flex items-center justify-center rounded-md font-pretendard font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-50";
@@ -34,9 +37,11 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   };
 
   const widthStyles = fullWidth ? "w-full" : "";
+  
+  const Comp = asChild ? Slot : "button";
 
   return (
-    <button
+    <Comp
       className={cn(
         baseStyles,
         variantStyles[variant],
@@ -47,7 +52,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       {...props}
     >
       {children}
-    </button>
+    </Comp>
   );
 };
 
