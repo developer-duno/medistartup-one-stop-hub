@@ -103,7 +103,7 @@ export const recentInsights: Insight[] = [
     category: "의료폐기물",
     date: "2025.01.15",
     views: 142,
-    image: "https://images.unsplash.com/photo-1530533718754-001d2668365a?q=80&w=2070&auto=format&fit=crop", 
+    image: "https://images.unsplash.com/photo-1530533718754-001d2668365a?q=80&w=2070&auto=format&fit=crop",
     excerpt: "2025년 시행되는 의료폐기물 관리 강화 정책의 주요 내용과 효율적인 폐기물 관리 시스템 구축 방안을 알아봅니다."
   }
 ];
