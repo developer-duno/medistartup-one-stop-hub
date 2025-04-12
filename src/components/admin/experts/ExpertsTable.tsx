@@ -15,15 +15,9 @@ interface Expert {
 
 interface ExpertsTableProps {
   experts: Expert[];
-  onEdit: (expert: Expert) => void;
-  onDelete: (id: number) => void;
 }
 
-const ExpertsTable: React.FC<ExpertsTableProps> = ({ 
-  experts,
-  onEdit,
-  onDelete 
-}) => {
+const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -93,20 +87,10 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-blue-600 hover:text-blue-900"
-                    onClick={() => onEdit(expert)}
-                  >
+                  <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-900">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-red-600 hover:text-red-900"
-                    onClick={() => onDelete(expert.id)}
-                  >
+                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-900">
                     <Trash className="h-4 w-4" />
                   </Button>
                 </td>

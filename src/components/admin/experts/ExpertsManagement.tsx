@@ -4,9 +4,7 @@ import { UserPlus, Edit, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AddExpertForm from './AddExpertForm';
 import ExpertsTable from './ExpertsTable';
-import { useToast } from '@/components/ui/use-toast';
 
-// Using the same data as in ExpertsSection.tsx for consistency
 const mockExperts = [
   {
     id: 1,
@@ -34,82 +32,15 @@ const mockExperts = [
     image: 'https://images.unsplash.com/photo-1556157382-97eda2f9aa60?q=80&w=2070&auto=format&fit=crop',
     regions: ['서울', '인천', '경기'],
     services: ['설계 및 인테리어']
-  },
-  {
-    id: 4,
-    name: '최민서',
-    role: '인허가 전문가',
-    specialty: '의료기관 인허가 및 행정절차 대행',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop',
-    regions: ['서울', '경기'],
-    services: ['인허가 대행']
-  },
-  {
-    id: 5,
-    name: '정서연',
-    role: '의료인력 채용 전문가',
-    specialty: '병원 맞춤형 인력 구성 및 채용',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
-    regions: ['서울', '경기'],
-    services: ['인력 채용']
-  },
-  {
-    id: 6,
-    name: '강현우',
-    role: '의료 마케팅 전문가',
-    specialty: '디지털 마케팅 및 환자 유치 전략',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop',
-    regions: ['서울', '경기', '인천'],
-    services: ['마케팅 전략']
-  },
-  {
-    id: 7,
-    name: '윤재호',
-    role: '의료기기 컨설턴트',
-    specialty: '진료과목별 최적 장비 구성 및 설치',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop',
-    regions: ['부산', '경남'],
-    services: ['의료기기 구입 및 설치']
-  },
-  {
-    id: 8,
-    name: '한지민',
-    role: '의료폐기물 관리 전문가',
-    specialty: '의료폐기물 처리 및 수납 시스템 구축',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop',
-    regions: ['서울', '경기'],
-    services: ['수납 및 의료폐기물 처리']
   }
 ];
 
 const ExpertsManagement: React.FC = () => {
   const [isAddingExpert, setIsAddingExpert] = useState(false);
-  const [experts, setExperts] = useState(mockExperts);
-  const { toast } = useToast();
   
-  const handleExpertAdded = (newExpert: any) => {
-    setExperts([...experts, { ...newExpert, id: Date.now() }]);
+  const handleExpertAdded = () => {
     setIsAddingExpert(false);
-    toast({
-      title: "전문가가 추가되었습니다.",
-      variant: "default",
-    });
-  };
-
-  const handleDelete = (id: number) => {
-    setExperts(experts.filter(expert => expert.id !== id));
-    toast({
-      title: "전문가가 삭제되었습니다.",
-      variant: "default",
-    });
-  };
-  
-  const handleEdit = (expert: any) => {
-    // Implement edit functionality here
-    toast({
-      title: "전문가 정보를 수정합니다.",
-      variant: "default",
-    });
+    // Here you would typically refresh the experts list
   };
 
   if (isAddingExpert) {
@@ -126,7 +57,7 @@ const ExpertsManagement: React.FC = () => {
         </Button>
       </div>
       
-      <ExpertsTable experts={experts} onEdit={handleEdit} onDelete={handleDelete} />
+      <ExpertsTable experts={mockExperts} />
     </>
   );
 };

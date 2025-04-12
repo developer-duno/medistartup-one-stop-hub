@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Facebook, Instagram, Youtube, ChevronRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -9,12 +8,12 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-6">
+            <a href="/" className="flex items-center gap-2 mb-6">
               <div className="h-9 w-9 rounded-full bg-white flex items-center justify-center">
                 <span className="text-primary font-bold text-lg">M</span>
               </div>
               <span className="text-white font-pretendard font-bold text-xl">MediStartup</span>
-            </Link>
+            </a>
             <p className="font-noto text-neutral-300 mb-6">
               병원창업 전문 컨설팅 기업 메디스타트업은 의사들의 성공적인 개원을 위한 원스탑 솔루션을 제공합니다.
             </p>
@@ -23,8 +22,6 @@ const Footer = () => {
                 href="#" 
                 className="w-9 h-9 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="Facebook"
-                target="_blank" 
-                rel="noopener noreferrer"
               >
                 <Facebook size={18} />
               </a>
@@ -32,8 +29,6 @@ const Footer = () => {
                 href="#" 
                 className="w-9 h-9 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="Instagram"
-                target="_blank" 
-                rel="noopener noreferrer"
               >
                 <Instagram size={18} />
               </a>
@@ -41,8 +36,6 @@ const Footer = () => {
                 href="#" 
                 className="w-9 h-9 rounded-full bg-neutral-700 flex items-center justify-center hover:bg-primary transition-colors"
                 aria-label="YouTube"
-                target="_blank" 
-                rel="noopener noreferrer"
               >
                 <Youtube size={18} />
               </a>
@@ -53,40 +46,40 @@ const Footer = () => {
             <h3 className="font-pretendard font-bold text-lg mb-6">서비스</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/services/location-analysis" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   입지 분석 서비스
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/services/financial-consulting" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   재무 컨설팅
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/services/design-interior" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   설계 및 인테리어
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/services/licensing" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   인허가 대행
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/services/recruitment" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   인력 채용
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/services/marketing-strategy" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   마케팅 전략
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -95,34 +88,34 @@ const Footer = () => {
             <h3 className="font-pretendard font-bold text-lg mb-6">지역별 데스크</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/#regions" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   대전/충남
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#regions" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   서울/경기
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#regions" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   부산/경남
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#regions" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   대구/경북
-                </Link>
+                </a>
               </li>
               <li>
-                <Link to="/#regions" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
+                <a href="#" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
                   <ChevronRight size={16} className="mr-1" />
                   광주/전라
-                </Link>
+                </a>
               </li>
             </ul>
           </div>
@@ -136,11 +129,11 @@ const Footer = () => {
               </li>
               <li className="flex">
                 <span className="font-noto font-medium text-white min-w-[80px]">전화:</span>
-                <a href="tel:042-123-4567" className="font-noto text-neutral-300 hover:text-white transition-colors">042-123-4567</a>
+                <span className="font-noto text-neutral-300">042-123-4567</span>
               </li>
               <li className="flex">
                 <span className="font-noto font-medium text-white min-w-[80px]">이메일:</span>
-                <a href="mailto:contact@medistartup.kr" className="font-noto text-neutral-300 hover:text-white transition-colors">contact@medistartup.kr</a>
+                <span className="font-noto text-neutral-300">contact@medistartup.kr</span>
               </li>
               <li className="flex">
                 <span className="font-noto font-medium text-white min-w-[80px]">상담시간:</span>
@@ -156,15 +149,15 @@ const Footer = () => {
               © 2025 메디스타트업. All rights reserved.
             </p>
             <div className="flex gap-4">
-              <Link to="/terms" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
+              <a href="#" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
                 이용약관
-              </Link>
-              <Link to="/privacy" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
+              </a>
+              <a href="#" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
                 개인정보처리방침
-              </Link>
-              <Link to="/sitemap" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
+              </a>
+              <a href="#" className="font-noto text-sm text-neutral-400 hover:text-white transition-colors">
                 사이트맵
-              </Link>
+              </a>
             </div>
           </div>
         </div>
