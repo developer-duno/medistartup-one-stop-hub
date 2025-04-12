@@ -2,6 +2,16 @@
 import React from 'react';
 import { Edit, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Expert {
   id: number;
@@ -15,9 +25,26 @@ interface Expert {
 
 interface ExpertsTableProps {
   experts: Expert[];
+  onDelete: (id: number) => void;
 }
 
-const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
+const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onDelete }) => {
+  const [deleteId, setDeleteId] = React.useState<number | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+
+  const handleDeleteClick = (id: number) => {
+    setDeleteId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteId !== null) {
+      onDelete(deleteId);
+      setIsDeleteDialogOpen(false);
+      setDeleteId(null);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -90,7 +117,12 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                   <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-900">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-900">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-red-600 hover:text-red-900"
+                    onClick={() => handleDeleteClick(expert.id)}
+                  >
                     <Trash className="h-4 w-4" />
                   </Button>
                 </td>
@@ -99,6 +131,21 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
           </tbody>
         </table>
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>전문가 삭제</AlertDialogTitle>
+            <AlertDialogDescription>
+              정말로 이 전문가를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmDelete} className="bg-red-600 hover:bg-red-700">삭제</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
