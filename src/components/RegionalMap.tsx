@@ -1,17 +1,68 @@
 
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Users } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
+import { Link } from 'react-router-dom';
 
 const RegionalMap = () => {
   const [activeRegion, setActiveRegion] = useState('대전/충남');
 
   const regions = [
-    { id: 'daejeon', name: '대전/충남', x: '60%', y: '40%', manager: '김의사', phone: '042-123-4567', email: 'daejeon@medistartup.kr' },
-    { id: 'seoul', name: '서울/경기', x: '30%', y: '25%', manager: '박컨설턴트', phone: '02-456-7890', email: 'seoul@medistartup.kr' },
-    { id: 'busan', name: '부산/경남', x: '75%', y: '70%', manager: '이닥터', phone: '051-789-0123', email: 'busan@medistartup.kr' },
-    { id: 'daegu', name: '대구/경북', x: '65%', y: '50%', manager: '최원장', phone: '053-234-5678', email: 'daegu@medistartup.kr' },
-    { id: 'gwangju', name: '광주/전라', x: '30%', y: '65%', manager: '정매니저', phone: '062-345-6789', email: 'gwangju@medistartup.kr' }
+    { 
+      id: 'daejeon', 
+      name: '대전/충남', 
+      x: '60%', 
+      y: '40%', 
+      manager: '김의사', 
+      phone: '042-123-4567', 
+      email: 'daejeon@medistartup.kr',
+      expertCount: 5,
+      topServices: ['입지 분석', '재무 컨설팅', '인허가 대행']
+    },
+    { 
+      id: 'seoul', 
+      name: '서울/경기', 
+      x: '30%', 
+      y: '25%', 
+      manager: '박컨설턴트', 
+      phone: '02-456-7890', 
+      email: 'seoul@medistartup.kr',
+      expertCount: 8,
+      topServices: ['설계 및 인테리어', '마케팅 전략', '의료기기 구입 및 설치']
+    },
+    { 
+      id: 'busan', 
+      name: '부산/경남', 
+      x: '75%', 
+      y: '70%', 
+      manager: '이닥터', 
+      phone: '051-789-0123', 
+      email: 'busan@medistartup.kr',
+      expertCount: 4,
+      topServices: ['재무 컨설팅', '인허가 대행', '인력 채용']
+    },
+    { 
+      id: 'daegu', 
+      name: '대구/경북', 
+      x: '65%', 
+      y: '50%', 
+      manager: '최원장', 
+      phone: '053-234-5678', 
+      email: 'daegu@medistartup.kr',
+      expertCount: 3,
+      topServices: ['입지 분석', '마케팅 전략', '의료기기 구입 및 설치']
+    },
+    { 
+      id: 'gwangju', 
+      name: '광주/전라', 
+      x: '30%', 
+      y: '65%', 
+      manager: '정매니저', 
+      phone: '062-345-6789', 
+      email: 'gwangju@medistartup.kr',
+      expertCount: 6,
+      topServices: ['설계 및 인테리어', '인력 채용', '수납 및 의료폐기물 처리']
+    }
   ];
 
   const getActiveRegion = () => {
@@ -23,17 +74,16 @@ const RegionalMap = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
-            지역별 <span className="text-primary">전담 데스크</span> 운영
+            지역별 <span className="text-primary">전문가 네트워크</span>
           </h2>
           <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
-            각 지역 특성과 의료 환경을 고려한 맞춤형 서비스를 제공합니다. 지역 특화 네트워크를 활용하여 보다 빠르고 효과적인 병원창업을 도와드립니다.
+            각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다. 지역에 특화된 전문지식을 바탕으로 보다 효과적인 병원창업을 도와드립니다.
           </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
             <div className="relative bg-white rounded-xl shadow-md p-2 h-[400px] md:h-[500px]">
-              {/* Map of Korea (simplified) */}
               <svg 
                 viewBox="0 0 500 600" 
                 className="w-full h-full"
@@ -46,7 +96,6 @@ const RegionalMap = () => {
                   strokeWidth="2"
                 />
 
-                {/* Region markers */}
                 {regions.map((region) => (
                   <g key={region.id} onClick={() => setActiveRegion(region.name)}>
                     <circle 
@@ -93,10 +142,10 @@ const RegionalMap = () => {
                   </div>
                   <div>
                     <h3 className="font-pretendard font-bold text-2xl text-neutral-900">
-                      {getActiveRegion()?.name} 지역 데스크
+                      {getActiveRegion()?.name} 지역
                     </h3>
                     <p className="font-noto text-neutral-500">
-                      {getActiveRegion()?.name} 지역 전담 컨설팅팀
+                      지역 전문가 네트워크
                     </p>
                   </div>
                 </div>
@@ -104,7 +153,7 @@ const RegionalMap = () => {
                 <div className="space-y-6 mb-8">
                   <div className="bg-neutral-50 rounded-lg p-4">
                     <p className="font-noto font-medium text-neutral-800 mb-1">
-                      담당 컨설턴트
+                      담당 총괄 매니저
                     </p>
                     <p className="font-pretendard font-bold text-xl text-primary">
                       {getActiveRegion()?.manager}
@@ -124,6 +173,28 @@ const RegionalMap = () => {
                         {getActiveRegion()?.email}
                       </span>
                     </div>
+                    <div className="flex items-center gap-3">
+                      <Users className="h-5 w-5 text-primary" />
+                      <span className="font-noto text-neutral-700">
+                        지역 전문가 {getActiveRegion()?.expertCount}명
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="font-noto font-medium text-neutral-800">
+                      주요 서비스 분야
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {getActiveRegion()?.topServices.map((service, index) => (
+                        <span 
+                          key={index}
+                          className="inline-flex items-center rounded-full bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-700"
+                        >
+                          {service}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="pt-2">
@@ -141,11 +212,15 @@ const RegionalMap = () => {
                 </div>
 
                 <div className="flex gap-3 mt-6">
-                  <CustomButton variant="primary" className="flex-1">
-                    상담 예약
+                  <CustomButton variant="primary" className="flex-1" asChild>
+                    <Link to={`/experts?region=${getActiveRegion()?.name}`}>
+                      지역 전문가 보기
+                    </Link>
                   </CustomButton>
-                  <CustomButton variant="outline" className="flex-1">
-                    성공사례 보기
+                  <CustomButton variant="outline" className="flex-1" asChild>
+                    <Link to="/success-stories">
+                      지역 성공사례
+                    </Link>
                   </CustomButton>
                 </div>
               </div>

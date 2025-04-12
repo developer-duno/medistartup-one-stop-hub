@@ -25,6 +25,21 @@ interface ServiceDetailProps {
   }[];
 }
 
+const getServiceUrlName = (title: string): string => {
+  const serviceMap: Record<string, string> = {
+    '입지 분석': 'location-analysis',
+    '재무 컨설팅': 'financial-consulting',
+    '설계 및 인테리어': 'design-interior',
+    '인허가 대행': 'licensing',
+    '인력 채용': 'recruitment',
+    '마케팅 전략': 'marketing-strategy',
+    '의료기기 구입 및 설치': 'medical-equipment',
+    '수납 및 의료폐기물 처리': 'waste-management'
+  };
+  
+  return serviceMap[title] || '';
+};
+
 const ServiceDetail: React.FC<ServiceDetailProps> = ({
   title,
   description,
@@ -35,6 +50,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
   process,
   faqs,
 }) => {
+  const serviceUrlName = getServiceUrlName(title);
+
   return (
     <div className="min-h-screen bg-white">
       <div className={`bg-gradient-to-r ${color} py-16 md:py-24`}>
@@ -141,8 +158,14 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                 ))}
               </ul>
               <div className="space-y-3">
-                <CustomButton variant="primary" fullWidth>
-                  무료 상담 신청하기
+                <CustomButton 
+                  variant="primary" 
+                  fullWidth 
+                  asChild
+                >
+                  <Link to={`/experts?service=${serviceUrlName}`}>
+                    {title} 전문가 만나기
+                  </Link>
                 </CustomButton>
                 <CustomButton variant="outline" fullWidth>
                   서비스 브로셔 다운로드
