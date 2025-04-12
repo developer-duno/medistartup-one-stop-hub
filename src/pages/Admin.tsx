@@ -8,20 +8,9 @@ import SimulatorManagement from '@/components/admin/simulator/SimulatorManagemen
 import AdminDashboard from '@/components/admin/dashboard/AdminDashboard';
 import RegionsManagement from '@/components/admin/regions/RegionsManagement';
 import SuccessStoriesManagement from '@/components/admin/success/SuccessStoriesManagement';
-import { useToast } from '@/components/ui/use-toast';
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
-  const { toast } = useToast();
-
-  // Show toast notification when the admin page is first loaded
-  React.useEffect(() => {
-    toast({
-      title: "관리자 대시보드",
-      description: "모든 섹션이 연동되어 실제 관리 가능합니다.",
-      variant: "default",
-    });
-  }, []);
 
   return (
     <AdminLayout activeSection={activeSection} setActiveSection={setActiveSection}>
