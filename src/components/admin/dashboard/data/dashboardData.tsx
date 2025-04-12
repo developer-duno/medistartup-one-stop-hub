@@ -1,9 +1,9 @@
 
+import React from 'react';
 import { 
   Users, Settings, FileText, BarChart3, 
   MapPin, Trophy, Eye, MessageSquare 
 } from 'lucide-react';
-import React from 'react';
 
 export interface Stat {
   title: string; 
