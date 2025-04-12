@@ -1,9 +1,23 @@
 
-import React, { useState } from 'react';
-import { Check, MapPin, Phone, Mail, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Check, MapPin, Phone, Mail, Clock, Users } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from '@/components/ui/use-toast';
 
 const ContactSection = () => {
+  // Expert data - in a real app, this would come from a central data store or API
+  const experts = [
+    { id: 1, name: '김태호', service: '재무 컨설팅' },
+    { id: 2, name: '박지연', service: '입지 분석' },
+    { id: 3, name: '이준호', service: '설계 및 인테리어' },
+    { id: 4, name: '최민서', service: '인허가 대행' },
+    { id: 5, name: '정서연', service: '인력 채용' },
+    { id: 6, name: '강현우', service: '마케팅 전략' },
+    { id: 7, name: '윤재호', service: '의료기기 구입 및 설치' },
+    { id: 8, name: '한지민', service: '수납 및 의료폐기물 처리' }
+  ];
+
   const [formState, setFormState] = useState({
     name: '',
     phone: '',
@@ -11,10 +25,34 @@ const ContactSection = () => {
     region: '',
     specialty: '',
     message: '',
-    consent: false
+    consent: false,
+    selectedExperts: []
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [selectedExpertIds, setSelectedExpertIds] = useState([]);
+
+  // Detect pre-selected experts from URL params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const expertIds = urlParams.get('experts');
+    
+    if (expertIds) {
+      const ids = expertIds.split(',').map(Number);
+      setSelectedExpertIds(ids);
+    }
+  }, []);
+
+  // Get expert objects from IDs
+  useEffect(() => {
+    if (selectedExpertIds.length > 0) {
+      const selectedExperts = experts.filter(expert => selectedExpertIds.includes(expert.id));
+      setFormState(prev => ({
+        ...prev,
+        selectedExperts: selectedExperts
+      }));
+    }
+  }, [selectedExpertIds]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -26,10 +64,32 @@ const ContactSection = () => {
     setFormState(prev => ({ ...prev, [name]: checked }));
   };
 
+  const handleExpertChange = (expertId: number, checked: boolean) => {
+    if (checked) {
+      setFormState(prev => ({
+        ...prev,
+        selectedExperts: [...prev.selectedExperts, experts.find(e => e.id === expertId)]
+      }));
+    } else {
+      setFormState(prev => ({
+        ...prev,
+        selectedExperts: prev.selectedExperts.filter(e => e.id !== expertId)
+      }));
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     // Here you'd typically send the form data to your backend
     console.log('Form submitted:', formState);
+    
+    // Show success message
+    toast({
+      title: "상담 신청이 완료되었습니다",
+      description: "담당 컨설턴트가 영업일 기준 1일 이내에 연락드릴 예정입니다.",
+    });
+    
     setSubmitted(true);
     
     // Reset form after 3 seconds
@@ -42,8 +102,10 @@ const ContactSection = () => {
         region: '',
         specialty: '',
         message: '',
-        consent: false
+        consent: false,
+        selectedExperts: []
       });
+      setSelectedExpertIds([]);
     }, 3000);
   };
 
@@ -177,6 +239,42 @@ const ContactSection = () => {
                         <option value="기타">기타</option>
                       </select>
                     </div>
+                  </div>
+                  
+                  {/* Expert Selection */}
+                  <div>
+                    <label className="block font-noto text-sm text-neutral-700 mb-2">
+                      상담 희망 전문가 (다중 선택 가능)
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 border border-neutral-300 rounded-md p-3 bg-neutral-50">
+                      {experts.map((expert) => (
+                        <label key={expert.id} className="flex items-center gap-2 p-2 hover:bg-neutral-100 rounded cursor-pointer">
+                          <Checkbox 
+                            checked={formState.selectedExperts.some(e => e.id === expert.id)}
+                            onCheckedChange={(checked) => {
+                              handleExpertChange(expert.id, !!checked);
+                            }}
+                          />
+                          <div>
+                            <p className="text-sm font-medium">{expert.name}</p>
+                            <p className="text-xs text-neutral-500">{expert.service}</p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                    {formState.selectedExperts.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {formState.selectedExperts.map((expert) => (
+                          <div 
+                            key={expert.id}
+                            className="bg-primary-50 text-primary text-xs px-2 py-1 rounded flex items-center gap-1"
+                          >
+                            <Users className="h-3 w-3" />
+                            {expert.name} ({expert.service})
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <div>

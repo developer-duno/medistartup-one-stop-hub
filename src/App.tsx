@@ -10,6 +10,9 @@ import MedicalEquipment from "./pages/services/MedicalEquipment";
 import WasteManagement from "./pages/services/WasteManagement";
 import Admin from "./pages/Admin";
 import Insights from "./pages/Insights";
+import ExpertProfile from "./pages/ExpertProfile";
+import ExpertList from "./pages/ExpertList";
+import SuccessStories from "./pages/SuccessStories";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +28,9 @@ const App = () => (
           <Route path="/services/waste-management" element={<WasteManagement />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/expert/:id" element={<ExpertProfile />} />
+          <Route path="/experts" element={<ExpertList />} />
+          <Route path="/success-stories" element={<SuccessStories />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
