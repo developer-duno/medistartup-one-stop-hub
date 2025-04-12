@@ -1,11 +1,15 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { Play, ArrowRight, CheckCircle, Map, PieChart, Clock, Users, Building, Calendar } from 'lucide-react';
 import CustomButton from '../components/ui/CustomButton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { MapPin, TrendingUp } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const SuccessStories = () => {
   const storyCategories = ["전체", "내과", "외과", "정형외과", "피부과", "치과", "한의원"];
