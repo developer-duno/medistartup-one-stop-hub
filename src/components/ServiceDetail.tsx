@@ -40,6 +40,21 @@ const getServiceUrlName = (title: string): string => {
   return serviceMap[title] || '';
 };
 
+const getServiceFilterName = (title: string): string => {
+  const serviceMap: Record<string, string> = {
+    '입지 분석': '입지 분석',
+    '재무 컨설팅': '재무 컨설팅',
+    '설계 및 인테리어': '설계 및 인테리어',
+    '인허가 대행': '인허가 대행',
+    '인력 채용': '인력 채용',
+    '마케팅 전략': '마케팅 전략',
+    '의료기기 구입 및 설치': '의료장비',
+    '수납 및 의료폐기물 처리': '의료폐기물'
+  };
+  
+  return serviceMap[title] || '';
+};
+
 const ServiceDetail: React.FC<ServiceDetailProps> = ({
   title,
   description,
@@ -51,6 +66,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
   faqs,
 }) => {
   const serviceUrlName = getServiceUrlName(title);
+  const serviceFilterName = getServiceFilterName(title);
 
   return (
     <div className="min-h-screen bg-white">
@@ -163,8 +179,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                   fullWidth 
                   asChild
                 >
-                  <Link to={`/experts?service=${serviceUrlName}`}>
-                    {title} 전문가 만나기
+                  <Link to={`/experts?service=${serviceFilterName}`}>
+                    {title} 전문가 상담 신청
                   </Link>
                 </CustomButton>
                 <CustomButton variant="outline" fullWidth>
