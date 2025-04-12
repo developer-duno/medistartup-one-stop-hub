@@ -35,18 +35,15 @@ const ExpertList = () => {
   
   const regions = ["서울", "경기", "인천", "대전", "충남", "충북", "부산", "대구", "광주", "제주"];
 
-  // Filter experts based on selected filters
   useEffect(() => {
     let results = [...expertsData];
     
-    // Filter by service category if not "all"
     if (activeCategory !== "all") {
       results = results.filter(expert => 
         expert.services.some(service => service === activeCategory)
       );
     }
     
-    // Filter by search term
     if (filters.search) {
       const searchLower = filters.search.toLowerCase();
       results = results.filter(expert => 
@@ -56,14 +53,12 @@ const ExpertList = () => {
       );
     }
     
-    // Filter by regions
     if (filters.regions.length > 0) {
       results = results.filter(expert => 
         expert.regions.some(region => filters.regions.includes(region))
       );
     }
     
-    // Filter by services
     if (filters.services.length > 0) {
       results = results.filter(expert => 
         expert.services.some(service => filters.services.includes(service))
@@ -73,26 +68,22 @@ const ExpertList = () => {
     setFilteredExperts(results);
   }, [filters, activeCategory, expertsData]);
   
-  // Initialize filtered experts
   useEffect(() => {
     setFilteredExperts(expertsData);
   }, [expertsData]);
 
   const handleExpertSelect = (expertId) => {
     setSelectedExperts(prev => {
-      // If already selected, remove it
       if (prev.includes(expertId)) {
         return prev.filter(id => id !== expertId);
       }
       
-      // If not selected and less than 3 experts selected, add it
       if (prev.length < 3) {
         return [...prev, expertId];
       }
       
-      // If already 3 experts selected, replace the oldest one
       const newSelected = [...prev];
-      newSelected.shift(); // Remove the first (oldest) item
+      newSelected.shift();
       newSelected.push(expertId);
       return newSelected;
     });
@@ -269,7 +260,6 @@ const ExpertList = () => {
           </div>
         </div>
 
-        {/* Mobile Compare Info Bar */}
         {selectedExperts.length > 0 && (
           <div className="md:hidden sticky top-0 z-10 bg-primary text-white p-4 mb-6 rounded-lg shadow-md">
             <div className="flex justify-between items-center">
@@ -286,7 +276,6 @@ const ExpertList = () => {
           </div>
         )}
 
-        {/* Grid View */}
         {viewMode === "grid" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredExperts.length > 0 ? (
@@ -308,7 +297,6 @@ const ExpertList = () => {
                       />
                     </div>
                     
-                    {/* Selection checkbox */}
                     <div className="absolute top-3 right-3">
                       <button
                         onClick={() => handleExpertSelect(expert.id)}
@@ -411,7 +399,6 @@ const ExpertList = () => {
           </div>
         )}
 
-        {/* Compare View */}
         {viewMode === "compare" && (
           <div>
             {selectedExperts.length >= 2 ? (
