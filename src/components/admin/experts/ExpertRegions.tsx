@@ -12,13 +12,12 @@ const ExpertRegions: React.FC<ExpertRegionsProps> = ({ selectedRegions, setSelec
   const regionOptions = ['서울', '경기', '인천', '대전', '충남', '충북', '부산', '대구', '광주', '제주'];
 
   const handleRegionToggle = (region: string) => {
-    setSelectedRegions(prev => {
-      if (prev.includes(region)) {
-        return prev.filter(r => r !== region);
-      } else {
-        return [...prev, region];
-      }
-    });
+    // Create a new array instead of using a callback function
+    if (selectedRegions.includes(region)) {
+      setSelectedRegions(selectedRegions.filter(r => r !== region));
+    } else {
+      setSelectedRegions([...selectedRegions, region]);
+    }
   };
 
   return (

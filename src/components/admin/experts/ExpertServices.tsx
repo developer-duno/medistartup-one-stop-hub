@@ -15,13 +15,12 @@ const ExpertServices: React.FC<ExpertServicesProps> = ({ selectedServices, setSe
   ];
 
   const handleServiceToggle = (service: string) => {
-    setSelectedServices(prev => {
-      if (prev.includes(service)) {
-        return prev.filter(s => s !== service);
-      } else {
-        return [...prev, service];
-      }
-    });
+    // Create a new array instead of using a callback function
+    if (selectedServices.includes(service)) {
+      setSelectedServices(selectedServices.filter(s => s !== service));
+    } else {
+      setSelectedServices([...selectedServices, service]);
+    }
   };
 
   return (
