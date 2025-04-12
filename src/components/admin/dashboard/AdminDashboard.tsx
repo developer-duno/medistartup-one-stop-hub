@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Users, Settings, FileText, BarChart3, 
@@ -253,7 +252,10 @@ const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: stri
               {[
                 '2023년 의료기관 개원 트렌드 분석',
                 '성공적인 의원 마케팅 전략 5가지',
-                '의료기관 인허가 절차 간소화 가이드'
+                '의료기관 인허가 절차 간소화 가이드',
+                '의료기관 재무 관리의 핵심 지표',
+                '의료진 채용 및 관리 베스트 프랙티스',
+                '최신 의료장비 도입 가이드 - ROI를 높이는 선택'
               ].map((insight, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">

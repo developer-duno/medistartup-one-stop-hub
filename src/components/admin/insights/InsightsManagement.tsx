@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileText, Edit, Trash2, Eye, Plus } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
 
-// Updated mock insights data to include 5 insights
+// Updated mock insights data to include 6 insights - synchronized with homepage
 const mockInsights = [
   {
     id: 1,
@@ -65,6 +66,17 @@ const mockInsights = [
     date: '2023-04-05',
     image: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?q=80&w=2070&auto=format&fit=crop',
     views: 890
+  },
+  {
+    id: 6,
+    title: '최신 의료장비 도입 가이드 - ROI를 높이는 선택',
+    excerpt: '의료기관에 새로운 장비를 도입할 때 고려해야 할 요소와 투자 대비 수익을 최대화하는 방법을 안내합니다.',
+    content: '의료장비 도입 시 1) 수요 분석, 2) 비용 대비 효과, 3) 유지보수 계획, 4) 사용자 교육, 5) 보험 수가 검토가 필수적입니다. 장비별 특성과 진료과목에 따른 맞춤형 선택 방법을 제시합니다.',
+    category: 'equipment',
+    author: '강장비',
+    date: '2023-03-28',
+    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=2070&auto=format&fit=crop',
+    views: 760
   }
 ];
 
@@ -73,6 +85,7 @@ const InsightsManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('list');
   const [editingInsight, setEditingInsight] = useState<any>(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const { toast } = useToast();
 
   const filteredInsights = activeCategory === 'all' 
     ? insights 
@@ -117,10 +130,30 @@ const InsightsManagement: React.FC = () => {
     setInsights(updatedInsights);
     setEditingInsight(null);
     setActiveTab('list');
+    
+    toast({
+      title: "인사이트 저장 완료",
+      description: "인사이트가 성공적으로 저장되었습니다.",
+      variant: "default",
+    });
   };
 
   const handleDeleteInsight = (id: number) => {
     setInsights(insights.filter(insight => insight.id !== id));
+    
+    toast({
+      title: "인사이트 삭제 완료",
+      description: "인사이트가 성공적으로 삭제되었습니다.",
+      variant: "default",
+    });
+  };
+
+  const handleViewInsight = (insight: any) => {
+    toast({
+      title: insight.title,
+      description: "인사이트 상세 보기 기능은 준비 중입니다.",
+      variant: "default",
+    });
   };
 
   return (
@@ -144,7 +177,7 @@ const InsightsManagement: React.FC = () => {
         </TabsList>
 
         <TabsContent value="list">
-          <div className="flex gap-4 mb-6">
+          <div className="flex gap-4 mb-6 flex-wrap">
             <Button 
               variant={activeCategory === 'all' ? "default" : "outline"} 
               onClick={() => setActiveCategory('all')}
@@ -174,6 +207,18 @@ const InsightsManagement: React.FC = () => {
               onClick={() => setActiveCategory('finance')}
             >
               재무
+            </Button>
+            <Button 
+              variant={activeCategory === 'recruitment' ? "default" : "outline"} 
+              onClick={() => setActiveCategory('recruitment')}
+            >
+              인력채용
+            </Button>
+            <Button 
+              variant={activeCategory === 'equipment' ? "default" : "outline"} 
+              onClick={() => setActiveCategory('equipment')}
+            >
+              의료장비
             </Button>
           </div>
 
@@ -206,12 +251,14 @@ const InsightsManagement: React.FC = () => {
                       {insight.category === 'marketing' && '마케팅'}
                       {insight.category === 'licensing' && '인허가'}
                       {insight.category === 'finance' && '재무'}
+                      {insight.category === 'recruitment' && '인력채용'}
+                      {insight.category === 'equipment' && '의료장비'}
                     </span>
                     <span>조회수: {insight.views}</span>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between gap-2">
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button variant="outline" size="sm" className="flex-1" onClick={() => handleViewInsight(insight)}>
                     <Eye className="h-4 w-4 mr-1" />
                     보기
                   </Button>
@@ -281,6 +328,8 @@ const InsightsManagement: React.FC = () => {
                           <SelectItem value="marketing">마케팅</SelectItem>
                           <SelectItem value="licensing">인허가</SelectItem>
                           <SelectItem value="finance">재무</SelectItem>
+                          <SelectItem value="recruitment">인력채용</SelectItem>
+                          <SelectItem value="equipment">의료장비</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
