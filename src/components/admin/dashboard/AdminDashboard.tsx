@@ -73,6 +73,20 @@ const AdminDashboard = () => {
       category: "입지 분석",
       date: "2025.02.10",
       views: 189
+    },
+    {
+      id: 4,
+      title: "의료기기 구입 최적화 가이드 - 비용절감과 효율성 향상 전략",
+      category: "의료기기",
+      date: "2025.01.25",
+      views: 167
+    },
+    {
+      id: 5,
+      title: "병원 폐기물 관리의 새로운 규제와 효과적인 대응 방법",
+      category: "의료폐기물",
+      date: "2025.01.15",
+      views: 142
     }
   ];
   
@@ -161,11 +175,9 @@ const AdminDashboard = () => {
         <div>
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-pretendard font-semibold text-xl">최근 인사이트</h3>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/admin?section=insights">
-                모두 보기
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Link>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin?section=insights')}>
+              모두 보기
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
           <Card>
@@ -197,11 +209,9 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
               <div className="p-4">
-                <Button variant="outline" size="sm" className="w-full" asChild>
-                  <Link to="/admin?section=insights" className="flex items-center justify-center">
-                    <Plus className="h-4 w-4 mr-2" />
-                    인사이트 추가하기
-                  </Link>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => navigate('/admin?section=insights')}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  인사이트 추가하기
                 </Button>
               </div>
             </CardContent>
@@ -211,11 +221,9 @@ const AdminDashboard = () => {
         <div>
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-pretendard font-semibold text-xl">인기 서비스</h3>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/admin?section=services">
-                모두 보기
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Link>
+            <Button variant="ghost" size="sm" onClick={() => navigate('/admin?section=services')}>
+              모두 보기
+              <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
           <Card>
@@ -244,11 +252,9 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
               <div className="p-4">
-                <Button variant="outline" size="sm" className="w-full" asChild>
-                  <Link to="/admin?section=simulator" className="flex items-center justify-center">
-                    <BarChart3 className="h-4 w-4 mr-2" />
-                    시뮬레이터 관리하기
-                  </Link>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => navigate('/admin?section=simulator')}>
+                  <BarChart3 className="h-4 w-4 mr-2" />
+                  시뮬레이터 관리하기
                 </Button>
               </div>
             </CardContent>
@@ -275,7 +281,7 @@ const AdminDashboard = () => {
                 <td className="p-4">김의사</td>
                 <td className="p-4">010-1234-5678</td>
                 <td className="p-4">입지 분석</td>
-                <td className="p-4">2023-04-10</td>
+                <td className="p-4">2025-04-10</td>
                 <td className="p-4"><span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">진행중</span></td>
                 <td className="p-4 text-right">
                   <Button variant="ghost" size="sm">상세보기</Button>
@@ -285,7 +291,7 @@ const AdminDashboard = () => {
                 <td className="p-4">이원장</td>
                 <td className="p-4">010-9876-5432</td>
                 <td className="p-4">재무 컨설팅</td>
-                <td className="p-4">2023-04-09</td>
+                <td className="p-4">2025-04-09</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
                 <td className="p-4 text-right">
                   <Button variant="ghost" size="sm">상세보기</Button>
@@ -295,7 +301,7 @@ const AdminDashboard = () => {
                 <td className="p-4">박의사</td>
                 <td className="p-4">010-5555-1234</td>
                 <td className="p-4">인허가 대행</td>
-                <td className="p-4">2023-04-08</td>
+                <td className="p-4">2025-04-08</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
                 <td className="p-4 text-right">
                   <Button variant="ghost" size="sm">상세보기</Button>
@@ -305,7 +311,7 @@ const AdminDashboard = () => {
                 <td className="p-4">최치과</td>
                 <td className="p-4">010-2222-3333</td>
                 <td className="p-4">설계 및 인테리어</td>
-                <td className="p-4">2023-04-07</td>
+                <td className="p-4">2025-04-07</td>
                 <td className="p-4"><span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">배정 필요</span></td>
                 <td className="p-4 text-right">
                   <Button variant="ghost" size="sm">상세보기</Button>

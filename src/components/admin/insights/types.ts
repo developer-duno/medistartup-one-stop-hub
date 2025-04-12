@@ -7,4 +7,5 @@ export interface Insight {
   image: string;
   excerpt: string;
   content?: string;
+  views?: number;
 }
