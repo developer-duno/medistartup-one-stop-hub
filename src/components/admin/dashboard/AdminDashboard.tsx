@@ -3,7 +3,6 @@ import React from 'react';
 import { getStatsData, quickLinksData } from './dashboardData';
 import DashboardStats from './DashboardStats';
 import QuickLinks from './QuickLinks';
-import RecentConsultations from './RecentConsultations';
 import RecentItems from './RecentItems';
 import { useExperts } from '@/contexts/ExpertsContext';
 
@@ -29,8 +28,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ setActiveSection }) => 
         links={quickLinksData}
         setActiveSection={setActiveSection} 
       />
-
-      <RecentConsultations />
       
       <RecentItems setActiveSection={setActiveSection} />
     </div>

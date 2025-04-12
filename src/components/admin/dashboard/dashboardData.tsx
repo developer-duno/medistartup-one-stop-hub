@@ -2,7 +2,7 @@
 import React from 'react';
 import { 
   Users, Settings, FileText, BarChart3, 
-  MapPin, Trophy, Eye, MessageSquare 
+  MapPin, Trophy, Eye
 } from 'lucide-react';
 import { StatItem, QuickLinkItem } from './dashboardTypes';
 
@@ -14,16 +14,6 @@ export const getStatsData = (expertsCount: number): StatItem[] => [
     icon: <Users className="h-8 w-8 text-primary" />,
     section: 'experts',
     dynamicData: true
-  },
-  { 
-    title: '이번 달 상담 신청', 
-    value: '24건', 
-    change: '+12%', 
-    icon: <MessageSquare className="h-8 w-8 text-secondary" />,
-    toastMessage: {
-      title: "상담 신청 관리",
-      description: "상담 신청 관리 기능은 준비 중입니다."
-    }
   },
   { 
     title: '페이지 조회수', 
