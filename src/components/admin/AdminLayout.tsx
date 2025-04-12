@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Lock, Home, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AdminSidebar from './AdminSidebar';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
