@@ -2,6 +2,7 @@
 import React from 'react';
 import { FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 
 interface ExpertServicesProps {
   selectedServices: string[];
@@ -34,10 +35,23 @@ const ExpertServices: React.FC<ExpertServicesProps> = ({ selectedServices, setSe
               checked={selectedServices.includes(service)}
               onCheckedChange={() => handleServiceToggle(service)}
             />
-            <span className="text-sm">{service}</span>
+            <div className="flex items-center">
+              <span className="text-sm">{service}</span>
+              {selectedServices.includes(service) && (
+                <Badge className="ml-2 text-xs bg-green-100 text-green-800 hover:bg-green-200">선택됨</Badge>
+              )}
+            </div>
           </label>
         ))}
       </div>
+      
+      {selectedServices.length > 0 && (
+        <div className="mt-3 p-2 bg-blue-50 rounded-md">
+          <p className="text-xs text-blue-700">
+            선택된 서비스: <span className="font-medium">{selectedServices.length}개</span>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

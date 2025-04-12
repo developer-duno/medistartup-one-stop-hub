@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
 import { useToast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 interface ExpertsTableProps {
   experts: Expert[];
@@ -61,12 +62,17 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                       <div className="flex-shrink-0 h-10 w-10">
                         <img 
                           className="h-10 w-10 rounded-full object-cover" 
-                          src={expert.image} 
+                          src={expert.image || "/placeholder.svg"} 
                           alt={expert.name} 
                         />
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-gray-900">{expert.name}</div>
+                        <div className="flex items-center">
+                          <div className="text-sm font-medium text-gray-900">{expert.name}</div>
+                          {expert.isRegionalManager && (
+                            <Badge className="ml-2 bg-primary/10 text-primary border-primary/20 text-xs">총괄</Badge>
+                          )}
+                        </div>
                         <div className="text-sm text-gray-500">{expert.specialty}</div>
                       </div>
                     </div>
@@ -80,9 +86,16 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                         expert.regions.map((region) => (
                           <span 
                             key={region} 
-                            className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
+                            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                              expert.isRegionalManager && expert.managedRegions?.includes(region) 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-blue-50 text-blue-700'
+                            }`}
                           >
                             {region}
+                            {expert.isRegionalManager && expert.managedRegions?.includes(region) && (
+                              <span className="ml-1 text-[10px] bg-blue-200 px-1 rounded">총괄</span>
+                            )}
                           </span>
                         ))
                       ) : (

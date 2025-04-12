@@ -26,6 +26,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [certifications, setCertifications] = useState<string[]>(['']);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRegionalManager, setIsRegionalManager] = useState(false);
   
   const form = useForm<NewExpert>({
     defaultValues: {
@@ -42,7 +43,9 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       email: '',
       regions: [],
       services: [],
-      certifications: []
+      certifications: [],
+      isRegionalManager: false,
+      managedRegions: []
     }
   });
 
@@ -59,7 +62,9 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       ...data,
       regions: selectedRegions,
       services: selectedServices,
-      certifications: filteredCertifications
+      certifications: filteredCertifications,
+      isRegionalManager: isRegionalManager,
+      managedRegions: isRegionalManager ? selectedRegions : []
     };
 
     console.log("Submitting expert data:", expertData);
@@ -100,7 +105,9 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <ExpertRegions 
               selectedRegions={selectedRegions} 
-              setSelectedRegions={setSelectedRegions} 
+              setSelectedRegions={setSelectedRegions}
+              isRegionalManager={isRegionalManager}
+              setIsRegionalManager={setIsRegionalManager}
             />
             
             <ExpertServices 
