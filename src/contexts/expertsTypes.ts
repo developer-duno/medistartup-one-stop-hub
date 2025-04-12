@@ -7,6 +7,8 @@ export interface ExpertsContextType {
   addExpert: (expert: NewExpert) => void;
   updateExpert: (expert: Expert) => void;
   deleteExpert: (id: number) => void;
+  updateExpertsOrder: (newOrder: Expert[]) => void;
+  toggleExpertMainVisibility: (id: number) => void;
 }
 
 export interface ExpertsProviderProps {

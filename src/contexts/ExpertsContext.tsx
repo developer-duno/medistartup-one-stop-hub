@@ -11,6 +11,8 @@ const ExpertsContext = createContext<ExpertsContextType>({
   addExpert: () => {},
   updateExpert: () => {},
   deleteExpert: () => {},
+  updateExpertsOrder: () => {},
+  toggleExpertMainVisibility: () => {},
 });
 
 // Local storage key for experts data
@@ -24,15 +26,26 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       const storedExperts = localStorage.getItem(EXPERTS_STORAGE_KEY);
       if (storedExperts) {
         const parsedExperts = JSON.parse(storedExperts);
-        console.log('Loaded experts from local storage:', parsedExperts);
-        return parsedExperts;
+        // Ensure displayOrder and showOnMain are set for all experts
+        const updatedExperts = parsedExperts.map((expert: Expert, index: number) => ({
+          ...expert,
+          displayOrder: expert.displayOrder !== undefined ? expert.displayOrder : index,
+          showOnMain: expert.showOnMain !== undefined ? expert.showOnMain : true
+        }));
+        console.log('Loaded experts from local storage:', updatedExperts);
+        return updatedExperts;
       }
     } catch (error) {
       console.error('Error loading experts from local storage:', error);
     }
     
     console.log('Using initial experts data');
-    return initialExperts;
+    // Initialize display order and showOnMain for initial experts
+    return initialExperts.map((expert, index) => ({
+      ...expert,
+      displayOrder: index,
+      showOnMain: true
+    }));
   });
   
   // Save experts to local storage whenever they change
@@ -48,12 +61,30 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   // Get the operations from our custom hook
   const { addExpert, updateExpert, deleteExpert } = useExpertOperations(setExperts);
 
+  // Update the order of experts
+  const updateExpertsOrder = (newOrder: Expert[]) => {
+    setExperts(newOrder);
+  };
+
+  // Toggle the main page visibility of an expert
+  const toggleExpertMainVisibility = (id: number) => {
+    setExperts(prevExperts => 
+      prevExperts.map(expert => 
+        expert.id === id 
+          ? { ...expert, showOnMain: !expert.showOnMain }
+          : expert
+      )
+    );
+  };
+
   // Create the context value object
   const contextValue: ExpertsContextType = {
     experts,
     addExpert,
     updateExpert,
-    deleteExpert
+    deleteExpert,
+    updateExpertsOrder,
+    toggleExpertMainVisibility
   };
 
   return (

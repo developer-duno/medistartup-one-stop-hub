@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash, Eye, EyeOff, MoveUp, MoveDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
@@ -12,7 +12,7 @@ interface ExpertsTableProps {
 }
 
 const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
-  const { deleteExpert } = useExperts();
+  const { deleteExpert, toggleExpertMainVisibility, updateExpertsOrder } = useExperts();
   const { toast } = useToast();
   
   const handleDelete = (id: number, name: string) => {
@@ -30,12 +30,59 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
     });
   };
 
+  const handleToggleVisibility = (id: number, name: string, currentVisibility: boolean) => {
+    toggleExpertMainVisibility(id);
+    toast({
+      title: currentVisibility ? "메인 페이지에서 숨김" : "메인 페이지에 표시",
+      description: `${name} 전문가가 메인 페이지에 ${currentVisibility ? '표시되지 않습니다.' : '표시됩니다.'}`,
+      variant: "default",
+    });
+  };
+
+  const moveExpert = (index: number, direction: 'up' | 'down') => {
+    if (
+      (direction === 'up' && index === 0) || 
+      (direction === 'down' && index === experts.length - 1)
+    ) {
+      return;
+    }
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    const newExperts = [...experts];
+    const temp = { ...newExperts[index] };
+    
+    // Swap the display orders
+    const tempOrder = temp.displayOrder;
+    temp.displayOrder = newExperts[newIndex].displayOrder;
+    newExperts[newIndex].displayOrder = tempOrder;
+
+    // Swap the positions in the array
+    newExperts[index] = newExperts[newIndex];
+    newExperts[newIndex] = temp;
+    
+    updateExpertsOrder(newExperts);
+
+    toast({
+      title: "전문가 순서 변경",
+      description: `${temp.name} 전문가의 표시 순서가 변경되었습니다.`,
+      variant: "default",
+    });
+  };
+
+  // Sort experts by display order for the table
+  const sortedExperts = [...experts].sort((a, b) => {
+    return (a.displayOrder || 0) - (b.displayOrder || 0);
+  });
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th scope="col" className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                순서
+              </th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 전문가
               </th>
@@ -54,9 +101,32 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {experts.length > 0 ? (
-              experts.map((expert) => (
-                <tr key={expert.id}>
+            {sortedExperts.length > 0 ? (
+              sortedExperts.map((expert, index) => (
+                <tr key={expert.id} className={!expert.showOnMain ? "bg-gray-50" : ""}>
+                  <td className="px-3 py-4 whitespace-nowrap">
+                    <div className="flex flex-col items-center">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="p-1"
+                        disabled={index === 0}
+                        onClick={() => moveExpert(index, 'up')}
+                      >
+                        <MoveUp className="h-4 w-4" />
+                      </Button>
+                      <span className="text-sm font-medium">{expert.displayOrder !== undefined ? expert.displayOrder + 1 : index + 1}</span>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="p-1"
+                        disabled={index === experts.length - 1}
+                        onClick={() => moveExpert(index, 'down')}
+                      >
+                        <MoveDown className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
@@ -71,6 +141,9 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                           <div className="text-sm font-medium text-gray-900">{expert.name}</div>
                           {expert.isRegionalManager && (
                             <Badge className="ml-2 bg-primary/10 text-primary border-primary/20 text-xs">총괄</Badge>
+                          )}
+                          {!expert.showOnMain && (
+                            <Badge className="ml-2 bg-gray-100 text-gray-500 border-gray-200 text-xs">숨김</Badge>
                           )}
                         </div>
                         <div className="text-sm text-gray-500">{expert.specialty}</div>
@@ -123,6 +196,15 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
+                      className={expert.showOnMain ? "text-blue-600 hover:text-blue-900" : "text-gray-400 hover:text-gray-600"}
+                      onClick={() => handleToggleVisibility(expert.id, expert.name, expert.showOnMain || false)}
+                      title={expert.showOnMain ? "메인에서 숨기기" : "메인에 표시하기"}
+                    >
+                      {expert.showOnMain ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
                       className="text-blue-600 hover:text-blue-900"
                       onClick={() => handleEdit(expert)}
                     >
@@ -141,7 +223,7 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
               ))
             ) : (
               <tr>
-                <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
+                <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
                   등록된 전문가가 없습니다.
                 </td>
               </tr>

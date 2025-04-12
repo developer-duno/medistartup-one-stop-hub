@@ -8,6 +8,16 @@ import { useExperts } from '@/contexts/ExpertsContext';
 const ExpertsSection = () => {
   const { experts } = useExperts();
 
+  // Filter experts to only show those marked for main page display
+  // and sort them by display order
+  const mainPageExperts = experts
+    .filter(expert => expert.showOnMain)
+    .sort((a, b) => {
+      const orderA = a.displayOrder !== undefined ? a.displayOrder : 999;
+      const orderB = b.displayOrder !== undefined ? b.displayOrder : 999;
+      return orderA - orderB;
+    });
+
   return (
     <section id="experts" className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -22,7 +32,7 @@ const ExpertsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {experts.map((expert) => (
+          {mainPageExperts.map((expert) => (
             <div key={expert.id} className="bg-white rounded-xl shadow-md overflow-hidden group">
               <div className="relative h-60 overflow-hidden">
                 <img 

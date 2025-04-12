@@ -1,60 +1,74 @@
 
-import React, { useState, useEffect } from 'react';
-import { Phone, Mail, MapPin, Users, Filter, ChevronDown, X } from 'lucide-react';
+import React, { useState } from 'react';
+import { Phone, Mail, MapPin, Users } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 
 const RegionalMap = () => {
-  const [activeRegion, setActiveRegion] = useState('대전/충남');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [activeRegion, setActiveRegion] = useState('서울/경기');
   const { experts } = useExperts();
   
+  // 한국 지도에 표시할 지역 정보
   const regions = [
-    { 
-      id: 'daejeon', 
-      name: '대전/충남', 
-      x: '60%', 
-      y: '40%',
-      includesRegions: ['대전', '충남']
-    },
     { 
       id: 'seoul', 
       name: '서울/경기', 
-      x: '30%', 
-      y: '25%',
+      path: 'M95,90 C105,75 125,65 145,70 C160,72 175,85 180,100 C185,115 182,135 172,145 C155,160 130,165 110,150 C95,140 85,115 95,90 Z',
+      labelX: 135,
+      labelY: 105,
       includesRegions: ['서울', '경기', '인천']
     },
     { 
-      id: 'busan', 
-      name: '부산/경남', 
-      x: '75%', 
-      y: '70%',
-      includesRegions: ['부산', '경남']
+      id: 'gangwon', 
+      name: '강원', 
+      path: 'M200,50 C220,40 250,45 265,60 C280,75 290,95 285,120 C280,140 260,155 240,155 C220,155 200,140 190,120 C185,100 185,65 200,50 Z',
+      labelX: 240,
+      labelY: 100,
+      includesRegions: ['강원']
     },
     { 
-      id: 'daegu', 
-      name: '대구/경북', 
-      x: '65%', 
-      y: '50%',
+      id: 'chungcheong', 
+      name: '충청', 
+      path: 'M125,160 C145,150 175,150 195,160 C210,170 220,190 215,210 C210,230 190,245 170,245 C150,245 130,235 120,215 C110,195 110,175 125,160 Z',
+      labelX: 165,
+      labelY: 195,
+      includesRegions: ['대전', '충남', '충북', '세종']
+    },
+    { 
+      id: 'gyeongbuk', 
+      name: '경북/대구', 
+      path: 'M250,180 C270,170 290,175 305,190 C320,205 325,225 320,245 C315,265 290,280 270,275 C250,270 235,255 230,235 C225,215 230,195 250,180 Z',
+      labelX: 275,
+      labelY: 225,
       includesRegions: ['대구', '경북']
     },
     { 
-      id: 'gwangju', 
-      name: '광주/전라', 
-      x: '30%', 
-      y: '65%',
-      includesRegions: ['광주', '전라']
+      id: 'jeonlla', 
+      name: '전라', 
+      path: 'M120,260 C140,245 165,245 185,255 C205,265 215,285 210,305 C205,325 185,340 165,340 C145,340 125,330 115,310 C105,290 105,275 120,260 Z',
+      labelX: 160,
+      labelY: 295,
+      includesRegions: ['광주', '전남', '전북']
+    },
+    { 
+      id: 'gyeongnam', 
+      name: '경남/부산', 
+      path: 'M220,280 C240,270 265,275 280,290 C295,305 300,325 295,345 C290,365 270,375 250,370 C230,365 215,350 210,330 C205,310 205,290 220,280 Z',
+      labelX: 255,
+      labelY: 325,
+      includesRegions: ['부산', '경남', '울산']
+    },
+    { 
+      id: 'jeju', 
+      name: '제주', 
+      path: 'M145,380 C155,375 170,375 180,380 C190,385 195,395 195,405 C195,415 185,425 170,425 C155,425 145,415 145,405 C145,395 135,385 145,380 Z',
+      labelX: 170,
+      labelY: 405,
+      includesRegions: ['제주']
     }
-  ];
-
-  const serviceOptions = [
-    '입지 분석', '재무 컨설팅', '설계 및 인테리어', '인허가 대행', 
-    '인력 채용', '마케팅 전략', '의료기기 구입 및 설치', '수납 및 의료폐기물 처리'
   ];
 
   // 지역 매니저 정보 가져오기 (isRegionalManager가 true인 전문가 중 해당 지역을 담당하는 전문가)
@@ -78,8 +92,7 @@ const RegionalMap = () => {
     const includesRegions = currentRegion.includesRegions;
     
     return experts.filter(expert => 
-      expert.regions.some(region => includesRegions.includes(region)) &&
-      (selectedServices.length === 0 || expert.services.some(service => selectedServices.includes(service)))
+      expert.regions.some(region => includesRegions.includes(region))
     ).length;
   };
   
@@ -128,21 +141,10 @@ const RegionalMap = () => {
   
   const getFilteredUrl = () => {
     const region = regions.find(r => r.name === activeRegion);
-    let baseUrl = `/experts?region=${encodeURIComponent(region?.name || '')}`;
+    if (!region) return '/experts';
     
-    if (selectedServices.length > 0) {
-      baseUrl += `&services=${encodeURIComponent(selectedServices.join(','))}`;
-    }
-    
-    return baseUrl;
-  };
-  
-  const handleServiceToggle = (service: string) => {
-    if (selectedServices.includes(service)) {
-      setSelectedServices(selectedServices.filter(s => s !== service));
-    } else {
-      setSelectedServices([...selectedServices, service]);
-    }
+    // 지역 이름만 URL 파라미터로 전달
+    return `/experts?region=${encodeURIComponent(region.name)}`;
   };
 
   return (
@@ -157,114 +159,47 @@ const RegionalMap = () => {
           </p>
         </div>
 
-        <div className="mb-6 flex justify-center">
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-neutral-200 text-neutral-700 hover:bg-neutral-50"
-          >
-            <Filter className="h-4 w-4" />
-            서비스 필터
-            <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-          </button>
-        </div>
-        
-        {showFilters && (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-8 max-w-3xl mx-auto animate-fade-in">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-pretendard font-medium">서비스 필터</h3>
-              <button 
-                onClick={() => setShowFilters(false)}
-                className="text-neutral-500 hover:text-neutral-700"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-              {serviceOptions.map((service) => (
-                <label key={service} className="flex items-center space-x-2">
-                  <Checkbox 
-                    checked={selectedServices.includes(service)}
-                    onCheckedChange={() => handleServiceToggle(service)}
-                  />
-                  <span className="text-sm">{service}</span>
-                </label>
-              ))}
-            </div>
-            
-            <div className="flex justify-end mt-4 gap-2">
-              <CustomButton 
-                variant="outline"
-                size="sm"
-                onClick={() => setSelectedServices([])}
-              >
-                초기화
-              </CustomButton>
-              <CustomButton 
-                variant="primary"
-                size="sm"
-                onClick={() => setShowFilters(false)}
-              >
-                적용하기
-              </CustomButton>
-            </div>
-          </div>
-        )}
-
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            <div className="relative bg-white rounded-xl shadow-md p-2 h-[400px] md:h-[500px]">
+            <div className="relative bg-white rounded-xl shadow-md p-4 h-[400px] md:h-[500px]">
+              {/* 대한민국 지도 SVG */}
               <svg 
-                viewBox="0 0 500 600" 
+                viewBox="0 0 400 450" 
                 className="w-full h-full"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M180,150 C150,180 120,170 100,200 C80,230 70,280 90,320 C110,360 130,400 180,420 C230,440 280,430 330,410 C380,390 410,350 430,300 C450,250 440,200 420,150 C400,100 350,80 300,90 C250,100 210,120 180,150 Z" 
-                  fill="#EBF2FC" 
-                  stroke="#2C6ECB"
-                  strokeWidth="2"
-                />
-
+                {/* 남한 지역별 경로 */}
                 {regions.map((region) => (
                   <g key={region.id} onClick={() => setActiveRegion(region.name)}>
-                    <circle 
-                      cx={region.x} 
-                      cy={region.y} 
-                      r="15"
-                      className={`${activeRegion === region.name ? 'fill-primary' : 'fill-white'} stroke-primary stroke-2 cursor-pointer transition-all duration-300`}
+                    <path 
+                      d={region.path}
+                      className={`${activeRegion === region.name ? 'fill-primary/30' : 'fill-blue-50'} stroke-primary stroke-2 cursor-pointer transition-all duration-300`}
                     />
                     <text 
-                      x={region.x} 
-                      y={region.y}
-                      dy=".3em"
+                      x={region.labelX} 
+                      y={region.labelY}
                       textAnchor="middle"
-                      className={`${activeRegion === region.name ? 'fill-white' : 'fill-primary'} text-xs font-medium cursor-pointer pointer-events-none`}
-                    >
-                      {region.id.charAt(0).toUpperCase()}
-                    </text>
-                    <circle 
-                      cx={region.x} 
-                      cy={region.y} 
-                      r="25"
-                      className={`${activeRegion === region.name ? 'fill-primary opacity-20' : 'fill-transparent'} stroke-transparent cursor-pointer transition-all duration-500`}
-                    />
-                    <text 
-                      x={region.x} 
-                      y={parseFloat(region.y) + 35}
-                      textAnchor="middle"
-                      className={`${activeRegion === region.name ? 'opacity-100' : 'opacity-70'} fill-neutral-700 text-xs font-noto cursor-pointer`}
+                      className={`${activeRegion === region.name ? 'fill-primary font-bold' : 'fill-neutral-700'} text-sm cursor-pointer pointer-events-none transition-all`}
                     >
                       {region.name}
                     </text>
                     <text 
-                      x={region.x} 
-                      y={parseFloat(region.y) + 50}
+                      x={region.labelX} 
+                      y={region.labelY + 16}
                       textAnchor="middle"
                       className={`${activeRegion === region.name ? 'opacity-100' : 'opacity-70'} fill-primary text-xs font-medium cursor-pointer`}
                     >
                       {getRegionalExpertCount(region.name)}명의 전문가
                     </text>
+                    {/* 활성화된 지역에 표시할 하이라이트 원 */}
+                    {activeRegion === region.name && (
+                      <circle 
+                        cx={region.labelX} 
+                        cy={region.labelY - 20} 
+                        r="8"
+                        className="fill-primary animate-pulse"
+                      />
+                    )}
                   </g>
                 ))}
               </svg>
@@ -324,11 +259,6 @@ const RegionalMap = () => {
                       <Users className="h-5 w-5 text-primary" />
                       <span className="font-noto text-neutral-700">
                         지역 전문가 {getActiveRegion()?.expertCount}명
-                        {selectedServices.length > 0 && (
-                          <span className="text-sm text-neutral-500 ml-1">
-                            (선택한 서비스 기준)
-                          </span>
-                        )}
                       </span>
                     </div>
                   </div>

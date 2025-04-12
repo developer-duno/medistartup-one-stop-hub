@@ -17,6 +17,8 @@ export interface Expert {
   achievements?: string;
   isRegionalManager?: boolean;  // 지역 총괄 책임자 여부
   managedRegions?: string[];    // 총괄 책임자가 담당하는 지역들
+  displayOrder?: number;        // 전문가 표시 순서
+  showOnMain?: boolean;         // 메인 페이지에 표시 여부
 }
 
 export interface NewExpert extends Omit<Expert, 'id'> {}
