@@ -8,6 +8,12 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MedicalEquipment from "./pages/services/MedicalEquipment";
 import WasteManagement from "./pages/services/WasteManagement";
+import LocationAnalysis from "./pages/services/LocationAnalysis";
+import FinancialConsulting from "./pages/services/FinancialConsulting";
+import DesignInterior from "./pages/services/DesignInterior";
+import Licensing from "./pages/services/Licensing";
+import Recruitment from "./pages/services/Recruitment";
+import MarketingStrategy from "./pages/services/MarketingStrategy";
 import Admin from "./pages/Admin";
 import Insights from "./pages/Insights";
 import ExpertProfile from "./pages/ExpertProfile";
@@ -26,6 +32,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
           <Route path="/services/waste-management" element={<WasteManagement />} />
+          <Route path="/services/location-analysis" element={<LocationAnalysis />} />
+          <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
+          <Route path="/services/design-interior" element={<DesignInterior />} />
+          <Route path="/services/licensing" element={<Licensing />} />
+          <Route path="/services/recruitment" element={<Recruitment />} />
+          <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="/expert/:id" element={<ExpertProfile />} />
