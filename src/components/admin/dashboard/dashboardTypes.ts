@@ -15,6 +15,7 @@ export interface StatItem {
   section?: string;
   toastMessage?: ToastMessage;
   onClick?: () => void;
+  dynamicData?: boolean;
 }
 
 export interface QuickLinkItem {

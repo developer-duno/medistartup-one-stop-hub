@@ -6,13 +6,14 @@ import {
 } from 'lucide-react';
 import { StatItem, QuickLinkItem } from './dashboardTypes';
 
-export const statsData: StatItem[] = [
+export const getStatsData = (expertsCount: number): StatItem[] => [
   { 
     title: '총 전문가', 
-    value: '8명', 
-    change: '+2명', 
+    value: `${expertsCount}명`, 
+    change: expertsCount > 8 ? `+${expertsCount - 8}명` : '+0명', 
     icon: <Users className="h-8 w-8 text-primary" />,
-    section: 'experts'
+    section: 'experts',
+    dynamicData: true
   },
   { 
     title: '이번 달 상담 신청', 

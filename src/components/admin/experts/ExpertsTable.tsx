@@ -2,22 +2,33 @@
 import React from 'react';
 import { Edit, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-interface Expert {
-  id: number;
-  name: string;
-  role: string;
-  specialty: string;
-  image: string;
-  regions: string[];
-  services: string[];
-}
+import { useExperts } from '@/contexts/ExpertsContext';
+import { Expert } from '@/types/expert';
+import { useToast } from '@/components/ui/use-toast';
 
 interface ExpertsTableProps {
   experts: Expert[];
 }
 
 const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
+  const { deleteExpert } = useExperts();
+  const { toast } = useToast();
+  
+  const handleDelete = (id: number, name: string) => {
+    if (window.confirm(`${name} 전문가를 삭제하시겠습니까?`)) {
+      deleteExpert(id);
+    }
+  };
+  
+  const handleEdit = (expert: Expert) => {
+    // For now just show a toast, we'll implement the edit form later
+    toast({
+      title: "전문가 수정",
+      description: `${expert.name} 전문가 수정 기능은 준비 중입니다.`,
+      variant: "default",
+    });
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="overflow-x-auto">
@@ -87,10 +98,20 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-900">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-blue-600 hover:text-blue-900"
+                    onClick={() => handleEdit(expert)}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-900">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-red-600 hover:text-red-900"
+                    onClick={() => handleDelete(expert.id, expert.name)}
+                  >
                     <Trash className="h-4 w-4" />
                   </Button>
                 </td>

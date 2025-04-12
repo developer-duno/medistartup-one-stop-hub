@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
+import { useExperts } from '@/contexts/ExpertsContext';
+import { NewExpert } from '@/types/expert';
+import { Textarea } from "@/components/ui/textarea";
 
 interface AddExpertFormProps {
   onCancel: () => void;
@@ -12,7 +15,9 @@ interface AddExpertFormProps {
 }
 
 const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => {
-  const form = useForm({
+  const { addExpert } = useExperts();
+  
+  const form = useForm<NewExpert>({
     defaultValues: {
       name: '',
       role: '',
@@ -22,7 +27,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
       projects: '',
       description: '',
       regions: [],
-      serviceCategories: []
+      services: []
     }
   });
 
@@ -33,8 +38,11 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
     '인력 채용', '마케팅 전략', '의료기기 구입 및 설치', '수납 및 의료폐기물 처리'
   ];
 
-  const handleFormSubmit = (data: any) => {
-    console.log("Form submitted:", data);
+  const handleFormSubmit = (data: NewExpert) => {
+    // Add the expert to our context
+    addExpert(data);
+    
+    // Also call the original onSubmit for any additional logic
     onSubmit(data);
   };
 
@@ -117,7 +125,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
                 <FormItem>
                   <FormLabel>경력 (년)</FormLabel>
                   <FormControl>
-                    <Input placeholder="10" type="number" {...field} />
+                    <Input placeholder="10년+" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -131,7 +139,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
                 <FormItem>
                   <FormLabel>프로젝트 수</FormLabel>
                   <FormControl>
-                    <Input placeholder="150" type="number" {...field} />
+                    <Input placeholder="150+" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,7 +154,7 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
               <FormItem>
                 <FormLabel>소개</FormLabel>
                 <FormControl>
-                  <textarea 
+                  <Textarea 
                     className="w-full p-2 border border-input rounded-md"
                     rows={4}
                     placeholder="전문가 소개를 입력하세요"
@@ -193,11 +201,11 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
                       className="rounded border-gray-300 text-primary focus:ring-primary"
                       value={service}
                       onChange={(e) => {
-                        const currentServices = form.getValues("serviceCategories") as string[] || [];
+                        const currentServices = form.getValues("services") as string[] || [];
                         if (e.target.checked) {
-                          form.setValue("serviceCategories", [...currentServices, service]);
+                          form.setValue("services", [...currentServices, service]);
                         } else {
-                          form.setValue("serviceCategories", currentServices.filter((s) => s !== service));
+                          form.setValue("services", currentServices.filter((s) => s !== service));
                         }
                       }}
                     />
