@@ -23,7 +23,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
     toast({
       title: "변경사항 저장됨",
       description: "웹사이트에 변경사항이 적용되었습니다.",
-      variant: "success",
+      variant: "default",  // Changed from "success" to "default"
     });
   };
 
