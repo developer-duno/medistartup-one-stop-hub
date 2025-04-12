@@ -114,7 +114,11 @@ const SimulatorManagement: React.FC = () => {
     if (!editingOption) return;
     
     const newValues = [...editingOption.values];
-    newValues[index][field] = field === 'cost' ? Number(value) : value;
+    if (field === 'name') {
+      newValues[index].name = value as string;
+    } else if (field === 'cost') {
+      newValues[index].cost = Number(value);
+    }
     
     setEditingOption({
       ...editingOption,
