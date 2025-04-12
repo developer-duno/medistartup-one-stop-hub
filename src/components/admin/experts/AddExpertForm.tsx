@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { NewExpert } from '@/types/expert';
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface AddExpertFormProps {
   onCancel: () => void;
@@ -16,6 +17,8 @@ interface AddExpertFormProps {
 
 const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => {
   const { addExpert } = useExperts();
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   
   const form = useForm<NewExpert>({
     defaultValues: {
@@ -38,12 +41,39 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
     '인력 채용', '마케팅 전략', '의료기기 구입 및 설치', '수납 및 의료폐기물 처리'
   ];
 
+  const handleRegionToggle = (region: string) => {
+    setSelectedRegions(prev => {
+      if (prev.includes(region)) {
+        return prev.filter(r => r !== region);
+      } else {
+        return [...prev, region];
+      }
+    });
+  };
+
+  const handleServiceToggle = (service: string) => {
+    setSelectedServices(prev => {
+      if (prev.includes(service)) {
+        return prev.filter(s => s !== service);
+      } else {
+        return [...prev, service];
+      }
+    });
+  };
+
   const handleFormSubmit = (data: NewExpert) => {
+    // Ensure regions and services are included in the submission
+    const expertData: NewExpert = {
+      ...data,
+      regions: selectedRegions,
+      services: selectedServices
+    };
+
     // Add the expert to our context
-    addExpert(data);
+    addExpert(expertData);
     
     // Also call the original onSubmit for any additional logic
-    onSubmit(data);
+    onSubmit(expertData);
   };
 
   return (
@@ -172,18 +202,10 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
                 {regionOptions.map((region) => (
                   <label key={region} className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox" 
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
-                      value={region}
-                      onChange={(e) => {
-                        const currentRegions = form.getValues("regions") as string[] || [];
-                        if (e.target.checked) {
-                          form.setValue("regions", [...currentRegions, region]);
-                        } else {
-                          form.setValue("regions", currentRegions.filter((r) => r !== region));
-                        }
-                      }}
+                    <Checkbox 
+                      id={`region-${region}`}
+                      checked={selectedRegions.includes(region)}
+                      onCheckedChange={() => handleRegionToggle(region)}
                     />
                     <span className="text-sm">{region}</span>
                   </label>
@@ -196,18 +218,10 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit }) => 
               <div className="grid grid-cols-1 gap-2 mt-2">
                 {serviceOptions.map((service) => (
                   <label key={service} className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox" 
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
-                      value={service}
-                      onChange={(e) => {
-                        const currentServices = form.getValues("services") as string[] || [];
-                        if (e.target.checked) {
-                          form.setValue("services", [...currentServices, service]);
-                        } else {
-                          form.setValue("services", currentServices.filter((s) => s !== service));
-                        }
-                      }}
+                    <Checkbox
+                      id={`service-${service}`}
+                      checked={selectedServices.includes(service)}
+                      onCheckedChange={() => handleServiceToggle(service)}
                     />
                     <span className="text-sm">{service}</span>
                   </label>

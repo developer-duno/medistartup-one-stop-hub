@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 import { Expert, NewExpert } from '../types/expert';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -128,23 +128,35 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   const [experts, setExperts] = useState<Expert[]>(initialExperts);
   const { toast } = useToast();
 
-  const addExpert = (newExpert: NewExpert) => {
+  const addExpert = useCallback((newExpert: NewExpert) => {
+    // Ensure regions and services are arrays
+    const expertWithArrays: NewExpert = {
+      ...newExpert,
+      regions: Array.isArray(newExpert.regions) ? newExpert.regions : [],
+      services: Array.isArray(newExpert.services) ? newExpert.services : []
+    };
+
     // Create new ID by finding the max ID and adding 1
     const newId = Math.max(0, ...experts.map(expert => expert.id)) + 1;
-    const expertWithId: Expert = { ...newExpert, id: newId };
+    const expertWithId: Expert = { ...expertWithArrays, id: newId };
     
-    setExperts([...experts, expertWithId]);
+    // Use functional update to ensure we're working with the latest state
+    setExperts(prevExperts => [...prevExperts, expertWithId]);
     
+    // Display success toast
     toast({
       title: "전문가 추가 완료",
       description: `${newExpert.name} 전문가가 성공적으로 등록되었습니다.`,
       variant: "default",
     });
-  };
 
-  const updateExpert = (updatedExpert: Expert) => {
-    setExperts(
-      experts.map(expert => 
+    console.log("Expert added:", expertWithId);
+    console.log("Updated experts list:", [...experts, expertWithId]);
+  }, [experts, toast]);
+
+  const updateExpert = useCallback((updatedExpert: Expert) => {
+    setExperts(prevExperts => 
+      prevExperts.map(expert => 
         expert.id === updatedExpert.id ? updatedExpert : expert
       )
     );
@@ -154,11 +166,12 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       description: `${updatedExpert.name} 전문가 정보가 업데이트되었습니다.`,
       variant: "default",
     });
-  };
+  }, [toast]);
 
-  const deleteExpert = (id: number) => {
+  const deleteExpert = useCallback((id: number) => {
     const expertToDelete = experts.find(expert => expert.id === id);
-    setExperts(experts.filter(expert => expert.id !== id));
+    
+    setExperts(prevExperts => prevExperts.filter(expert => expert.id !== id));
     
     if (expertToDelete) {
       toast({
@@ -166,11 +179,21 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
         description: `${expertToDelete.name} 전문가가 삭제되었습니다.`,
         variant: "default",
       });
+      
+      console.log("Expert deleted:", expertToDelete);
+      console.log("Remaining experts:", experts.filter(expert => expert.id !== id));
     }
+  }, [experts, toast]);
+
+  const contextValue = {
+    experts,
+    addExpert,
+    updateExpert,
+    deleteExpert
   };
 
   return (
-    <ExpertsContext.Provider value={{ experts, addExpert, updateExpert, deleteExpert }}>
+    <ExpertsContext.Provider value={contextValue}>
       {children}
     </ExpertsContext.Provider>
   );

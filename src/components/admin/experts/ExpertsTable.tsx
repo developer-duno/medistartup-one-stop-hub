@@ -53,70 +53,78 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts }) => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {experts.map((expert) => (
-              <tr key={expert.id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      <img 
-                        className="h-10 w-10 rounded-full object-cover" 
-                        src={expert.image} 
-                        alt={expert.name} 
-                      />
+            {experts.length > 0 ? (
+              experts.map((expert) => (
+                <tr key={expert.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img 
+                          className="h-10 w-10 rounded-full object-cover" 
+                          src={expert.image} 
+                          alt={expert.name} 
+                        />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">{expert.name}</div>
+                        <div className="text-sm text-gray-500">{expert.specialty}</div>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{expert.name}</div>
-                      <div className="text-sm text-gray-500">{expert.specialty}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {expert.role}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-wrap gap-1">
+                      {expert.regions && expert.regions.map((region) => (
+                        <span 
+                          key={region} 
+                          className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
+                        >
+                          {region}
+                        </span>
+                      ))}
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {expert.role}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-wrap gap-1">
-                    {expert.regions.map((region) => (
-                      <span 
-                        key={region} 
-                        className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
-                      >
-                        {region}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex flex-wrap gap-1">
-                    {expert.services.map((service) => (
-                      <span 
-                        key={service} 
-                        className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-blue-600 hover:text-blue-900"
-                    onClick={() => handleEdit(expert)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="text-red-600 hover:text-red-900"
-                    onClick={() => handleDelete(expert.id, expert.name)}
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex flex-wrap gap-1">
+                      {expert.services && expert.services.map((service) => (
+                        <span 
+                          key={service} 
+                          className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700"
+                        >
+                          {service}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-blue-600 hover:text-blue-900"
+                      onClick={() => handleEdit(expert)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-red-600 hover:text-red-900"
+                      onClick={() => handleDelete(expert.id, expert.name)}
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="px-6 py-4 text-center text-sm text-gray-500">
+                  등록된 전문가가 없습니다.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
