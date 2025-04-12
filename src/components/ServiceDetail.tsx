@@ -167,8 +167,14 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                     {title} 전문가 만나기
                   </Link>
                 </CustomButton>
-                <CustomButton variant="outline" fullWidth>
-                  서비스 브로셔 다운로드
+                <CustomButton 
+                  variant="accent" 
+                  fullWidth 
+                  asChild
+                >
+                  <Link to={`/experts?service=${serviceUrlName}`}>
+                    전문 상담 신청하기
+                  </Link>
                 </CustomButton>
               </div>
             </div>

@@ -2,17 +2,20 @@
 import React from 'react';
 import { 
   Users, Settings, FileText, BarChart3, 
-  MapPin, Trophy, Eye, MessageSquare 
+  MapPin, Trophy, Eye, MessageSquare, ArrowRight 
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ setActiveSection }: { setActiveSection: (section: string) => void }) => {
   const stats = [
     { 
       title: '총 전문가', 
       value: '8명', 
       change: '+2명', 
-      icon: <Users className="h-8 w-8 text-primary" /> 
+      icon: <Users className="h-8 w-8 text-primary" />,
+      section: 'experts'
     },
     { 
       title: '이번 달 상담 신청', 
@@ -30,7 +33,8 @@ const AdminDashboard = () => {
       title: '성공사례', 
       value: '16건', 
       change: '+3건', 
-      icon: <Trophy className="h-8 w-8 text-green-500" /> 
+      icon: <Trophy className="h-8 w-8 text-green-500" />,
+      section: 'success'
     }
   ];
 
@@ -49,7 +53,11 @@ const AdminDashboard = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
-          <Card key={index}>
+          <Card 
+            key={index} 
+            className={stat.section ? "cursor-pointer hover:shadow-md transition-shadow" : ""}
+            onClick={stat.section ? () => setActiveSection(stat.section) : undefined}
+          >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
                 {stat.title}
@@ -71,7 +79,11 @@ const AdminDashboard = () => {
       <h3 className="font-pretendard font-semibold text-xl mb-4">빠른 작업</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         {quickLinks.map((link, index) => (
-          <Card key={index} className="cursor-pointer hover:bg-gray-50 transition-colors">
+          <Card 
+            key={index} 
+            className="cursor-pointer hover:bg-gray-50 transition-colors"
+            onClick={() => setActiveSection(link.section)}
+          >
             <CardContent className="flex items-center gap-3 p-4">
               <div className="bg-primary/10 p-2 rounded-full">
                 {link.icon}
@@ -82,7 +94,14 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      <h3 className="font-pretendard font-semibold text-xl mb-4">최근 상담 신청</h3>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-pretendard font-semibold text-xl">최근 상담 신청</h3>
+        <Button variant="ghost" size="sm" className="text-primary">
+          모든 상담 보기
+          <ArrowRight className="ml-1 h-4 w-4" />
+        </Button>
+      </div>
+      
       <Card>
         <CardContent className="p-0">
           <table className="w-full">
@@ -93,6 +112,7 @@ const AdminDashboard = () => {
                 <th className="text-left p-4 font-medium text-muted-foreground">관심 서비스</th>
                 <th className="text-left p-4 font-medium text-muted-foreground">신청일</th>
                 <th className="text-left p-4 font-medium text-muted-foreground">상태</th>
+                <th className="text-left p-4 font-medium text-muted-foreground">관리</th>
               </tr>
             </thead>
             <tbody>
@@ -102,6 +122,9 @@ const AdminDashboard = () => {
                 <td className="p-4">입지 분석</td>
                 <td className="p-4">2023-04-10</td>
                 <td className="p-4"><span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">진행중</span></td>
+                <td className="p-4">
+                  <Button variant="outline" size="sm">상세보기</Button>
+                </td>
               </tr>
               <tr className="border-b">
                 <td className="p-4">이원장</td>
@@ -109,6 +132,9 @@ const AdminDashboard = () => {
                 <td className="p-4">재무 컨설팅</td>
                 <td className="p-4">2023-04-09</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
+                <td className="p-4">
+                  <Button variant="outline" size="sm">상세보기</Button>
+                </td>
               </tr>
               <tr>
                 <td className="p-4">박의사</td>
@@ -116,11 +142,85 @@ const AdminDashboard = () => {
                 <td className="p-4">인허가 대행</td>
                 <td className="p-4">2023-04-08</td>
                 <td className="p-4"><span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">완료</span></td>
+                <td className="p-4">
+                  <Button variant="outline" size="sm">상세보기</Button>
+                </td>
               </tr>
             </tbody>
           </table>
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-lg">최근 등록된 전문가</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-primary"
+                onClick={() => setActiveSection('experts')}
+              >
+                모두 보기
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {['윤재호', '한지민', '정서연'].map((expert, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Users className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{expert}</p>
+                      <p className="text-sm text-muted-foreground">신규 등록</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" size="sm">프로필</Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle className="text-lg">최근 등록된 인사이트</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-primary"
+                onClick={() => setActiveSection('insights')}
+              >
+                모두 보기
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                '2023년 의료기관 개원 트렌드 분석',
+                '성공적인 의원 마케팅 전략 5가지',
+                '의료기관 인허가 절차 간소화 가이드'
+              ].map((insight, i) => (
+                <div key={i} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                      <FileText className="h-4 w-4 text-secondary" />
+                    </div>
+                    <p className="font-medium line-clamp-1">{insight}</p>
+                  </div>
+                  <Button variant="outline" size="sm">보기</Button>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

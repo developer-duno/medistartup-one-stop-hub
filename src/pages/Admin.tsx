@@ -14,7 +14,7 @@ const Admin = () => {
 
   return (
     <AdminLayout activeSection={activeSection} setActiveSection={setActiveSection}>
-      {activeSection === "dashboard" && <AdminDashboard />}
+      {activeSection === "dashboard" && <AdminDashboard setActiveSection={setActiveSection} />}
       {activeSection === "experts" && <ExpertsManagement />}
       {activeSection === "services" && <ServicesManagement />}
       {activeSection === "insights" && <InsightsManagement />}
