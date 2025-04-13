@@ -1,15 +1,35 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, MapPin, TrendingUp, Users, Clock, Sparkles } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
+import { RunwareService } from '../services/RunwareService';
 
 const HeroSection = () => {
   const [selectedRegion, setSelectedRegion] = useState('대전/충남');
+  const [hospitalImage, setHospitalImage] = useState('');
   const regions = ['대전/충남', '서울/경기', '부산/경남', '대구/경북', '광주/전라', '강원', '제주'];
+
+  useEffect(() => {
+    const generateHospitalImage = async () => {
+      try {
+        const runwareService = new RunwareService('YOUR_RUNWARE_API_KEY');
+        const result = await runwareService.generateImage({
+          positivePrompt: "Modern hospital interior, clean and professional medical clinic, soft lighting, medical equipment, white walls, healthcare design",
+          width: 1024,
+          height: 1024,
+          numberResults: 1
+        });
+        setHospitalImage(result.imageURL);
+      } catch (error) {
+        console.error('Failed to generate hospital image:', error);
+        setHospitalImage('https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop');
+      }
+    };
+
+    generateHospitalImage();
+  }, []);
 
   return (
     <section className="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden relative">
-      {/* Background Element */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-primary-100 via-white to-white"></div>
         <div className="absolute top-0 left-0 w-full h-full opacity-10">
@@ -124,13 +144,12 @@ const HeroSection = () => {
           <div className="w-full lg:w-1/2 relative" aria-hidden="true">
             <div className="aspect-[5/4] relative z-10">
               <img 
-                src="https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop"
+                src={hospitalImage || "https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop"}
                 alt="병원 인테리어 이미지" 
                 className="w-full h-full object-cover rounded-2xl shadow-xl animate-float"
               />
             </div>
             
-            {/* Decorative elements */}
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-secondary-100 rounded-full z-0"></div>
             <div className="absolute -bottom-5 -left-5 w-20 h-20 bg-accent-100 rounded-full z-0"></div>
             
