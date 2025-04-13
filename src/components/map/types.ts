@@ -11,7 +11,6 @@ export interface Region {
   expertCount?: number;
   latitude?: number;
   longitude?: number;
-  active?: boolean; // 지역 활성화 여부 추가
 }
 
 export interface RegionInfo extends Region {
@@ -22,4 +21,3 @@ export interface RegionInfo extends Region {
   topServices: string[];
   hasManager: boolean;
 }
-

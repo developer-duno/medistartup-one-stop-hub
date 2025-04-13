@@ -1,48 +1,22 @@
 
+// Global declaration for the Kakao Maps API
 declare global {
   interface Window {
-    kakao: {
-      maps: {
-        load: (callback: () => void) => void;
-        Map: {
-          new (container: HTMLElement, options: MapOptions): Map;
-        };
-        LatLng: {
-          new (lat: number, lng: number): LatLng;
-        };
-        Marker: {
-          new (options: MarkerOptions): Marker;
-        };
-        CustomOverlay: {
-          new (options: CustomOverlayOptions): CustomOverlay;
-        };
-        event: {
-          addListener: (target: any, type: string, handler: (...args: any[]) => void) => void;
-        };
-      };
-    };
+    kakao: KakaoNamespace;
   }
 }
 
-interface MapOptions {
-  center: LatLng;
-  level?: number;
-}
-
-interface MarkerOptions {
-  position: LatLng;
-  map?: Map;
-  title?: string;
-}
-
-interface CustomOverlayOptions {
-  position: LatLng;
-  content: string | HTMLElement;
-  map?: Map;
-  clickable?: boolean;
-  xAnchor?: number;
-  yAnchor?: number;
-  zIndex?: number;
+interface KakaoNamespace {
+  maps: {
+    load: (callback: () => void) => void;
+    Map: new (container: HTMLElement, options: MapOptions) => Map;
+    LatLng: new (lat: number, lng: number) => LatLng;
+    Marker: new (options: MarkerOptions) => Marker;
+    CustomOverlay: new (options: CustomOverlayOptions) => CustomOverlay;
+    event: {
+      addListener: (target: any, type: string, handler: (...args: any[]) => void) => void;
+    };
+  };
 }
 
 interface Map {
@@ -69,4 +43,26 @@ interface CustomOverlay {
   setContent(content: string | HTMLElement): void;
 }
 
+interface MapOptions {
+  center: LatLng;
+  level?: number;
+}
+
+interface MarkerOptions {
+  position: LatLng;
+  map?: Map;
+  title?: string;
+}
+
+interface CustomOverlayOptions {
+  position: LatLng;
+  content: string | HTMLElement;
+  map?: Map;
+  clickable?: boolean;
+  xAnchor?: number;
+  yAnchor?: number;
+  zIndex?: number;
+}
+
+// Make sure types are exported
 export {};
