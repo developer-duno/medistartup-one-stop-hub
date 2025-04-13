@@ -4,9 +4,11 @@ import { Award, ArrowRight } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useExperts } from '@/contexts/ExpertsContext';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertsSection = () => {
   const { experts } = useExperts();
+  const { openConsultation } = useConsultation();
 
   // Filter experts to only show those who are approved and marked for main page display
   // and sort them by display order
@@ -80,16 +82,23 @@ const ExpertsSection = () => {
                   {expert.description}
                 </p>
                 
-                <div className="mt-auto">
+                <div className="mt-auto flex gap-2">
                   <CustomButton 
                     variant="primary" 
-                    className="w-full flex items-center justify-center gap-1"
+                    className="flex-1 flex items-center justify-center gap-1"
                     asChild
                   >
                     <Link to={`/expert/${expert.id}`}>
                       프로필 보기
                       <ArrowRight className="h-4 w-4 ml-1" />
                     </Link>
+                  </CustomButton>
+                  <CustomButton
+                    variant="accent"
+                    className="flex-1 flex items-center justify-center"
+                    onClick={openConsultation}
+                  >
+                    무료 상담
                   </CustomButton>
                 </div>
               </div>

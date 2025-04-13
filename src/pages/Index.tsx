@@ -5,7 +5,6 @@ import HeroSection from '../components/HeroSection';
 import ServicesSection from '../components/ServicesSection';
 import RegionalMap from '../components/RegionalMap';
 import ExpertsSection from '../components/ExpertsSection';
-import ContactSection from '../components/contact/ContactSection';
 import Footer from '../components/Footer';
 import NewsInsightsSection from '../components/home/NewsInsightsSection';
 import SuccessStoriesSection from '../components/home/SuccessStoriesSection';
@@ -24,9 +23,7 @@ const Index = () => {
       <NewsInsightsSection />
       <SuccessStoriesSection />
       
-      <ContactSection />
-      
-      {/* Expert application CTA section - moved below contact section */}
+      {/* Expert application CTA section */}
       <ExpertApplicationCTA />
       
       <Footer />

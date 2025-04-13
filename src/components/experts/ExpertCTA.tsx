@@ -3,8 +3,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Download } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertCTA: React.FC = () => {
+  const { openConsultation } = useConsultation();
+  
   return (
     <>
       <div className="flex justify-center mt-12">
@@ -27,11 +30,9 @@ const ExpertCTA: React.FC = () => {
             <CustomButton 
               variant="accent" 
               size="lg"
-              asChild
+              onClick={openConsultation}
             >
-              <Link to="/contact">
-                무료 상담 신청하기
-              </Link>
+              무료 상담 신청하기
             </CustomButton>
           </div>
         </div>
