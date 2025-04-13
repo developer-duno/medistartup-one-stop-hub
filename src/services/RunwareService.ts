@@ -10,6 +10,9 @@ export interface GenerateImageParams {
   height?: number;
   numberResults?: number;
   outputFormat?: string;
+  CFGScale?: number;
+  scheduler?: string;
+  seed?: number | string;
 }
 
 export class RunwareService {
@@ -37,8 +40,9 @@ export class RunwareService {
             height: params.height || 1024,
             numberResults: params.numberResults || 1,
             outputFormat: params.outputFormat || "WEBP",
-            CFGScale: 1,
-            scheduler: "FlowMatchEulerDiscreteScheduler",
+            CFGScale: params.CFGScale || 1,
+            scheduler: params.scheduler || "FlowMatchEulerDiscreteScheduler",
+            seed: params.seed || Math.floor(Math.random() * 1000000000),
           }
         ])
       });

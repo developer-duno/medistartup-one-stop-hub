@@ -10,6 +10,7 @@ const HeroSection = () => {
   const [hospitalImage, setHospitalImage] = useState('');
   const regions = ['대전/충남', '서울/경기', '부산/경남', '대구/경북', '광주/전라', '강원', '제주'];
   const [isLoading, setIsLoading] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   useEffect(() => {
     const generateHospitalImage = async () => {
@@ -44,6 +45,10 @@ const HeroSection = () => {
       toast.success(`${selectedRegion} 지역의 무료 타당성 분석 요청이 접수되었습니다.`);
       setIsLoading(false);
     }, 1500);
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
   };
 
   return (
@@ -163,11 +168,34 @@ const HeroSection = () => {
 
           <div className="w-full lg:w-1/2 relative" aria-hidden="true">
             <div className="aspect-[5/4] relative z-10">
-              <img 
-                src={hospitalImage || "https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop"}
-                alt="병원 인테리어 이미지" 
-                className="w-full h-full object-cover rounded-2xl shadow-xl animate-float"
-              />
+              {isVideoPlaying ? (
+                <video 
+                  className="w-full h-full object-cover rounded-2xl shadow-xl"
+                  autoPlay
+                  controls
+                  loop
+                >
+                  <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <div className="relative cursor-pointer" onClick={handleVideoPlay}>
+                  <img 
+                    src={hospitalImage || "https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop"}
+                    alt="병원 인테리어 이미지" 
+                    className="w-full h-full object-cover rounded-2xl shadow-xl animate-float"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center animate-pulse-light">
+                      <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-secondary-100 rounded-full z-0"></div>
