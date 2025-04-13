@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Eye, Edit, Trash2, Plus, MapPin, BarChart3, Building2, FileCheck, Users, Briefcase, Package } from 'lucide-react';
 import { useServices } from '@/contexts/ServicesContext';
 import ServiceForm from './ServiceForm';
-import { useToast } from '@/components/ui/toast';
+import { useToast } from '@/hooks/use-toast';
 import { Service } from '@/types/service';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
