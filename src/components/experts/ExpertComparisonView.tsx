@@ -3,21 +3,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
-import { Expert } from '@/types/expert';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 interface ExpertComparisonViewProps {
-  selectedExperts: number[];
-  getSelectedExpertsData: () => Expert[];
-  setSelectedExperts: (experts: number[]) => void;
   setViewMode: (mode: string) => void;
 }
 
 const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
-  selectedExperts,
-  getSelectedExpertsData,
-  setSelectedExperts,
   setViewMode
 }) => {
+  const { selectedExperts, clearSelectedExperts, getSelectedExpertsData, openConsultation } = useConsultation();
+
   if (selectedExperts.length < 2) {
     return (
       <div className="bg-white rounded-xl shadow-md p-8 text-center">
@@ -39,6 +35,8 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
     );
   }
 
+  const selectedExpertsData = getSelectedExpertsData();
+
   return (
     <div>
       <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
@@ -49,7 +47,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <th className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider w-1/4">
                   비교 항목
                 </th>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <th key={expert.id} className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden">
@@ -70,7 +68,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   전문 분야
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     {expert.role}
                   </td>
@@ -80,7 +78,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   전문 서비스
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     {expert.services.join(', ')}
                   </td>
@@ -90,7 +88,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   경력
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     {expert.experience}
                   </td>
@@ -100,7 +98,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   프로젝트 수
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     {expert.projects}
                   </td>
@@ -110,7 +108,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   활동 지역
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     {expert.regions.join(', ')}
                   </td>
@@ -120,7 +118,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   소개
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 text-sm text-neutral-700">
                     <p className="max-w-xs">{expert.description}</p>
                   </td>
@@ -130,7 +128,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
                   상세 프로필
                 </td>
-                {getSelectedExpertsData().map((expert) => (
+                {selectedExpertsData.map((expert) => expert && (
                   <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
                     <Link 
                       to={`/expert/${expert.id}`}
@@ -149,18 +147,16 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
       <div className="flex justify-center gap-4">
         <CustomButton 
           variant="outline"
-          onClick={() => setSelectedExperts([])}
+          onClick={clearSelectedExperts}
         >
           선택 초기화
         </CustomButton>
         
         <CustomButton 
           variant="primary"
-          asChild
+          onClick={openConsultation}
         >
-          <Link to="/contact">
-            선택한 전문가에게 상담 신청
-          </Link>
+          선택한 전문가에게 상담 신청
         </CustomButton>
         
         <CustomButton 

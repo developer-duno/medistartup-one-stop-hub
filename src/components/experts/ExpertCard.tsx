@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Clock, MapPin } from 'lucide-react';
@@ -8,20 +9,10 @@ import { useConsultation } from '@/contexts/ConsultationContext';
 
 interface ExpertCardProps {
   expert: Expert;
-  selectedExperts?: number[];
-  onSelectExpert?: (expertId: number) => void;
 }
 
-const ExpertCard: React.FC<ExpertCardProps> = ({ 
-  expert, 
-  selectedExperts: propSelectedExperts, 
-  onSelectExpert: propOnSelectExpert 
-}) => {
-  const { selectedExperts: contextSelectedExperts, selectExpert: contextSelectExpert } = useConsultation();
-  
-  // Use props if provided (for backward compatibility), otherwise use context
-  const selectedExperts = propSelectedExperts || contextSelectedExperts;
-  const onSelectExpert = propOnSelectExpert || contextSelectExpert;
+const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
+  const { selectedExperts, selectExpert } = useConsultation();
   
   const isSelected = selectedExperts.includes(expert.id);
 
@@ -44,7 +35,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
         
         <div className="absolute top-3 right-3">
           <button
-            onClick={() => onSelectExpert(expert.id)}
+            onClick={() => selectExpert(expert.id)}
             className={`w-6 h-6 rounded-full flex items-center justify-center ${
               isSelected
                 ? 'bg-primary text-white'
@@ -101,7 +92,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
             variant={isSelected ? "secondary" : "outline"}
             size="sm"
             className="flex-1"
-            onClick={() => onSelectExpert(expert.id)}
+            onClick={() => selectExpert(expert.id)}
           >
             {isSelected ? '선택 취소' : '전문가 선택'}
           </CustomButton>

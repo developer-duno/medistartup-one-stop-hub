@@ -7,15 +7,11 @@ import { Expert } from '@/types/expert';
 
 interface ExpertGridViewProps {
   filteredExperts: Expert[];
-  selectedExperts: number[];
-  handleExpertSelect: (expertId: number) => void;
   resetFilters: () => void;
 }
 
 const ExpertGridView: React.FC<ExpertGridViewProps> = ({ 
   filteredExperts, 
-  selectedExperts, 
-  handleExpertSelect,
   resetFilters 
 }) => {
   if (filteredExperts.length === 0) {
@@ -45,8 +41,6 @@ const ExpertGridView: React.FC<ExpertGridViewProps> = ({
         <ExpertCard
           key={expert.id} 
           expert={expert}
-          selectedExperts={selectedExperts}
-          onSelectExpert={handleExpertSelect}
         />
       ))}
     </div>

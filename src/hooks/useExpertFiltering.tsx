@@ -2,11 +2,12 @@
 import { useState, useEffect } from 'react';
 import { Expert } from '@/types/expert';
 import { useSearchParams } from 'react-router-dom';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 export function useExpertFiltering(expertsData: Expert[]) {
   const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState("grid"); // grid or compare
-  const [selectedExperts, setSelectedExperts] = useState<number[]>([]);
+  const { selectedExperts, selectExpert: handleExpertSelect, getSelectedExpertsData } = useConsultation();
   const [filters, setFilters] = useState({
     search: "",
     regions: [] as string[],
@@ -95,29 +96,6 @@ export function useExpertFiltering(expertsData: Expert[]) {
     setFilteredExperts(expertsData);
   }, [expertsData]);
 
-  // Handle expert selection
-  const handleExpertSelect = (expertId: number) => {
-    setSelectedExperts(prev => {
-      if (prev.includes(expertId)) {
-        return prev.filter(id => id !== expertId);
-      }
-      
-      if (prev.length < 3) {
-        return [...prev, expertId];
-      }
-      
-      const newSelected = [...prev];
-      newSelected.shift();
-      newSelected.push(expertId);
-      return newSelected;
-    });
-  };
-  
-  // Get data for selected experts
-  const getSelectedExpertsData = () => {
-    return selectedExperts.map(id => expertsData.find(expert => expert.id === id));
-  };
-
   // Reset all filters
   const resetFilters = () => {
     setFilters({search: "", regions: [], services: []});
@@ -130,7 +108,6 @@ export function useExpertFiltering(expertsData: Expert[]) {
     viewMode,
     setViewMode,
     selectedExperts,
-    setSelectedExperts,
     filteredExperts,
     showFilters,
     setShowFilters,

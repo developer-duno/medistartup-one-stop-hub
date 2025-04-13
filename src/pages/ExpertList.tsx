@@ -10,9 +10,11 @@ import ExpertCTA from '@/components/experts/ExpertCTA';
 import ExpertPageLayout from '@/components/experts/ExpertPageLayout';
 import ExpertCategoryBar from '@/components/experts/ExpertCategoryBar';
 import { useExpertFiltering } from '@/hooks/useExpertFiltering';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
+  const { selectedExperts, setSelectedExperts } = useConsultation();
   const serviceCategories = [
     "입지 분석", 
     "재무 컨설팅", 
@@ -29,8 +31,7 @@ const ExpertList = () => {
     setFilters,
     viewMode,
     setViewMode,
-    selectedExperts,
-    setSelectedExperts,
+    selectedExperts: filteredSelectedExperts,  // Renamed to avoid confusion
     filteredExperts,
     showFilters,
     setShowFilters,
@@ -69,22 +70,16 @@ const ExpertList = () => {
       </div>
 
       <MobileSelectionBar 
-        selectedExperts={selectedExperts} 
         setViewMode={setViewMode} 
       />
 
       {viewMode === "grid" ? (
         <ExpertGridView 
           filteredExperts={filteredExperts} 
-          selectedExperts={selectedExperts}
-          handleExpertSelect={handleExpertSelect}
           resetFilters={resetFilters}
         />
       ) : (
         <ExpertComparisonView 
-          selectedExperts={selectedExperts}
-          getSelectedExpertsData={getSelectedExpertsData}
-          setSelectedExperts={setSelectedExperts}
           setViewMode={setViewMode}
         />
       )}

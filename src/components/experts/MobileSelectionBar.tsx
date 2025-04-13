@@ -5,18 +5,13 @@ import { useConsultation } from '@/contexts/ConsultationContext';
 import { CheckCircle } from 'lucide-react';
 
 interface MobileSelectionBarProps {
-  selectedExperts?: number[];
   setViewMode: (mode: string) => void;
 }
 
 const MobileSelectionBar: React.FC<MobileSelectionBarProps> = ({ 
-  selectedExperts: propSelectedExperts, 
   setViewMode 
 }) => {
-  const { selectedExperts: contextSelectedExperts, openConsultation } = useConsultation();
-  
-  // Use props if provided (for backward compatibility), otherwise use context
-  const selectedExperts = propSelectedExperts || contextSelectedExperts;
+  const { selectedExperts, openConsultation } = useConsultation();
   
   if (selectedExperts.length === 0) return null;
   
