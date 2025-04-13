@@ -41,3 +41,20 @@
   color: var(--theme-primary);
   border-color: var(--theme-primary);
 }
+
+.theme-underline {
+  border-bottom: 2px solid var(--theme-primary);
+}
+
+.theme-highlight {
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary);
+}
+
+.theme-point {
+  color: var(--theme-primary);
+}
+
+.theme-icon {
+  color: var(--theme-primary);
+}

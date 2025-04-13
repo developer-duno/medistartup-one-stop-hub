@@ -10,6 +10,7 @@ interface CustomButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   children: React.ReactNode;
   className?: string;
   asChild?: boolean;
+  themeClass?: string;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -19,15 +20,16 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   fullWidth = false,
   className,
   asChild = false,
+  themeClass,
   ...props
 }) => {
   const baseStyles = "inline-flex items-center justify-center rounded-md font-pretendard font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-opacity-50";
 
   const variantStyles = {
-    primary: "bg-primary hover:bg-primary-700 text-white focus:ring-primary-300",
+    primary: themeClass ? "bg-primary hover:bg-primary-700 text-white focus:ring-primary-300 theme-btn" : "bg-primary hover:bg-primary-700 text-white focus:ring-primary-300",
     secondary: "bg-secondary hover:bg-secondary-700 text-white focus:ring-secondary-300",
     accent: "bg-accent hover:bg-accent-700 text-white focus:ring-accent-300",
-    outline: "bg-transparent border-2 border-primary text-primary hover:bg-primary-100 focus:ring-primary-300",
+    outline: themeClass ? "bg-transparent border-2 border-primary text-primary hover:bg-primary-100 focus:ring-primary-300 theme-border theme-text" : "bg-transparent border-2 border-primary text-primary hover:bg-primary-100 focus:ring-primary-300",
   };
 
   const sizeStyles = {
@@ -47,6 +49,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         variantStyles[variant],
         sizeStyles[size],
         widthStyles,
+        themeClass,
         className
       )}
       {...props}
