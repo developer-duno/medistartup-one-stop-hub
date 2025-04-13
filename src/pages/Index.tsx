@@ -10,6 +10,7 @@ import Footer from '../components/Footer';
 import NewsInsightsSection from '../components/home/NewsInsightsSection';
 import SuccessStoriesSection from '../components/home/SuccessStoriesSection';
 import ExpertApplicationButton from '../components/expert/ExpertApplicationButton';
+import SimulatorSection from '../components/simulator/SimulatorSection';
 import { UserPlus } from 'lucide-react';
 
 const Index = () => {
@@ -18,6 +19,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <ServicesSection />
+      <SimulatorSection />
       <RegionalMap />
       <ExpertsSection />
       
