@@ -23,8 +23,6 @@ const ExpertList = () => {
     "의료기기 구입 및 설치", 
     "수납 및 의료폐기물 처리"
   ];
-  
-  const regions = ["서울", "경기", "인천", "대전", "충남", "충북", "부산", "대구", "광주", "제주"];
 
   const {
     filters,
@@ -56,7 +54,6 @@ const ExpertList = () => {
         <ExpertFilters 
           filters={filters}
           setFilters={setFilters}
-          regions={regions}
           serviceCategories={serviceCategories}
           showFilters={showFilters}
           setShowFilters={setShowFilters}

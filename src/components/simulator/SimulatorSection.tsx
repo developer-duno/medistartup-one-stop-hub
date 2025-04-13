@@ -1,10 +1,92 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calculator, TrendingUp, Users } from 'lucide-react';
 import SimulatorCard from './SimulatorCard';
 import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './SimulatorUtils';
+import { Simulator } from '../admin/simulator/types';
+
+// Default simulators if none found in localStorage
+const defaultSimulators: Simulator[] = [
+  {
+    id: 1,
+    title: '개원 비용 시뮬레이터',
+    description: '진료과목별 평균 개원 비용을 확인하세요',
+    type: 'financial',
+    active: true,
+    views: 0
+  },
+  {
+    id: 2,
+    title: '수익성 분석 시뮬레이터',
+    description: '지역 및 진료과목별 예상 수익 시뮬레이션',
+    type: 'revenue',
+    active: true,
+    views: 0
+  },
+  {
+    id: 3,
+    title: '인력 구성 시뮬레이터',
+    description: '병원 규모별 최적 인력 구성 시뮬레이션',
+    type: 'staffing',
+    active: true,
+    views: 0
+  }
+];
 
 const SimulatorSection = () => {
+  const [simulators, setSimulators] = useState<Simulator[]>([]);
+
+  // Load simulators from localStorage
+  useEffect(() => {
+    const storedSimulators = localStorage.getItem('simulators');
+    if (storedSimulators) {
+      try {
+        const parsedSimulators = JSON.parse(storedSimulators);
+        // Only show active simulators
+        const activeSimulators = parsedSimulators.filter((sim: Simulator) => sim.active);
+        setSimulators(activeSimulators);
+      } catch (error) {
+        console.error('Error parsing stored simulators:', error);
+        setSimulators(defaultSimulators);
+      }
+    } else {
+      setSimulators(defaultSimulators);
+    }
+  }, []);
+  
+  // Get simulator function based on type
+  const getSimulatorFunction = (type: string) => {
+    switch(type) {
+      case 'financial':
+        return simulateFinancialCosts;
+      case 'revenue':
+        return simulateRevenue;
+      case 'staffing':
+        return simulateStaffing;
+      default:
+        return simulateFinancialCosts;
+    }
+  };
+  
+  // Track simulator usage
+  const trackSimulatorUsage = (simulatorId: number) => {
+    const storedSimulators = localStorage.getItem('simulators');
+    if (storedSimulators) {
+      try {
+        const parsedSimulators = JSON.parse(storedSimulators);
+        const updatedSimulators = parsedSimulators.map((sim: Simulator) => {
+          if (sim.id === simulatorId) {
+            return {...sim, views: (sim.views || 0) + 1};
+          }
+          return sim;
+        });
+        localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
+      } catch (error) {
+        console.error('Error updating simulator usage:', error);
+      }
+    }
+  };
+
   return (
     <section id="simulators" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -18,34 +100,32 @@ const SimulatorSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <SimulatorCard
-            id={1}
-            title="개원 비용 시뮬레이터"
-            description="진료과목별 평균 개원 비용을 확인하세요"
-            icon={<Calculator className="h-6 w-6 text-primary" />}
-            simulatorType="financial"
-            onSimulate={simulateFinancialCosts}
-          />
-          
-          <SimulatorCard
-            id={2}
-            title="수익성 분석 시뮬레이터"
-            description="지역 및 진료과목별 예상 수익 시뮬레이션"
-            icon={<TrendingUp className="h-6 w-6 text-primary" />}
-            simulatorType="revenue"
-            onSimulate={simulateRevenue}
-          />
-          
-          <SimulatorCard
-            id={3}
-            title="인력 구성 시뮬레이터"
-            description="병원 규모별 최적 인력 구성 시뮬레이션"
-            icon={<Users className="h-6 w-6 text-primary" />}
-            simulatorType="staffing"
-            onSimulate={simulateStaffing}
-          />
-        </div>
+        {simulators.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {simulators.map((simulator) => (
+              <SimulatorCard
+                key={simulator.id}
+                id={simulator.id}
+                title={simulator.title}
+                description={simulator.description}
+                icon={
+                  simulator.type === 'financial' ? <Calculator className="h-6 w-6 text-primary" /> :
+                  simulator.type === 'revenue' ? <TrendingUp className="h-6 w-6 text-primary" /> :
+                  <Users className="h-6 w-6 text-primary" />
+                }
+                simulatorType={simulator.type}
+                onSimulate={() => {
+                  trackSimulatorUsage(simulator.id);
+                  return getSimulatorFunction(simulator.type)();
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10">
+            <p className="text-neutral-500">시뮬레이터를 준비 중입니다. 잠시만 기다려주세요.</p>
+          </div>
+        )}
         
         <div className="mt-10 text-center">
           <p className="text-sm text-muted-foreground">

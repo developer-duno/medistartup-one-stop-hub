@@ -37,20 +37,23 @@ const mockSimulators: Simulator[] = [
   }
 ];
 
-// Mock simulator usage data
-const mockUsageData: UsageData[] = [
-  { date: '2023-01', views: 120 },
-  { date: '2023-02', views: 150 },
-  { date: '2023-03', views: 200 },
-  { date: '2023-04', views: 180 },
-  { date: '2023-05', views: 220 },
-  { date: '2023-06', views: 250 }
-];
+// Calculate usage data from simulators
+const generateUsageData = (simulators: Simulator[]): UsageData[] => {
+  const totalViews = simulators.reduce((sum, sim) => sum + (sim.views || 0), 0);
+  const months = ['1월', '2월', '3월', '4월', '5월', '6월'];
+  
+  // Generate mock data based on total views
+  return months.map((month, index) => ({
+    date: `2023-0${index + 1}`,
+    views: Math.floor((totalViews / 6) * (0.8 + Math.random() * 0.4))
+  }));
+};
 
 const SimulatorManagement: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
   const [editingSimulator, setEditingSimulator] = useState<Simulator | null>(null);
   const [activeTab, setActiveTab] = useState('list');
+  const [usageData, setUsageData] = useState<UsageData[]>([]);
   const { toast } = useToast();
 
   // Load simulators from localStorage or use mock data
@@ -67,6 +70,11 @@ const SimulatorManagement: React.FC = () => {
       setSimulators(mockSimulators);
     }
   }, []);
+
+  // Generate usage data whenever simulators change
+  useEffect(() => {
+    setUsageData(generateUsageData(simulators));
+  }, [simulators]);
 
   // Save simulators to localStorage when they change
   useEffect(() => {
@@ -176,7 +184,7 @@ const SimulatorManagement: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="usage">
-          <SimulatorUsage usageData={mockUsageData} />
+          <SimulatorUsage usageData={usageData} />
         </TabsContent>
 
         <TabsContent value="edit">

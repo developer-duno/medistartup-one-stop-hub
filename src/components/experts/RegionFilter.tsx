@@ -19,6 +19,9 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
   selectedRegions,
   onRegionChange,
 }) => {
+  // Show only active regions
+  const activeRegions = regions.filter(region => region !== undefined);
+  
   return (
     <Collapsible className="w-full">
       <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-neutral-50 rounded-md">
@@ -30,7 +33,7 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
       </CollapsibleTrigger>
       <CollapsibleContent className="mt-2 space-y-2">
         <div className="grid grid-cols-2 gap-2 pl-6">
-          {regions.map((region) => (
+          {activeRegions.map((region) => (
             <label key={region} className="flex items-center space-x-2 cursor-pointer">
               <Checkbox 
                 checked={selectedRegions.includes(region)}

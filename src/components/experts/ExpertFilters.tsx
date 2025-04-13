@@ -11,6 +11,7 @@ import {
 import SearchInput from './SearchInput';
 import FilterBadges from './FilterBadges';
 import FilterPopoverContent from './FilterPopoverContent';
+import { useRegions } from '@/contexts/RegionsContext';
 
 interface ExpertFiltersProps {
   filters: {
@@ -23,7 +24,6 @@ interface ExpertFiltersProps {
     regions: string[];
     services: string[];
   }>>;
-  regions: string[];
   serviceCategories: string[];
   showFilters: boolean;
   setShowFilters: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,13 +34,18 @@ interface ExpertFiltersProps {
 const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   filters,
   setFilters,
-  regions,
   serviceCategories,
   showFilters,
   setShowFilters,
   activeCategory,
   setActiveCategory
 }) => {
+  // Use regions from RegionsContext instead of prop
+  const { regions } = useRegions();
+  
+  // Extract region names for the filter
+  const regionNames = regions.map(region => region.name);
+  
   const handleRemoveFilter = (type: 'regions' | 'services', value: string) => {
     setFilters(prev => ({
       ...prev,
@@ -52,8 +57,6 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
     setFilters({search: "", regions: [], services: []});
     setActiveCategory("all");
   };
-
-  const activeFiltersCount = filters.regions.length + filters.services.length;
   
   const handleRegionChange = (region: string, checked: boolean) => {
     if (checked) {
@@ -89,9 +92,9 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
               >
                 <Filter className="h-4 w-4" />
                 필터
-                {activeFiltersCount > 0 && (
+                {(filters.regions.length + filters.services.length) > 0 && (
                   <Badge className="bg-primary text-white ml-1 h-6 w-6 flex items-center justify-center p-0 rounded-full">
-                    {activeFiltersCount}
+                    {filters.regions.length + filters.services.length}
                   </Badge>
                 )}
                 <ChevronDown className="h-4 w-4" />
@@ -99,7 +102,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
             </PopoverTrigger>
             <PopoverContent className="w-80 p-4" align="start">
               <FilterPopoverContent
-                regions={regions}
+                regions={regionNames}
                 serviceCategories={serviceCategories}
                 filters={filters}
                 onRegionChange={handleRegionChange}
