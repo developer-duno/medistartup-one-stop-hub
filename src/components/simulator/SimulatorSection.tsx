@@ -87,17 +87,30 @@ const SimulatorSection = () => {
     }
   };
 
-  // Get default parameters for simulator types
-  const getDefaultParamsForType = (type: string) => {
+  // Get default parameters for simulator types with proper typing
+  const getFinancialParams = () => {
+    return { specialty: '내과', size: 50, location: '중형상가' };
+  };
+
+  const getRevenueParams = () => {
+    return { specialty: '피부과', patients: 30, region: '서울/경기' };
+  };
+
+  const getStaffingParams = () => {
+    return { specialty: '치과', size: 100, services: ['일반진료', '미용'] as string[] };
+  };
+
+  // Get appropriate parameter object based on simulator type
+  const getParamsForType = (type: string) => {
     switch(type) {
       case 'financial':
-        return { specialty: '내과', size: 50, location: '중형상가' };
+        return getFinancialParams();
       case 'revenue':
-        return { specialty: '피부과', patients: 30, region: '서울/경기' };
+        return getRevenueParams();
       case 'staffing':
-        return { specialty: '치과', size: 100, services: ['일반진료', '미용'] };
+        return getStaffingParams();
       default:
-        return { specialty: '내과', size: 50, location: '중형상가' };
+        return getFinancialParams();
     }
   };
 
@@ -130,7 +143,16 @@ const SimulatorSection = () => {
                 simulatorType={(simulator.type as 'financial' | 'revenue' | 'staffing')}
                 onSimulate={() => {
                   trackSimulatorUsage(simulator.id);
-                  return getSimulatorFunction(simulator.type)(getDefaultParamsForType(simulator.type));
+                  // Handle simulation with proper type safety
+                  if (simulator.type === 'financial') {
+                    return simulateFinancialCosts(getFinancialParams());
+                  } else if (simulator.type === 'revenue') {
+                    return simulateRevenue(getRevenueParams());
+                  } else if (simulator.type === 'staffing') {
+                    return simulateStaffing(getStaffingParams());
+                  } else {
+                    return simulateFinancialCosts(getFinancialParams());
+                  }
                 }}
               />
             ))}
