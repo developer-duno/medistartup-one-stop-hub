@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Expert } from '@/types/expert';
 import { useExperts } from './ExpertsContext';
+import { toast } from 'sonner';
 
 interface ConsultationContextType {
   selectedExperts: number[];
@@ -43,15 +44,46 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
 
   const selectExpert = (expertId: number) => {
     setSelectedExperts(prev => {
-      if (prev.includes(expertId)) return prev;
-      
-      // Maximum 3 experts
-      if (prev.length >= 3) {
-        const newSelected = [...prev];
-        newSelected.shift(); // Remove oldest selection
-        return [...newSelected, expertId];
+      // If already selected, remove this expert (deselect)
+      if (prev.includes(expertId)) {
+        return prev.filter(id => id !== expertId);
       }
       
+      // Get the expert's services
+      const expert = experts.find(e => e.id === expertId);
+      if (!expert) return prev;
+      
+      const expertServices = expert.services;
+      
+      // Check if any service from this expert is already represented by another expert
+      const conflictingExperts = prev.filter(selectedId => {
+        const selectedExpert = experts.find(e => e.id === selectedId);
+        if (!selectedExpert) return false;
+        
+        // Check if any service overlaps
+        return selectedExpert.services.some(service => 
+          expertServices.includes(service)
+        );
+      });
+      
+      if (conflictingExperts.length > 0) {
+        // Get names of conflicting services
+        const conflictingExpertNames = conflictingExperts
+          .map(id => experts.find(e => e.id === id)?.name || "")
+          .filter(name => name !== "");
+          
+        const message = conflictingExpertNames.length === 1
+          ? `${conflictingExpertNames[0]} 전문가와 같은 서비스 카테고리를 가지고 있어 선택할 수 없습니다.`
+          : `다른 전문가와 같은 서비스 카테고리를 가지고 있어 선택할 수 없습니다.`;
+
+        toast.error(message, {
+          description: "서비스 카테고리별로 한 명의 전문가만 선택할 수 있습니다."
+        });
+        
+        return prev;
+      }
+      
+      // Add this expert to selection
       return [...prev, expertId];
     });
   };

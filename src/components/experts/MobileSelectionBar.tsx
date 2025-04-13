@@ -2,6 +2,7 @@
 import React from 'react';
 import CustomButton from '../ui/CustomButton';
 import { useConsultation } from '@/contexts/ConsultationContext';
+import { CheckCircle } from 'lucide-react';
 
 interface MobileSelectionBarProps {
   selectedExperts?: number[];
@@ -22,7 +23,10 @@ const MobileSelectionBar: React.FC<MobileSelectionBarProps> = ({
   return (
     <div className="md:hidden sticky top-0 z-10 bg-primary text-white p-4 mb-6 rounded-lg shadow-md">
       <div className="flex justify-between items-center">
-        <span>{selectedExperts.length}명의 전문가 선택됨</span>
+        <div className="flex items-center gap-2">
+          <CheckCircle className="h-4 w-4" />
+          <span>{selectedExperts.length}명의 전문가 선택됨</span>
+        </div>
         <div className="flex gap-2">
           <CustomButton 
             variant="secondary" 

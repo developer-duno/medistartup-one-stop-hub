@@ -7,7 +7,7 @@ import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertsSection = () => {
   const { experts } = useExperts();
-  const { selectExpert } = useConsultation();
+  const { selectedExperts, selectExpert } = useConsultation();
 
   // Filter experts to only show those who are approved and marked for main page display
   // and sort them by display order
@@ -33,77 +33,100 @@ const ExpertsSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {mainPageExperts.map((expert) => (
-            <div key={expert.id} className="bg-white rounded-xl shadow-md overflow-hidden group">
-              <div className="relative h-60 overflow-hidden">
-                <img 
-                  src={expert.image || "/placeholder.svg"} 
-                  alt={expert.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="font-noto text-sm text-white/80">
-                    {expert.specialty}
-                  </p>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="font-pretendard font-bold text-xl text-neutral-900">
-                      {expert.name}
-                    </h3>
-                    <p className="font-noto text-neutral-600">
-                      {expert.role}
+          {mainPageExperts.map((expert) => {
+            const isSelected = selectedExperts.includes(expert.id);
+            
+            return (
+              <div key={expert.id} className={`bg-white rounded-xl shadow-md overflow-hidden group ${
+                isSelected ? 'ring-2 ring-primary border-primary' : ''
+              }`}>
+                <div className="relative h-60 overflow-hidden">
+                  <img 
+                    src={expert.image || "/placeholder.svg"} 
+                    alt={expert.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <p className="font-noto text-sm text-white/80">
+                      {expert.specialty}
                     </p>
                   </div>
-                  <Award className="h-5 w-5 text-secondary" />
+                  
+                  {isSelected && (
+                    <div className="absolute top-3 right-3">
+                      <div className="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center">
+                        <Check className="h-4 w-4" />
+                      </div>
+                    </div>
+                  )}
                 </div>
                 
-                <div className="flex gap-4 mb-4">
-                  <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
-                    <span className="font-pretendard font-bold text-primary text-lg">
-                      {expert.experience}
-                    </span>
-                    <span className="font-noto text-xs text-neutral-500">경력</span>
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="font-pretendard font-bold text-xl text-neutral-900">
+                        {expert.name}
+                      </h3>
+                      <p className="font-noto text-neutral-600">
+                        {expert.role}
+                      </p>
+                    </div>
+                    <Award className="h-5 w-5 text-secondary" />
                   </div>
-                  <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
-                    <span className="font-pretendard font-bold text-primary text-lg">
-                      {expert.projects}
-                    </span>
-                    <span className="font-noto text-xs text-neutral-500">프로젝트</span>
+                  
+                  <div className="flex gap-4 mb-4">
+                    <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
+                      <span className="font-pretendard font-bold text-primary text-lg">
+                        {expert.experience}
+                      </span>
+                      <span className="font-noto text-xs text-neutral-500">경력</span>
+                    </div>
+                    <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
+                      <span className="font-pretendard font-bold text-primary text-lg">
+                        {expert.projects}
+                      </span>
+                      <span className="font-noto text-xs text-neutral-500">프로젝트</span>
+                    </div>
                   </div>
-                </div>
-                
-                <p className="font-noto text-sm text-neutral-600 mb-6 line-clamp-3">
-                  {expert.description}
-                </p>
-                
-                <div className="mt-auto flex gap-2">
-                  <CustomButton 
-                    variant="primary" 
-                    className="flex-1 flex items-center justify-center gap-1"
-                    asChild
-                  >
-                    <Link to={`/expert/${expert.id}`}>
-                      프로필 보기
-                      <ArrowRight className="h-4 w-4 ml-1" />
-                    </Link>
-                  </CustomButton>
-                  <CustomButton
-                    variant="accent"
-                    className="flex-1 flex items-center justify-center gap-1"
-                    onClick={() => selectExpert(expert.id)}
-                  >
-                    <Check className="h-4 w-4" />
-                    선택하기
-                  </CustomButton>
+                  
+                  <p className="font-noto text-sm text-neutral-600 mb-6 line-clamp-3">
+                    {expert.description}
+                  </p>
+                  
+                  <div className="mt-auto flex gap-2">
+                    <CustomButton 
+                      variant="primary" 
+                      className="flex-1 flex items-center justify-center gap-1"
+                      asChild
+                    >
+                      <Link to={`/expert/${expert.id}`}>
+                        프로필 보기
+                        <ArrowRight className="h-4 w-4 ml-1" />
+                      </Link>
+                    </CustomButton>
+                    <CustomButton
+                      variant={isSelected ? "secondary" : "accent"}
+                      className="flex-1 flex items-center justify-center gap-1"
+                      onClick={() => selectExpert(expert.id)}
+                    >
+                      {isSelected ? (
+                        <>
+                          <Check className="h-4 w-4" />
+                          선택됨
+                        </>
+                      ) : (
+                        <>
+                          <Check className="h-4 w-4" />
+                          선택하기
+                        </>
+                      )}
+                    </CustomButton>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         
         <div className="mt-10 text-center">

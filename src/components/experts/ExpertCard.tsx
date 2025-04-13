@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Clock, MapPin } from 'lucide-react';
@@ -99,7 +98,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({
         
         <div className="flex gap-2">
           <CustomButton 
-            variant="outline" 
+            variant={isSelected ? "secondary" : "outline"}
             size="sm"
             className="flex-1"
             onClick={() => onSelectExpert(expert.id)}
