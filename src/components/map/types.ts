@@ -9,6 +9,8 @@ export interface Region {
   labelY: number;
   includesRegions: string[];
   expertCount?: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface RegionInfo extends Region {

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useExperts } from '@/contexts/ExpertsContext';
-import MapSvg from './map/MapSvg';
+import KakaoMap from './map/KakaoMap';
 import RegionCard from './map/RegionCard';
 import { regions } from './map/regionData';
 import { getActiveRegionInfo, getFilteredUrl, getRegionalExpertCount } from './map/regionUtils';
@@ -33,7 +33,7 @@ const RegionalMap = () => {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            <MapSvg 
+            <KakaoMap 
               regions={regionsWithCounts} 
               activeRegion={activeRegion} 
               setActiveRegion={setActiveRegion} 
