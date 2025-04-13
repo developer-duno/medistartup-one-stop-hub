@@ -1,14 +1,9 @@
 
 import React from 'react';
+import { FinancialResult } from '../types';
 
 interface FinancialResultsProps {
-  result: {
-    interiorCost: string;
-    equipmentCost: string;
-    licenseCost: string;
-    miscCost: string;
-    totalCost: string;
-  };
+  result: FinancialResult;
 }
 
 const FinancialResults: React.FC<FinancialResultsProps> = ({ result }) => {

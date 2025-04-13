@@ -6,6 +6,7 @@ import { Check, ChevronRight, Sparkles } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import SimulatorInputs from './SimulatorInputs';
 import SimulatorResults from './SimulatorResults';
+import { FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
 
 export interface SimulatorCardProps {
   id: number;
@@ -13,7 +14,7 @@ export interface SimulatorCardProps {
   description: string;
   icon: React.ReactNode;
   simulatorType: 'financial' | 'revenue' | 'staffing';
-  onSimulate: (data: any) => any;
+  onSimulate: (data: any) => FinancialResult | RevenueResult | StaffingResult;
 }
 
 const SimulatorCard: React.FC<SimulatorCardProps> = ({
@@ -25,7 +26,7 @@ const SimulatorCard: React.FC<SimulatorCardProps> = ({
   onSimulate,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<FinancialResult | RevenueResult | StaffingResult | null>(null);
   const { toast } = useToast();
   
   // Form state based on simulator type

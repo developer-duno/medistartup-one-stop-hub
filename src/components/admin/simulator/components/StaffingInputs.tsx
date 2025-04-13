@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { SimulatorTestParams } from '../types';
+import { SimulatorTestParams, MEDICAL_SPECIALTIES, SERVICE_TYPES } from '../types';
 
 interface StaffingInputsProps {
   params: SimulatorTestParams;
@@ -13,6 +13,10 @@ interface StaffingInputsProps {
 }
 
 const StaffingInputs: React.FC<StaffingInputsProps> = ({ params, onParamChange, onServiceToggle }) => {
+  // Filter to specialties commonly used for staffing simulation
+  const staffingSpecialties = MEDICAL_SPECIALTIES.filter(specialty => 
+    ['내과', '치과', '한의원', '종합병원'].includes(specialty));
+    
   return (
     <>
       <div className="grid gap-3">
@@ -22,10 +26,9 @@ const StaffingInputs: React.FC<StaffingInputsProps> = ({ params, onParamChange, 
             <SelectValue placeholder="진료과목 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="내과">내과</SelectItem>
-            <SelectItem value="치과">치과</SelectItem>
-            <SelectItem value="한의원">한의원</SelectItem>
-            <SelectItem value="종합병원">종합병원</SelectItem>
+            {staffingSpecialties.map(specialty => (
+              <SelectItem key={specialty} value={specialty}>{specialty}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -43,7 +46,7 @@ const StaffingInputs: React.FC<StaffingInputsProps> = ({ params, onParamChange, 
       <div className="grid gap-3">
         <Label>제공 서비스</Label>
         <div className="flex flex-wrap gap-2">
-          {['수술', '미용', '검진', '입원'].map(service => (
+          {SERVICE_TYPES.map(service => (
             <Button 
               key={service}
               variant={params.services?.includes(service) ? "default" : "outline"}

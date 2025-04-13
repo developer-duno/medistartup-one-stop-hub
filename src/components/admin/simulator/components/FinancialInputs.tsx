@@ -3,7 +3,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { SimulatorTestParams } from '../types';
+import { SimulatorTestParams, MEDICAL_SPECIALTIES, LOCATION_TYPES } from '../types';
 
 interface FinancialInputsProps {
   params: SimulatorTestParams;
@@ -20,16 +20,9 @@ const FinancialInputs: React.FC<FinancialInputsProps> = ({ params, onParamChange
             <SelectValue placeholder="진료과목 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="내과">내과</SelectItem>
-            <SelectItem value="소아과">소아과</SelectItem>
-            <SelectItem value="외과">외과</SelectItem>
-            <SelectItem value="산부인과">산부인과</SelectItem>
-            <SelectItem value="피부과">피부과</SelectItem>
-            <SelectItem value="치과">치과</SelectItem>
-            <SelectItem value="정형외과">정형외과</SelectItem>
-            <SelectItem value="안과">안과</SelectItem>
-            <SelectItem value="한의원">한의원</SelectItem>
-            <SelectItem value="종합병원">종합병원</SelectItem>
+            {MEDICAL_SPECIALTIES.map(specialty => (
+              <SelectItem key={specialty} value={specialty}>{specialty}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -51,10 +44,9 @@ const FinancialInputs: React.FC<FinancialInputsProps> = ({ params, onParamChange
             <SelectValue placeholder="위치 유형 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="중형상가">중형상가</SelectItem>
-            <SelectItem value="대형상가">대형상가</SelectItem>
-            <SelectItem value="주택가">주택가</SelectItem>
-            <SelectItem value="오피스밀집지역">오피스밀집지역</SelectItem>
+            {LOCATION_TYPES.map(location => (
+              <SelectItem key={location} value={location}>{location}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>

@@ -1,7 +1,8 @@
 
 // Utility functions for simulator calculations
+import { FinancialResult, RevenueResult, StaffingResult, StaffMember } from '../admin/simulator/types';
 
-export const simulateFinancialCosts = (params: { specialty: string; size: number; location: string }) => {
+export const simulateFinancialCosts = (params: { specialty: string; size: number; location: string }): FinancialResult => {
   // Base costs by specialty (in millions of KRW)
   const baseCosts: Record<string, number> = {
     '내과': 150,
@@ -47,7 +48,7 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
   };
 };
 
-export const simulateRevenue = (params: { specialty: string; patients: number; region: string }) => {
+export const simulateRevenue = (params: { specialty: string; patients: number; region: string }): RevenueResult => {
   // Base revenue per patient by specialty (in KRW)
   const baseRevenue: Record<string, number> = {
     '내과': 25000,
@@ -58,13 +59,14 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
     '한의원': 50000,
   };
   
-  // Regional multipliers
+  // Regional multipliers - using standardized regions
   const regionMultipliers: Record<string, number> = {
     '서울/경기': 1.2,
     '부산/경남': 0.9,
     '대전/충남': 0.85,
     '대구/경북': 0.8,
     '광주/전라': 0.75,
+    '제주': 0.7,
   };
   
   // Calculate expected revenue
@@ -91,9 +93,9 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
   };
 };
 
-export const simulateStaffing = (params: { specialty: string; size: number; services: string[] }) => {
+export const simulateStaffing = (params: { specialty: string; size: number; services: string[] }): StaffingResult => {
   // Base staffing needs
-  let baseStaffing = [
+  let baseStaffing: StaffMember[] = [
     { role: '의사/의료진', count: 1, salary: 1000 },
     { role: '간호사', count: 1, salary: 350 },
     { role: '리셉션/행정', count: 1, salary: 250 },
@@ -145,4 +147,27 @@ export const simulateStaffing = (params: { specialty: string; size: number; serv
     staffing: baseStaffing,
     monthlyCost: monthlyCost + '만원',
   };
+};
+
+// Helper function to track simulator usage (centralized)
+export const trackSimulatorUsage = (simulatorId: number): void => {
+  const storedSimulators = localStorage.getItem('simulators');
+  if (storedSimulators) {
+    try {
+      const parsedSimulators = JSON.parse(storedSimulators);
+      const updatedSimulators = parsedSimulators.map((sim: any) => {
+        if (sim.id === simulatorId) {
+          return {...sim, views: (sim.views || 0) + 1};
+        }
+        return sim;
+      });
+      localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
+      // Dispatch a custom event to notify other components about the change
+      window.dispatchEvent(new CustomEvent('simulatorUpdate', { 
+        detail: { action: 'viewIncrement', simulatorId } 
+      }));
+    } catch (error) {
+      console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
+    }
+  }
 };

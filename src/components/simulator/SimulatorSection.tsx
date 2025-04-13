@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calculator, TrendingUp, Users } from 'lucide-react';
 import SimulatorCard from './SimulatorCard';
-import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './SimulatorUtils';
+import { simulateFinancialCosts, simulateRevenue, simulateStaffing, trackSimulatorUsage } from './SimulatorUtils';
 import { Simulator } from '../admin/simulator/types';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -12,40 +12,49 @@ const SimulatorSection = () => {
   const { toast } = useToast();
 
   // Load simulators from localStorage (관리자 페이지에서 관리되는 데이터)
-  useEffect(() => {
-    const loadSimulators = () => {
-      setIsLoading(true);
-      try {
-        const storedSimulators = localStorage.getItem('simulators');
-        if (storedSimulators) {
-          const parsedSimulators = JSON.parse(storedSimulators);
-          // 활성화된 시뮬레이터만 표시
-          const activeSimulators = parsedSimulators.filter((sim: Simulator) => sim.active);
-          setSimulators(activeSimulators);
-        }
-      } catch (error) {
-        console.error('시뮬레이터 데이터를 불러오는 중 오류 발생:', error);
-        toast({
-          title: '시뮬레이터 로드 오류',
-          description: '시뮬레이터를 불러오는 중 문제가 발생했습니다.',
-          variant: 'destructive',
-        });
-      } finally {
-        setIsLoading(false);
+  const loadSimulators = () => {
+    setIsLoading(true);
+    try {
+      const storedSimulators = localStorage.getItem('simulators');
+      if (storedSimulators) {
+        const parsedSimulators = JSON.parse(storedSimulators);
+        // 활성화된 시뮬레이터만 표시
+        const activeSimulators = parsedSimulators.filter((sim: Simulator) => sim.active);
+        setSimulators(activeSimulators);
       }
-    };
-
+    } catch (error) {
+      console.error('시뮬레이터 데이터를 불러오는 중 오류 발생:', error);
+      toast({
+        title: '시뮬레이터 로드 오류',
+        description: '시뮬레이터를 불러오는 중 문제가 발생했습니다.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     loadSimulators();
     
-    // 시뮬레이터 데이터가 변경될 때마다 갱신
+    // Custom event listener for simulator updates
+    const handleSimulatorUpdate = () => loadSimulators();
+    
+    // Listen for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'simulators') {
         loadSimulators();
       }
     };
     
+    // Listen for the custom event for changes in the same window
+    window.addEventListener('simulatorUpdate', handleSimulatorUpdate);
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('simulatorUpdate', handleSimulatorUpdate);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, [toast]);
   
   // 시뮬레이터 타입에 맞는 아이콘 반환
@@ -61,28 +70,10 @@ const SimulatorSection = () => {
         return <Calculator className="h-6 w-6 text-primary" />;
     }
   };
-  
-  // 시뮬레이터 사용 추적
-  const trackSimulatorUsage = (simulatorId: number) => {
-    const storedSimulators = localStorage.getItem('simulators');
-    if (storedSimulators) {
-      try {
-        const parsedSimulators = JSON.parse(storedSimulators);
-        const updatedSimulators = parsedSimulators.map((sim: Simulator) => {
-          if (sim.id === simulatorId) {
-            return {...sim, views: (sim.views || 0) + 1};
-          }
-          return sim;
-        });
-        localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
-      } catch (error) {
-        console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
-      }
-    }
-  };
 
   // 시뮬레이터 실행 함수
   const handleSimulation = (simulatorId: number, type: string, params: any) => {
+    // Use centralized tracking function
     trackSimulatorUsage(simulatorId);
     
     if (type === 'financial') {

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
-import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from '@/components/simulator/SimulatorUtils';
+import { simulateFinancialCosts, simulateRevenue, simulateStaffing, trackSimulatorUsage } from '@/components/simulator/SimulatorUtils';
 import { Simulator, SimulatorTestParams } from './types';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -74,19 +74,8 @@ const SimulatorTest: React.FC<SimulatorTestProps> = ({ simulator, onBack }) => {
 
     setResult(simulationResult);
     
-    // Increment the simulator views
-    const storedSimulators = localStorage.getItem('simulators');
-    if (storedSimulators) {
-      try {
-        const simulators = JSON.parse(storedSimulators);
-        const updatedSimulators = simulators.map((s: Simulator) => 
-          s.id === simulator.id ? {...s, views: (s.views || 0) + 1} : s
-        );
-        localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
-      } catch (error) {
-        console.error('Error updating simulator views:', error);
-      }
-    }
+    // Use centralized tracking function
+    trackSimulatorUsage(simulator.id);
 
     toast({
       title: '시뮬레이션 실행 완료',

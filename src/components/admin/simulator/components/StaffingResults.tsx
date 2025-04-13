@@ -1,17 +1,9 @@
 
 import React from 'react';
-
-interface StaffMember {
-  role: string;
-  count: number;
-  salary: number;
-}
+import { StaffMember, StaffingResult } from '../types';
 
 interface StaffingResultsProps {
-  result: {
-    staffing: StaffMember[];
-    monthlyCost: string;
-  };
+  result: StaffingResult;
 }
 
 const StaffingResults: React.FC<StaffingResultsProps> = ({ result }) => {
