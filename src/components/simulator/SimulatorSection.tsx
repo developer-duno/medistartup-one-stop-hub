@@ -6,71 +6,63 @@ import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './Sim
 import { Simulator } from '../admin/simulator/types';
 import { useToast } from '@/components/ui/use-toast';
 
-// Default simulators if none found in localStorage
-const defaultSimulators: Simulator[] = [
-  {
-    id: 1,
-    title: '개원 비용 시뮬레이터',
-    description: '진료과목별 평균 개원 비용을 확인하세요',
-    type: 'financial',
-    active: true,
-    views: 0
-  },
-  {
-    id: 2,
-    title: '수익성 분석 시뮬레이터',
-    description: '지역 및 진료과목별 예상 수익 시뮬레이션',
-    type: 'revenue',
-    active: true,
-    views: 0
-  },
-  {
-    id: 3,
-    title: '인력 구성 시뮬레이터',
-    description: '병원 규모별 최적 인력 구성 시뮬레이션',
-    type: 'staffing',
-    active: true,
-    views: 0
-  }
-];
-
 const SimulatorSection = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
-  // Load simulators from localStorage
+  // Load simulators from localStorage (관리자 페이지에서 관리되는 데이터)
   useEffect(() => {
-    const storedSimulators = localStorage.getItem('simulators');
-    if (storedSimulators) {
+    const loadSimulators = () => {
+      setIsLoading(true);
       try {
-        const parsedSimulators = JSON.parse(storedSimulators);
-        // Only show active simulators
-        const activeSimulators = parsedSimulators.filter((sim: Simulator) => sim.active);
-        setSimulators(activeSimulators);
+        const storedSimulators = localStorage.getItem('simulators');
+        if (storedSimulators) {
+          const parsedSimulators = JSON.parse(storedSimulators);
+          // 활성화된 시뮬레이터만 표시
+          const activeSimulators = parsedSimulators.filter((sim: Simulator) => sim.active);
+          setSimulators(activeSimulators);
+        }
       } catch (error) {
-        console.error('Error parsing stored simulators:', error);
-        setSimulators(defaultSimulators);
+        console.error('시뮬레이터 데이터를 불러오는 중 오류 발생:', error);
+        toast({
+          title: '시뮬레이터 로드 오류',
+          description: '시뮬레이터를 불러오는 중 문제가 발생했습니다.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
       }
-    } else {
-      setSimulators(defaultSimulators);
-    }
-  }, []);
+    };
+
+    loadSimulators();
+    
+    // 시뮬레이터 데이터가 변경될 때마다 갱신
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'simulators') {
+        loadSimulators();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [toast]);
   
-  // Get simulator function based on type
-  const getSimulatorFunction = (type: string) => {
+  // 시뮬레이터 타입에 맞는 아이콘 반환
+  const getSimulatorIcon = (type: string) => {
     switch(type) {
       case 'financial':
-        return simulateFinancialCosts;
+        return <Calculator className="h-6 w-6 text-primary" />;
       case 'revenue':
-        return simulateRevenue;
+        return <TrendingUp className="h-6 w-6 text-primary" />;
       case 'staffing':
-        return simulateStaffing;
+        return <Users className="h-6 w-6 text-primary" />;
       default:
-        return simulateFinancialCosts;
+        return <Calculator className="h-6 w-6 text-primary" />;
     }
   };
   
-  // Track simulator usage
+  // 시뮬레이터 사용 추적
   const trackSimulatorUsage = (simulatorId: number) => {
     const storedSimulators = localStorage.getItem('simulators');
     if (storedSimulators) {
@@ -84,45 +76,24 @@ const SimulatorSection = () => {
         });
         localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
       } catch (error) {
-        console.error('Error updating simulator usage:', error);
+        console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
       }
     }
   };
 
-  // Get default parameters for simulator types with proper typing
-  const getFinancialParams = () => {
-    return { specialty: '내과', size: 50, location: '중형상가' };
-  };
-
-  const getRevenueParams = () => {
-    return { specialty: '피부과', patients: 30, region: '서울/경기' };
-  };
-
-  const getStaffingParams = () => {
-    return { specialty: '치과', size: 100, services: ['일반진료', '미용'] as string[] };
-  };
-
-  // Get appropriate parameter object based on simulator type
-  const getParamsForType = (type: string) => {
-    switch(type) {
-      case 'financial':
-        return getFinancialParams();
-      case 'revenue':
-        return getRevenueParams();
-      case 'staffing':
-        return getStaffingParams();
-      default:
-        return getFinancialParams();
+  // 시뮬레이터 실행 함수
+  const handleSimulation = (simulatorId: number, type: string, params: any) => {
+    trackSimulatorUsage(simulatorId);
+    
+    if (type === 'financial') {
+      return simulateFinancialCosts(params);
+    } else if (type === 'revenue') {
+      return simulateRevenue(params);
+    } else if (type === 'staffing') {
+      return simulateStaffing(params);
     }
-  };
-
-  // Handle simulation completion
-  const handleSimulationComplete = (type: string) => {
-    toast({
-      title: "시뮬레이션 완료",
-      description: `${type} 시뮬레이션이 성공적으로 완료되었습니다.`,
-      variant: "default",
-    });
+    
+    return null;
   };
 
   return (
@@ -138,7 +109,11 @@ const SimulatorSection = () => {
           </p>
         </div>
         
-        {simulators.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center items-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : simulators.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {simulators.map((simulator) => (
               <SimulatorCard
@@ -146,39 +121,17 @@ const SimulatorSection = () => {
                 id={simulator.id}
                 title={simulator.title}
                 description={simulator.description}
-                icon={
-                  simulator.type === 'financial' ? <Calculator className="h-6 w-6 text-primary" /> :
-                  simulator.type === 'revenue' ? <TrendingUp className="h-6 w-6 text-primary" /> :
-                  <Users className="h-6 w-6 text-primary" />
-                }
+                icon={getSimulatorIcon(simulator.type)}
                 simulatorType={(simulator.type as 'financial' | 'revenue' | 'staffing')}
-                onSimulate={() => {
-                  trackSimulatorUsage(simulator.id);
-                  // Handle simulation with proper type safety
-                  if (simulator.type === 'financial') {
-                    const result = simulateFinancialCosts(getFinancialParams());
-                    handleSimulationComplete("재무");
-                    return result;
-                  } else if (simulator.type === 'revenue') {
-                    const result = simulateRevenue(getRevenueParams());
-                    handleSimulationComplete("수익");
-                    return result;
-                  } else if (simulator.type === 'staffing') {
-                    const result = simulateStaffing(getStaffingParams());
-                    handleSimulationComplete("인력");
-                    return result;
-                  } else {
-                    const result = simulateFinancialCosts(getFinancialParams());
-                    handleSimulationComplete("기본");
-                    return result;
-                  }
-                }}
+                onSimulate={(params) => handleSimulation(simulator.id, simulator.type, params)}
               />
             ))}
           </div>
         ) : (
           <div className="text-center py-10">
-            <p className="text-neutral-500">시뮬레이터를 준비 중입니다. 잠시만 기다려주세요.</p>
+            <p className="text-neutral-500">
+              현재 활성화된 시뮬레이터가 없습니다. 관리자 페이지에서 시뮬레이터를 추가해주세요.
+            </p>
           </div>
         )}
         
