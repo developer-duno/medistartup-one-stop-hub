@@ -1,12 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, MapPin, TrendingUp, Users, Clock, Sparkles } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { RunwareService } from '../services/RunwareService';
+import { toast } from 'sonner';
 
 const HeroSection = () => {
   const [selectedRegion, setSelectedRegion] = useState('대전/충남');
   const [hospitalImage, setHospitalImage] = useState('');
   const regions = ['대전/충남', '서울/경기', '부산/경남', '대구/경북', '광주/전라', '강원', '제주'];
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const generateHospitalImage = async () => {
@@ -27,6 +30,21 @@ const HeroSection = () => {
 
     generateHospitalImage();
   }, []);
+
+  const handleFeasibilityAnalysis = () => {
+    if (!selectedRegion) {
+      toast.error('지역을 선택해 주세요');
+      return;
+    }
+
+    setIsLoading(true);
+    
+    // Simulating a feasibility analysis request
+    setTimeout(() => {
+      toast.success(`${selectedRegion} 지역의 무료 타당성 분석 요청이 접수되었습니다.`);
+      setIsLoading(false);
+    }, 1500);
+  };
 
   return (
     <section className="pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden relative">
@@ -100,8 +118,10 @@ const HeroSection = () => {
                   variant="accent" 
                   size="lg"
                   className="rounded-l-none"
+                  onClick={handleFeasibilityAnalysis}
+                  disabled={isLoading}
                 >
-                  무료 타당성 분석 받기
+                  {isLoading ? '분석 중...' : '무료 타당성 분석 받기'}
                 </CustomButton>
               </div>
             </div>
