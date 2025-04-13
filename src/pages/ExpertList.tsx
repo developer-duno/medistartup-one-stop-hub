@@ -1,18 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Search, CheckCircle, Clock, MapPin, Award, Download } from 'lucide-react';
-import CustomButton from '../components/ui/CustomButton';
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useExperts } from '@/contexts/ExpertsContext';
 import ExpertFilters from '@/components/experts/ExpertFilters';
+import ExpertPageHeader from '@/components/experts/ExpertPageHeader';
+import MobileSelectionBar from '@/components/experts/MobileSelectionBar';
+import ExpertGridView from '@/components/experts/ExpertGridView';
+import ExpertComparisonView from '@/components/experts/ExpertComparisonView';
+import ExpertCTA from '@/components/experts/ExpertCTA';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
   const [viewMode, setViewMode] = useState("grid"); // grid or compare
-  const [selectedExperts, setSelectedExperts] = useState([]);
+  const [selectedExperts, setSelectedExperts] = useState<number[]>([]);
   const [filters, setFilters] = useState({
     search: "",
     regions: [],
@@ -93,6 +94,11 @@ const ExpertList = () => {
     return selectedExperts.map(id => expertsData.find(expert => expert.id === id));
   };
 
+  const resetFilters = () => {
+    setFilters({search: "", regions: [], services: []});
+    setActiveCategory("all");
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
@@ -113,25 +119,12 @@ const ExpertList = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div>
-              <h2 className="font-pretendard font-bold text-2xl text-neutral-900">
-                전문가 목록
-              </h2>
-              <p className="text-neutral-600">
-                총 {filteredExperts.length}명의 전문가
-              </p>
-            </div>
-            
-            <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="hidden md:block">
-              <TabsList>
-                <TabsTrigger value="grid">그리드 보기</TabsTrigger>
-                <TabsTrigger value="compare" disabled={selectedExperts.length < 2}>
-                  비교 보기 ({selectedExperts.length}/3)
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+          <ExpertPageHeader 
+            filteredExperts={filteredExperts}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            selectedExperts={selectedExperts}
+          />
           
           <ExpertFilters 
             filters={filters}
@@ -145,330 +138,28 @@ const ExpertList = () => {
           />
         </div>
 
-        {selectedExperts.length > 0 && (
-          <div className="md:hidden sticky top-0 z-10 bg-primary text-white p-4 mb-6 rounded-lg shadow-md">
-            <div className="flex justify-between items-center">
-              <span>{selectedExperts.length}명의 전문가 선택됨</span>
-              <CustomButton 
-                variant="secondary" 
-                size="sm"
-                onClick={() => setViewMode("compare")}
-                disabled={selectedExperts.length < 2}
-              >
-                비교하기
-              </CustomButton>
-            </div>
-          </div>
-        )}
+        <MobileSelectionBar 
+          selectedExperts={selectedExperts} 
+          setViewMode={setViewMode} 
+        />
 
-        {viewMode === "grid" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredExperts.length > 0 ? (
-              filteredExperts.map((expert) => (
-                <div 
-                  key={expert.id}
-                  className={`bg-white rounded-xl shadow-sm border overflow-hidden group ${
-                    selectedExperts.includes(expert.id) 
-                      ? 'border-primary ring-2 ring-primary-300' 
-                      : 'border-neutral-200 hover:shadow-md'
-                  }`}
-                >
-                  <div className="relative">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={expert.image} 
-                        alt={expert.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    
-                    <div className="absolute top-3 right-3">
-                      <button
-                        onClick={() => handleExpertSelect(expert.id)}
-                        className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                          selectedExperts.includes(expert.id)
-                            ? 'bg-primary text-white'
-                            : 'bg-white/80 text-neutral-500 hover:bg-primary/10'
-                        }`}
-                      >
-                        {selectedExperts.includes(expert.id) ? (
-                          <CheckCircle className="h-5 w-5" />
-                        ) : (
-                          <div className="w-3 h-3 border-2 border-neutral-400 rounded-full"></div>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="p-5">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-pretendard font-bold text-lg text-neutral-900">
-                          {expert.name}
-                        </h3>
-                        <p className="font-noto text-neutral-600 text-sm">
-                          {expert.role}
-                        </p>
-                      </div>
-                      <Badge className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20">
-                        {expert.services[0]}
-                      </Badge>
-                    </div>
-                    
-                    <p className="font-noto text-neutral-700 text-sm mb-4 line-clamp-2">
-                      {expert.specialty}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-3 mb-5">
-                      <div className="flex items-center gap-1 text-sm text-neutral-500">
-                        <Award className="h-4 w-4" />
-                        <span>{expert.experience}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-1 text-sm text-neutral-500">
-                        <Clock className="h-4 w-4" />
-                        <span>{expert.projects}</span>
-                      </div>
-                      
-                      <div className="flex items-center gap-1 text-sm text-neutral-500">
-                        <MapPin className="h-4 w-4" />
-                        <span>{expert.regions.join(', ')}</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-2">
-                      <CustomButton 
-                        variant="outline" 
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handleExpertSelect(expert.id)}
-                      >
-                        {selectedExperts.includes(expert.id) ? '선택 취소' : '전문가 선택'}
-                      </CustomButton>
-                      
-                      <CustomButton 
-                        variant="primary" 
-                        size="sm"
-                        className="flex-1"
-                        asChild
-                      >
-                        <Link to={`/expert/${expert.id}`}>
-                          상세 프로필
-                        </Link>
-                      </CustomButton>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="col-span-full flex flex-col items-center justify-center py-12">
-                <div className="bg-neutral-100 rounded-full w-16 h-16 flex items-center justify-center mb-4">
-                  <Search className="h-8 w-8 text-neutral-400" />
-                </div>
-                <h3 className="font-pretendard font-medium text-xl mb-2">검색 결과가 없습니다</h3>
-                <p className="text-neutral-600 text-center max-w-md">
-                  다른 검색어나 필터 조건을 사용해보세요. 또는 모든 필터를 초기화하여 전체 전문가를 확인하세요.
-                </p>
-                <CustomButton 
-                  variant="outline"
-                  className="mt-4"
-                  onClick={() => {
-                    setFilters({search: "", regions: [], services: []});
-                    setActiveCategory("all");
-                  }}
-                >
-                  필터 초기화
-                </CustomButton>
-              </div>
-            )}
-          </div>
-        )}
-
-        {viewMode === "compare" && (
-          
-          <div>
-            {selectedExperts.length >= 2 ? (
-              <div>
-                <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-neutral-200">
-                      <thead className="bg-neutral-50">
-                        <tr>
-                          <th className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider w-1/4">
-                            비교 항목
-                          </th>
-                          {getSelectedExpertsData().map((expert) => (
-                            <th key={expert.id} className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full overflow-hidden">
-                                  <img 
-                                    src={expert.image} 
-                                    alt={expert.name}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                                <span>{expert.name}</span>
-                              </div>
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white divide-y divide-neutral-200">
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            전문 분야
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              {expert.role}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            전문 서비스
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              {expert.services.join(', ')}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            경력
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              {expert.experience}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            프로젝트 수
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              {expert.projects}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            활동 지역
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              {expert.regions.join(', ')}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            소개
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 text-sm text-neutral-700">
-                              <p className="max-w-xs">{expert.description}</p>
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-800">
-                            상세 프로필
-                          </td>
-                          {getSelectedExpertsData().map((expert) => (
-                            <td key={expert.id} className="px-6 py-4 whitespace-nowrap text-sm text-neutral-700">
-                              <Link 
-                                to={`/expert/${expert.id}`}
-                                className="text-primary hover:text-primary-700 font-medium"
-                              >
-                                상세 보기
-                              </Link>
-                            </td>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                
-                <div className="flex justify-center gap-4">
-                  <CustomButton 
-                    variant="outline"
-                    onClick={() => setSelectedExperts([])}
-                  >
-                    선택 초기화
-                  </CustomButton>
-                  
-                  <CustomButton 
-                    variant="primary"
-                    asChild
-                  >
-                    <Link to="/contact">
-                      선택한 전문가에게 상담 신청
-                    </Link>
-                  </CustomButton>
-                  
-                  <CustomButton 
-                    variant="secondary"
-                    onClick={() => setViewMode("grid")}
-                  >
-                    그리드 보기로 돌아가기
-                  </CustomButton>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-white rounded-xl shadow-md p-8 text-center">
-                <div className="mx-auto w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center mb-4">
-                  <CheckCircle className="h-8 w-8 text-neutral-400" />
-                </div>
-                <h3 className="font-pretendard font-bold text-xl mb-2">전문가를 2명 이상 선택해주세요</h3>
-                <p className="text-neutral-600 mb-6">
-                  전문가를 비교하려면 2명 이상의 전문가를 선택해야 합니다.
-                  그리드 보기에서 전문가를 선택한 후 비교해보세요.
-                </p>
-                <CustomButton 
-                  variant="primary"
-                  onClick={() => setViewMode("grid")}
-                >
-                  그리드 보기로 돌아가기
-                </CustomButton>
-              </div>
-            )}
-          </div>
+        {viewMode === "grid" ? (
+          <ExpertGridView 
+            filteredExperts={filteredExperts} 
+            selectedExperts={selectedExperts}
+            handleExpertSelect={handleExpertSelect}
+            resetFilters={resetFilters}
+          />
+        ) : (
+          <ExpertComparisonView 
+            selectedExperts={selectedExperts}
+            getSelectedExpertsData={getSelectedExpertsData}
+            setSelectedExperts={setSelectedExperts}
+            setViewMode={setViewMode}
+          />
         )}
         
-        <div className="flex justify-center mt-12">
-          <CustomButton variant="outline">
-            <Download className="h-5 w-5 mr-2" />
-            전문가 종합 안내서 다운로드
-          </CustomButton>
-        </div>
-      </div>
-
-      <div className="bg-primary-50 py-12">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="font-pretendard font-bold text-2xl md:text-3xl text-neutral-900 mb-4">
-              아직 어떤 전문가가 필요한지 모르시나요?
-            </h2>
-            <p className="font-noto text-neutral-600 mb-8">
-              무료 상담 신청을 통해 병원 창업 전문가의 맞춤형 조언을 받아보세요.
-              개원 계획에 맞는 최적의 전문가 팀을 구성해 드립니다.
-            </p>
-            <CustomButton 
-              variant="accent" 
-              size="lg"
-              asChild
-            >
-              <Link to="/contact">
-                무료 상담 신청하기
-              </Link>
-            </CustomButton>
-          </div>
-        </div>
+        <ExpertCTA />
       </div>
       
       <Footer />
