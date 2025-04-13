@@ -3,13 +3,25 @@ import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar, Tag } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 // Add useThemeStyles prop to optionally use themed styles
 const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles = false }) => {
   const categoryName = getCategoryDisplayName(insight.category);
-  const formattedDate = format(new Date(insight.publishedAt), 'yyyy년 MM월 dd일', { locale: ko });
+  
+  // Add validation to handle invalid dates
+  let formattedDate = '';
+  if (insight.publishedAt) {
+    const dateObj = new Date(insight.publishedAt);
+    if (isValid(dateObj)) {
+      formattedDate = format(dateObj, 'yyyy년 MM월 dd일', { locale: ko });
+    } else {
+      formattedDate = '날짜 없음';
+    }
+  } else {
+    formattedDate = '날짜 없음';
+  }
   
   // Use theme styles if the prop is true
   const cardClass = useThemeStyles 
