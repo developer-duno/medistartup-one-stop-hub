@@ -172,7 +172,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                   fullWidth 
                   asChild
                 >
-                  <Link to={`/experts?service=${serviceUrlName}`}>
+                  <Link to={`/experts?service=${serviceUrlName}&consultation=true`}>
                     전문 상담 신청하기
                   </Link>
                 </CustomButton>

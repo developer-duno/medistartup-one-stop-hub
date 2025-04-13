@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useServices } from '@/contexts/ServicesContext';
 import Navbar from '@/components/Navbar';
@@ -66,6 +67,22 @@ const Services = () => {
   }, []);
 
   const displayServices = getServicesByCategory(selectedCategory);
+  
+  // Map service titles to URL parameters for expert filtering
+  const getServiceUrlParam = (title: string): string => {
+    const serviceMap: Record<string, string> = {
+      '입지 분석': 'location-analysis',
+      '재무 컨설팅': 'financial-consulting',
+      '설계 및 인테리어': 'design-interior',
+      '인허가 대행': 'licensing',
+      '인력 채용': 'recruitment',
+      '마케팅 전략': 'marketing-strategy',
+      '의료기기 구입 및 설치': 'medical-equipment',
+      '수납 및 의료폐기물 처리': 'waste-management'
+    };
+    
+    return serviceMap[title] || '';
+  };
 
   const handleCategoryChange = (category: ServiceCategory | 'all') => {
     setSelectedCategory(category);
@@ -188,7 +205,7 @@ const Services = () => {
                 </div>
                 <p className="font-noto text-neutral-600 mb-4">{service.description}</p>
               </div>
-              <div className="p-4 bg-neutral-50 group-hover:theme-bg-light transition-colors">
+              <div className="p-4 bg-neutral-50 flex justify-between items-center group-hover:theme-bg-light transition-colors">
                 <span className="font-pretendard font-medium theme-text inline-flex items-center">
                   자세히 보기
                   <svg
@@ -206,6 +223,13 @@ const Services = () => {
                     <path d="m9 18 6-6-6-6" />
                   </svg>
                 </span>
+                <Link 
+                  to={`/experts?service=${getServiceUrlParam(service.title)}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-sm theme-text hover:underline"
+                >
+                  전문가 찾기
+                </Link>
               </div>
             </Link>
           ))}

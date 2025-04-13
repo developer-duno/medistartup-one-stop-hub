@@ -29,6 +29,22 @@ const ServicesSection = () => {
     return colors[index % colors.length];
   };
 
+  // Map service titles to URL parameters for expert filtering
+  const getServiceUrlParam = (title: string): string => {
+    const serviceMap: Record<string, string> = {
+      '입지 분석': 'location-analysis',
+      '재무 컨설팅': 'financial-consulting',
+      '설계 및 인테리어': 'design-interior',
+      '인허가 대행': 'licensing',
+      '인력 채용': 'recruitment',
+      '마케팅 전략': 'marketing-strategy',
+      '의료기기 구입 및 설치': 'medical-equipment',
+      '수납 및 의료폐기물 처리': 'waste-management'
+    };
+    
+    return serviceMap[title] || '';
+  };
+
   return (
     <section id="services" className="py-16 md:py-24">
       <div className="container mx-auto px-4">
@@ -58,7 +74,7 @@ const ServicesSection = () => {
                   {service.description}
                 </p>
               </div>
-              <div className="p-4 border-t border-neutral-100">
+              <div className="p-4 border-t border-neutral-100 flex justify-between items-center">
                 <Link 
                   to={service.path} 
                   className="font-pretendard font-medium text-primary inline-flex items-center group-hover:underline"
@@ -78,6 +94,12 @@ const ServicesSection = () => {
                   >
                     <path d="m9 18 6-6-6-6"/>
                   </svg>
+                </Link>
+                <Link 
+                  to={`/experts?service=${getServiceUrlParam(service.title)}`}
+                  className="text-sm text-secondary-foreground hover:text-primary transition-colors"
+                >
+                  전문가 찾기
                 </Link>
               </div>
             </div>

@@ -9,11 +9,12 @@ import MobileSelectionBar from '@/components/experts/MobileSelectionBar';
 import ExpertGridView from '@/components/experts/ExpertGridView';
 import ExpertComparisonView from '@/components/experts/ExpertComparisonView';
 import ExpertCTA from '@/components/experts/ExpertCTA';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
+  const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState("grid"); // grid or compare
   const [selectedExperts, setSelectedExperts] = useState<number[]>([]);
   const [filters, setFilters] = useState({
@@ -38,6 +39,47 @@ const ExpertList = () => {
   
   const regions = ["서울", "경기", "인천", "대전", "충남", "충북", "부산", "대구", "광주", "제주"];
 
+  // Get service and region from URL params
+  useEffect(() => {
+    const serviceParam = searchParams.get('service');
+    const regionParam = searchParams.get('region');
+    const consultationParam = searchParams.get('consultation');
+    
+    const newFilters = { ...filters };
+    
+    // Handle service filtering
+    if (serviceParam) {
+      const serviceMap: Record<string, string> = {
+        'location-analysis': '입지 분석',
+        'financial-consulting': '재무 컨설팅',
+        'design-interior': '설계 및 인테리어',
+        'licensing': '인허가 대행',
+        'recruitment': '인력 채용',
+        'marketing-strategy': '마케팅 전략',
+        'medical-equipment': '의료기기 구입 및 설치',
+        'waste-management': '수납 및 의료폐기물 처리'
+      };
+      
+      const serviceName = serviceMap[serviceParam];
+      if (serviceName && !newFilters.services.includes(serviceName)) {
+        newFilters.services = [serviceName];
+      }
+    }
+    
+    // Handle region filtering
+    if (regionParam && !newFilters.regions.includes(regionParam)) {
+      newFilters.regions = [regionParam];
+    }
+    
+    // Set the new filters if they're different from current ones
+    if (
+      newFilters.services.length !== filters.services.length || 
+      newFilters.regions.length !== filters.regions.length
+    ) {
+      setFilters(newFilters);
+    }
+  }, [searchParams]);
+  
   useEffect(() => {
     let results = [...expertsData];
     
