@@ -9,7 +9,7 @@ export interface RegionsContextType {
   getActiveRegionInfo: () => RegionInfo | null;
   getRegionalExpertCount: (regionName: string) => number;
   getRegionalManager: (regionName: string) => Expert | null;
-  getRegionTopServices: (regionName: string) => string[];
+  getRegionTopServices: (regionName: string) => Array<{name: string; percent: number}>;
   getFilteredUrl: (regionName: string) => string;
   
   // Admin operations
