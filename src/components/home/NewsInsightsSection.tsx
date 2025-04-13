@@ -49,42 +49,48 @@ const NewsInsightsSection = () => {
         <div className="relative">
           <div className="overflow-x-auto pb-6 hide-scrollbar">
             <div className="flex gap-6 min-w-max px-4">
-              {latestInsights.map((insight) => (
-                <div 
-                  key={insight.id}
-                  className="w-[320px] md:w-[380px] bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow"
-                >
-                  <Link to={`/insights/${insight.id}`} className="block">
-                    <div className="h-48 overflow-hidden">
-                      <img 
-                        src={insight.image} 
-                        alt={insight.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                          e.currentTarget.src = 'https://placehold.co/600x400?text=No+Image';
-                        }}
-                      />
-                    </div>
-                    <div className="p-5">
-                      <div className="flex justify-between items-center mb-3">
-                        <span className="inline-block px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-md">
-                          {getCategoryDisplayName(insight.category)}
-                        </span>
-                        <div className="flex items-center text-neutral-500 text-xs">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {insight.date}
-                        </div>
+              {latestInsights.length > 0 ? (
+                latestInsights.map((insight) => (
+                  <div 
+                    key={insight.id}
+                    className="w-[320px] md:w-[380px] bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden hover:shadow-md transition-shadow"
+                  >
+                    <Link to={`/insights/${insight.id}`} className="block">
+                      <div className="h-48 overflow-hidden">
+                        <img 
+                          src={insight.image || 'https://placehold.co/600x400?text=No+Image'} 
+                          alt={insight.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                          onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                            e.currentTarget.src = 'https://placehold.co/600x400?text=No+Image';
+                          }}
+                        />
                       </div>
-                      <h3 className="font-pretendard font-bold text-lg mb-2 line-clamp-2">
-                        {insight.title}
-                      </h3>
-                      <p className="font-noto text-neutral-600 text-sm line-clamp-3">
-                        {insight.excerpt}
-                      </p>
-                    </div>
-                  </Link>
+                      <div className="p-5">
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="inline-block px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-md">
+                            {getCategoryDisplayName(insight.category)}
+                          </span>
+                          <div className="flex items-center text-neutral-500 text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {insight.date}
+                          </div>
+                        </div>
+                        <h3 className="font-pretendard font-bold text-lg mb-2 line-clamp-2">
+                          {insight.title}
+                        </h3>
+                        <p className="font-noto text-neutral-600 text-sm line-clamp-3">
+                          {insight.excerpt || "설명이 없습니다."}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))
+              ) : (
+                <div className="w-full text-center py-8">
+                  <p className="text-neutral-500">등록된 인사이트가 없습니다.</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
           

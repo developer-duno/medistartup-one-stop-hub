@@ -14,7 +14,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ categories }) => {
         <TabsTrigger
           key={category.id}
           value={category.id}
-          className="px-6 py-2 font-noto data-[state=active]:theme-bg-light data-[state=active]:theme-text"
+          className="px-8 py-3 font-noto font-medium text-lg data-[state=active]:theme-bg-light data-[state=active]:theme-text"
         >
           {category.name}
         </TabsTrigger>

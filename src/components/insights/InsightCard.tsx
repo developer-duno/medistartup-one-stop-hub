@@ -10,7 +10,7 @@ import { ko } from 'date-fns/locale';
 const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles = false }) => {
   const categoryName = getCategoryDisplayName(insight.category);
   
-  // Add validation to handle invalid dates
+  // Format the date properly
   let formattedDate = '';
   if (insight.publishedAt) {
     const dateObj = new Date(insight.publishedAt);
@@ -18,6 +18,14 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
       formattedDate = format(dateObj, 'yyyy년 MM월 dd일', { locale: ko });
     } else {
       formattedDate = '날짜 없음';
+    }
+  } else if (insight.date) {
+    // Fall back to insight.date if publishedAt is not available
+    const dateObj = new Date(insight.date);
+    if (isValid(dateObj)) {
+      formattedDate = format(dateObj, 'yyyy년 MM월 dd일', { locale: ko });
+    } else {
+      formattedDate = insight.date; // Use as string if not a valid date
     }
   } else {
     formattedDate = '날짜 없음';
@@ -37,9 +45,12 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
       <CardContent className="p-0">
         <div className="aspect-video relative overflow-hidden">
           <img 
-            src={insight.imageUrl || '/placeholder.svg'} 
+            src={insight.imageUrl || insight.image || '/placeholder.svg'} 
             alt={insight.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.src = '/placeholder.svg';
+            }}
           />
           <Badge className={`absolute top-3 left-3 ${badgeClass}`}>
             {categoryName}
@@ -52,7 +63,7 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
           </h3>
           
           <p className="font-noto text-neutral-600 text-sm mb-3 line-clamp-2">
-            {insight.summary}
+            {insight.summary || insight.excerpt || "설명이 없습니다."}
           </p>
           
           <div className="flex flex-wrap items-center justify-between text-xs text-neutral-500">

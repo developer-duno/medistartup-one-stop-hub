@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRegions } from '@/contexts/RegionsContext';
 import RegionCard from './map/RegionCard';
 import { Search, MapPin, Users, ArrowRight } from 'lucide-react';
@@ -14,21 +14,28 @@ const RegionalMap = () => {
     activeRegion, 
     setActiveRegion, 
     getActiveRegionInfo, 
-    getFilteredUrl 
+    getFilteredUrl,
+    adminRegions // Get the admin regions directly to ensure we're using updated data
   } = useRegions();
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [displayRegions, setDisplayRegions] = useState(regions);
+  
+  // Update display regions whenever admin regions change
+  useEffect(() => {
+    setDisplayRegions(regions);
+  }, [regions, adminRegions]);
   
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
   
   // Filter regions based on search term
   const filteredRegions = searchTerm
-    ? regions.filter(r => 
+    ? displayRegions.filter(r => 
         r.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
         r.includesRegions.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))
       )
-    : regions;
+    : displayRegions;
 
   return (
     <section id="regions" className="py-16 md:py-24 bg-neutral-50">

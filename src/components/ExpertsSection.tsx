@@ -13,7 +13,7 @@ const ExpertsSection = () => {
   // Filter experts to only show those who are approved and marked for main page display
   // and sort them by display order
   const mainPageExperts = experts
-    .filter(expert => expert.showOnMain && expert.isApproved)
+    .filter(expert => expert.showOnMain && expert.isApproved && expert.applicationStatus === 'approved')
     .sort((a, b) => {
       const orderA = a.displayOrder !== undefined ? a.displayOrder : 999;
       const orderB = b.displayOrder !== undefined ? b.displayOrder : 999;
