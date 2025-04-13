@@ -32,7 +32,7 @@ const RegionCard: React.FC<RegionCardProps> = ({ activeRegion, getFilteredUrl })
               전문가 {expertCount}명
             </Badge>
           </div>
-          <p className="font-noto text-white/90">{description}</p>
+          <p className="font-noto text-white/90">{description || `${name} 지역의 전문가 네트워크`}</p>
         </div>
 
         <div className="p-6">

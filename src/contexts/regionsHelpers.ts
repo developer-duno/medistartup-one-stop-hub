@@ -66,7 +66,7 @@ export const getRegionTopServices = (
   regionName: string, 
   adminRegions: RegionAdmin[], 
   experts: Expert[]
-): string[] => {
+): Array<{name: string; percent: number}> => {
   const currentRegion = adminRegions.find(region => region.name === regionName);
   if (!currentRegion) return [];
   
@@ -79,15 +79,21 @@ export const getRegionTopServices = (
   
   // Count service occurrences
   const serviceCounts: Record<string, number> = {};
+  let totalServices = 0;
+  
   allServices.forEach(service => {
     serviceCounts[service] = (serviceCounts[service] || 0) + 1;
+    totalServices++;
   });
   
-  // Sort by count and return top 3
+  // Sort by count and return top 3 with percentages
   return Object.entries(serviceCounts)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3)
-    .map(entry => entry[0]);
+    .map(([name, count]) => ({
+      name,
+      percent: Math.round((count / Math.max(1, totalServices)) * 100)
+    }));
 };
 
 // Get active region info
@@ -110,7 +116,8 @@ export const getActiveRegionInfo = (
     email: manager?.email || 'contact@medistartup.kr',
     expertCount,
     topServices,
-    hasManager: !!manager
+    hasManager: !!manager,
+    description: `${region.name} 지역의 의료 창업 환경에 특화된 전문가 서비스를 제공합니다.`
   };
 };
 

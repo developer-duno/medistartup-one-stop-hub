@@ -18,8 +18,9 @@ export interface RegionInfo extends Region {
   phone: string;
   email: string;
   expertCount: number;
-  topServices: string[];
+  topServices: Array<{name: string; percent: number}>;
   hasManager: boolean;
+  description?: string;
 }
 
 export interface RegionAdmin extends Region {
