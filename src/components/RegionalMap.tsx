@@ -21,10 +21,12 @@ const RegionalMap = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [displayRegions, setDisplayRegions] = useState(regions);
   
-  // Update display regions whenever admin regions change
+  // Update display regions whenever regions change
   useEffect(() => {
-    setDisplayRegions(regions);
-  }, [regions, adminRegions]);
+    // Only show active regions
+    const activeRegions = regions.filter(region => region.active !== false);
+    setDisplayRegions(activeRegions);
+  }, [regions]);
   
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
@@ -85,15 +87,25 @@ const RegionalMap = () => {
                     <div className="mt-2">
                       <p className="text-sm text-muted-foreground">주요 도시:</p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {region.includesRegions.slice(0, 3).map((city, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            {city}
-                          </Badge>
-                        ))}
-                        {region.includesRegions.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{region.includesRegions.length - 3}
-                          </Badge>
+                        {region.mainCities && region.mainCities.length > 0 ? (
+                          <>
+                            {region.mainCities.slice(0, 3).map((city, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">
+                                {city}
+                              </Badge>
+                            ))}
+                            {region.mainCities.length > 3 && (
+                              <Badge variant="secondary" className="text-xs">
+                                +{region.mainCities.length - 3}
+                              </Badge>
+                            )}
+                          </>
+                        ) : (
+                          region.includesRegions.slice(0, 3).map((city, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs">
+                              {city}
+                            </Badge>
+                          ))
                         )}
                       </div>
                     </div>

@@ -16,31 +16,47 @@ const RegionalExperts = () => {
     activeRegion, 
     setActiveRegion, 
     getActiveRegionInfo, 
-    getFilteredUrl 
+    getFilteredUrl,
+    adminRegions
   } = useRegions();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [searchParams] = useSearchParams();
+  const [displayRegions, setDisplayRegions] = useState(regions);
   const navigate = useNavigate();
   
-  // Get region from query params if available
+  // Get region from query params if available and update display regions whenever regions change
   useEffect(() => {
+    // Only show active regions
+    const activeRegions = regions.filter(region => region.active !== false);
+    setDisplayRegions(activeRegions);
+    
     const regionParam = searchParams.get('region');
     if (regionParam) {
-      setActiveRegion(regionParam);
+      // Check if the region exists and is active
+      const regionExists = activeRegions.some(r => r.name === regionParam);
+      if (regionExists) {
+        setActiveRegion(regionParam);
+      } else {
+        // If region doesn't exist or is inactive, set the first active region
+        if (activeRegions.length > 0) {
+          setActiveRegion(activeRegions[0].name);
+        }
+      }
     }
-  }, [searchParams, setActiveRegion]);
+  }, [searchParams, setActiveRegion, regions]);
   
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
   
   // Filter regions based on search term
   const filteredRegions = searchTerm
-    ? regions.filter(r => 
+    ? displayRegions.filter(r => 
         r.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (r.mainCities && r.mainCities.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))) ||
         r.includesRegions.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))
       )
-    : regions;
+    : displayRegions;
 
   return (
     <div className="theme-regions min-h-screen bg-white">
@@ -101,15 +117,25 @@ const RegionalExperts = () => {
                     <div className="mt-2">
                       <p className="text-sm text-muted-foreground">주요 도시:</p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {region.includesRegions.slice(0, 3).map((city, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs">
-                            {city}
-                          </Badge>
-                        ))}
-                        {region.includesRegions.length > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{region.includesRegions.length - 3}
-                          </Badge>
+                        {region.mainCities && region.mainCities.length > 0 ? (
+                          <>
+                            {region.mainCities.slice(0, 3).map((city, i) => (
+                              <Badge key={i} variant="secondary" className="text-xs">
+                                {city}
+                              </Badge>
+                            ))}
+                            {region.mainCities.length > 3 && (
+                              <Badge variant="secondary" className="text-xs">
+                                +{region.mainCities.length - 3}
+                              </Badge>
+                            )}
+                          </>
+                        ) : (
+                          region.includesRegions.slice(0, 3).map((city, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs">
+                              {city}
+                            </Badge>
+                          ))
                         )}
                       </div>
                     </div>

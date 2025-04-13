@@ -13,10 +13,10 @@ interface RegionCardProps {
 }
 
 const RegionCard: React.FC<RegionCardProps> = ({ activeRegion, getFilteredUrl }) => {
-  const { name, description, expertCount, manager, topServices } = activeRegion;
+  const { name, description, expertCount, manager, topServices, mainCities } = activeRegion;
   
   // Create the URL for filtering experts by this region
-  const expertFilterUrl = `/experts?region=${encodeURIComponent(name)}`;
+  const expertFilterUrl = getFilteredUrl(name);
 
   return (
     <Card className="border-0 shadow-md">

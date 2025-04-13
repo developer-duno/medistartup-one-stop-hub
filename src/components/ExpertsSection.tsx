@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Award, ArrowRight } from 'lucide-react';
+import { Award, ArrowRight, Check } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useExperts } from '@/contexts/ExpertsContext';
@@ -8,7 +8,7 @@ import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertsSection = () => {
   const { experts } = useExperts();
-  const { openConsultation } = useConsultation();
+  const { selectExpert } = useConsultation();
 
   // Filter experts to only show those who are approved and marked for main page display
   // and sort them by display order
@@ -95,10 +95,11 @@ const ExpertsSection = () => {
                   </CustomButton>
                   <CustomButton
                     variant="accent"
-                    className="flex-1 flex items-center justify-center"
-                    onClick={openConsultation}
+                    className="flex-1 flex items-center justify-center gap-1"
+                    onClick={() => selectExpert(expert.id)}
                   >
-                    무료 상담
+                    <Check className="h-4 w-4" />
+                    선택하기
                   </CustomButton>
                 </div>
               </div>
