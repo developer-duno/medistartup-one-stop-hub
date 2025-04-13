@@ -14,7 +14,7 @@ import { useConsultation } from '@/contexts/ConsultationContext';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
-  const { selectedExperts, setSelectedExperts } = useConsultation();
+  const { selectedExperts } = useConsultation();
   const serviceCategories = [
     "입지 분석", 
     "재무 컨설팅", 
@@ -31,14 +31,11 @@ const ExpertList = () => {
     setFilters,
     viewMode,
     setViewMode,
-    selectedExperts: filteredSelectedExperts,  // Renamed to avoid confusion
     filteredExperts,
     showFilters,
     setShowFilters,
     activeCategory,
     setActiveCategory,
-    handleExpertSelect,
-    getSelectedExpertsData,
     resetFilters
   } = useExpertFiltering(expertsData);
 
