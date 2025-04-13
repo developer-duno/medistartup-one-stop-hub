@@ -8,15 +8,23 @@ interface KakaoMapProps {
   setActiveRegion: (name: string) => void;
 }
 
+declare global {
+  interface Window {
+    kakao: any;
+  }
+}
+
 const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveRegion }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [mapInstance, setMapInstance] = useState<any>(null);
   const [markers, setMarkers] = useState<any[]>([]);
   const [customOverlays, setCustomOverlays] = useState<any[]>([]);
+  const scriptRef = useRef<HTMLScriptElement | null>(null);
 
   // 카카오맵 스크립트 로드
   useEffect(() => {
     const script = document.createElement('script');
+    scriptRef.current = script;
     script.async = true;
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=c43d5347a799e3c48342ab2155fc1acc&autoload=false`;
     document.head.appendChild(script);
@@ -35,15 +43,15 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
     };
 
     return () => {
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
+      if (scriptRef.current && document.head.contains(scriptRef.current)) {
+        document.head.removeChild(scriptRef.current);
       }
     };
   }, []);
 
   // 지역 마커 생성
   useEffect(() => {
-    if (!mapInstance) return;
+    if (!mapInstance || !window.kakao) return;
 
     // 기존 마커와 오버레이 제거
     markers.forEach(marker => marker.setMap(null));
