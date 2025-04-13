@@ -22,6 +22,23 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
   // Show only active regions
   const activeRegions = regions.filter(region => region !== undefined);
   
+  if (activeRegions.length === 0) {
+    return (
+      <Collapsible className="w-full">
+        <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-neutral-50 rounded-md">
+          <div className="flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-primary" />
+            <span className="font-medium">지역 선택</span>
+          </div>
+          <ChevronsUpDown className="h-4 w-4 text-neutral-500" />
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-2 pl-6">
+          <p className="text-sm text-muted-foreground">사용 가능한 지역이 없습니다.</p>
+        </CollapsibleContent>
+      </Collapsible>
+    );
+  }
+  
   return (
     <Collapsible className="w-full">
       <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-neutral-50 rounded-md">

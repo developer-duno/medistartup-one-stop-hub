@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { Expert } from '@/types/expert';
 import { useSearchParams } from 'react-router-dom';
 import { useConsultation } from '@/contexts/ConsultationContext';
+import { useRegions } from '@/contexts/RegionsContext';
 
 export function useExpertFiltering(expertsData: Expert[]) {
   const [searchParams] = useSearchParams();
   const [viewMode, setViewMode] = useState("grid"); // grid or compare
-  const { selectedExperts, selectExpert: handleExpertSelect, getSelectedExpertsData } = useConsultation();
+  const { selectedExperts } = useConsultation();
+  const { adminRegions } = useRegions();
   const [filters, setFilters] = useState({
     search: "",
     regions: [] as string[],
@@ -44,8 +46,16 @@ export function useExpertFiltering(expertsData: Expert[]) {
     }
     
     // Handle region filtering
-    if (regionParam && !newFilters.regions.includes(regionParam)) {
-      newFilters.regions = [regionParam];
+    if (regionParam) {
+      // Check if the region parameter matches any admin region or subregion
+      const regionExists = adminRegions.some(r => 
+        r.name === regionParam || 
+        (r.includesRegions && r.includesRegions.includes(regionParam))
+      );
+      
+      if (regionExists && !newFilters.regions.includes(regionParam)) {
+        newFilters.regions = [regionParam];
+      }
     }
     
     // Set the new filters if they're different from current ones
@@ -55,7 +65,13 @@ export function useExpertFiltering(expertsData: Expert[]) {
     ) {
       setFilters(newFilters);
     }
-  }, [searchParams]);
+  }, [searchParams, adminRegions]);
+  
+  // Get all subregions for a given region name
+  const getSubRegions = (regionName: string): string[] => {
+    const region = adminRegions.find(r => r.name === regionName);
+    return region?.includesRegions || [];
+  };
   
   // Filter experts based on active category and filters
   useEffect(() => {
@@ -77,9 +93,23 @@ export function useExpertFiltering(expertsData: Expert[]) {
     }
     
     if (filters.regions.length > 0) {
-      results = results.filter(expert => 
-        expert.regions.some(region => filters.regions.includes(region))
-      );
+      results = results.filter(expert => {
+        // For each selected filter region
+        return filters.regions.some(filterRegion => {
+          // Check if expert directly has this region
+          if (expert.regions.includes(filterRegion)) {
+            return true;
+          }
+          
+          // Check if this filter region is a major region that includes expert's regions
+          const subRegions = getSubRegions(filterRegion);
+          if (subRegions.length > 0) {
+            return expert.regions.some(expertRegion => subRegions.includes(expertRegion));
+          }
+          
+          return false;
+        });
+      });
     }
     
     if (filters.services.length > 0) {
@@ -89,7 +119,7 @@ export function useExpertFiltering(expertsData: Expert[]) {
     }
     
     setFilteredExperts(results);
-  }, [filters, activeCategory, expertsData]);
+  }, [filters, activeCategory, expertsData, adminRegions]);
   
   // Initialize filtered experts with all experts
   useEffect(() => {
@@ -107,14 +137,11 @@ export function useExpertFiltering(expertsData: Expert[]) {
     setFilters,
     viewMode,
     setViewMode,
-    selectedExperts,
     filteredExperts,
     showFilters,
     setShowFilters,
     activeCategory,
     setActiveCategory,
-    handleExpertSelect,
-    getSelectedExpertsData,
     resetFilters
   };
 }
