@@ -21,36 +21,39 @@ import MarketingStrategy from './pages/services/MarketingStrategy';
 import MedicalEquipment from './pages/services/MedicalEquipment';
 import WasteManagement from './pages/services/WasteManagement';
 
-// Context Provider
+// Context Providers
 import { ExpertsProvider } from './contexts/ExpertsContext';
+import { ServicesProvider } from './contexts/ServicesContext';
 import { Toaster } from '@/components/ui/toaster';
 
 function App() {
   return (
     <ExpertsProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/experts" element={<ExpertList />} />
-          <Route path="/expert/:id" element={<ExpertProfile />} />
-          <Route path="/success-stories" element={<SuccessStories />} />
-          <Route path="/insights" element={<Insights />} />
-          
-          {/* Services Routes */}
-          <Route path="/services/location-analysis" element={<LocationAnalysis />} />
-          <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
-          <Route path="/services/design-interior" element={<DesignInterior />} />
-          <Route path="/services/licensing" element={<Licensing />} />
-          <Route path="/services/recruitment" element={<Recruitment />} />
-          <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
-          <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
-          <Route path="/services/waste-management" element={<WasteManagement />} />
-          
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster />
-      </Router>
+      <ServicesProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/experts" element={<ExpertList />} />
+            <Route path="/expert/:id" element={<ExpertProfile />} />
+            <Route path="/success-stories" element={<SuccessStories />} />
+            <Route path="/insights" element={<Insights />} />
+            
+            {/* Services Routes */}
+            <Route path="/services/location-analysis" element={<LocationAnalysis />} />
+            <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
+            <Route path="/services/design-interior" element={<DesignInterior />} />
+            <Route path="/services/licensing" element={<Licensing />} />
+            <Route path="/services/recruitment" element={<Recruitment />} />
+            <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
+            <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
+            <Route path="/services/waste-management" element={<WasteManagement />} />
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster />
+        </Router>
+      </ServicesProvider>
     </ExpertsProvider>
   );
 }
