@@ -10,9 +10,9 @@ interface KakaoMapProps {
 
 const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveRegion }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<any>(null);
-  const [markers, setMarkers] = useState<any[]>([]);
-  const [customOverlays, setCustomOverlays] = useState<any[]>([]);
+  const [mapInstance, setMapInstance] = useState<kakao.maps.Map | null>(null);
+  const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
+  const [customOverlays, setCustomOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
 
   // 카카오맵 스크립트 로드
   useEffect(() => {
@@ -47,8 +47,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
     markers.forEach(marker => marker.setMap(null));
     customOverlays.forEach(overlay => overlay.setMap(null));
     
-    const newMarkers: any[] = [];
-    const newOverlays: any[] = [];
+    const newMarkers: kakao.maps.Marker[] = [];
+    const newOverlays: kakao.maps.CustomOverlay[] = [];
 
     regions.forEach(region => {
       if (region.latitude && region.longitude) {
@@ -68,19 +68,26 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
         
         newMarkers.push(marker);
         
-        // 커스텀 오버레이 생성
-        const content = `
-          <div class="marker-overlay ${activeRegion === region.name ? 'active' : ''}">
-            <div class="marker-title">${region.name}</div>
-            <div class="marker-count">${region.expertCount}명의 전문가</div>
-          </div>
-        `;
+        // 커스텀 오버레이 생성 - 이제 HTML 클래스를 사용합니다.
+        const isActive = activeRegion === region.name;
+        const content = document.createElement('div');
+        content.className = `bg-white p-2 rounded-md border ${isActive ? 'bg-primary text-white border-primary-700' : 'border-gray-300'} shadow-sm text-center font-noto`;
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'text-sm font-medium';
+        titleDiv.textContent = region.name;
+        content.appendChild(titleDiv);
+        
+        const countDiv = document.createElement('div');
+        countDiv.className = 'text-xs mt-0.5';
+        countDiv.textContent = `${region.expertCount}명의 전문가`;
+        content.appendChild(countDiv);
         
         const overlay = new window.kakao.maps.CustomOverlay({
           position,
           content,
           yAnchor: 1.3,
-          zIndex: activeRegion === region.name ? 2 : 1
+          zIndex: isActive ? 2 : 1
         });
         
         overlay.setMap(mapInstance);
@@ -109,33 +116,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
       <div 
         ref={mapRef} 
         className="w-full h-full rounded-lg"
-        style={{ position: 'relative' }}
       ></div>
-      <style jsx>{`
-        .marker-overlay {
-          background: white;
-          padding: 5px 10px;
-          border-radius: 4px;
-          border: 1px solid #ddd;
-          text-align: center;
-          font-family: 'Noto Sans KR', sans-serif;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .marker-overlay.active {
-          background: #3b82f6;
-          color: white;
-          border-color: #2563eb;
-          font-weight: bold;
-        }
-        .marker-title {
-          font-size: 14px;
-          font-weight: 500;
-        }
-        .marker-count {
-          font-size: 12px;
-          margin-top: 2px;
-        }
-      `}</style>
     </div>
   );
 };
