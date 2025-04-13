@@ -5,7 +5,7 @@ import HeroSection from '../components/HeroSection';
 import ServicesSection from '../components/ServicesSection';
 import RegionalMap from '../components/RegionalMap';
 import ExpertsSection from '../components/ExpertsSection';
-import ContactSection from '../components/ContactSection';
+import ContactSection from '../components/contact/ContactSection';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
