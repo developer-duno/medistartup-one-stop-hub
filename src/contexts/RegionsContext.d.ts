@@ -1,5 +1,5 @@
 
-import { Region, RegionInfo } from '@/components/map/types';
+import { Region, RegionInfo, RegionAdmin } from '@/components/map/types';
 import { Expert } from '@/types/expert';
 
 export interface RegionsContextType {
@@ -11,4 +11,14 @@ export interface RegionsContextType {
   getRegionalManager: (regionName: string) => Expert | null;
   getRegionTopServices: (regionName: string) => string[];
   getFilteredUrl: (regionName: string) => string;
+  
+  // Admin operations
+  adminRegions: RegionAdmin[];
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  filteredRegions: RegionAdmin[];
+  addRegion: (region: RegionAdmin) => void;
+  updateRegion: (region: RegionAdmin) => void;
+  deleteRegion: (id: string) => void;
+  toggleRegionActive: (id: string) => boolean;
 }

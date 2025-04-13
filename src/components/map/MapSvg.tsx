@@ -12,6 +12,17 @@ interface MapSvgProps {
 const MapSvg: React.FC<MapSvgProps> = ({ regions, activeRegion, setActiveRegion }) => {
   const { getRegionalExpertCount } = useRegions();
   
+  // Only display active regions on the map
+  const activeRegions = regions.filter(region => {
+    // If the region has an active property (is actually a RegionAdmin), check its value
+    // @ts-ignore: Ignore the type issue since we know admin regions have 'active' property
+    if (region.active !== undefined) {
+      // @ts-ignore
+      return region.active;
+    }
+    return true; // Default to showing the region if active state is not defined
+  });
+  
   return (
     <div className="relative bg-white rounded-xl shadow-md p-4 h-[400px] md:h-[500px]">
       <svg 
@@ -19,7 +30,7 @@ const MapSvg: React.FC<MapSvgProps> = ({ regions, activeRegion, setActiveRegion 
         className="w-full h-full"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {regions.map((region) => (
+        {activeRegions.map((region) => (
           <g key={region.id} onClick={() => setActiveRegion(region.name)}>
             <path 
               d={region.path}

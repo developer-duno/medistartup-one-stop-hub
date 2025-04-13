@@ -4,26 +4,29 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 
-  MapPin, Users, Edit, Trash2, Plus, Check, X 
+  MapPin, Users, Edit, Trash2, Plus, Search, Filter 
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 import RegionForm from './RegionForm';
 import { useToast } from '@/components/ui/use-toast';
-import { regions } from '@/components/map/regionData';
-import { Region, RegionAdmin } from '@/components/map/types';
-
-// Convert regions to admin format
-const initialRegions: RegionAdmin[] = regions.map((region, index) => ({
-  ...region,
-  active: true,
-  manager: ['김지역', '이담당', '박매니저', '최지역', '정관리'][index % 5],
-  mainCities: ['서울', '부산', '대구', '인천', '광주', '대전'][index % 6].split(','),
-  serviceCount: 4 + (index % 5)
-}));
+import { useRegions } from '@/contexts/RegionsContext';
+import { RegionAdmin } from '@/components/map/types';
 
 const RegionsManagement: React.FC = () => {
-  const [adminRegions, setAdminRegions] = useState<RegionAdmin[]>(initialRegions);
+  const { 
+    adminRegions, 
+    filteredRegions,
+    searchQuery,
+    setSearchQuery,
+    addRegion, 
+    updateRegion, 
+    deleteRegion, 
+    toggleRegionActive,
+    getRegionalExpertCount
+  } = useRegions();
+  
   const [activeRegion, setActiveRegion] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('regions');
   const [editingRegion, setEditingRegion] = useState<RegionAdmin | null>(null);
@@ -57,61 +60,29 @@ const RegionsManagement: React.FC = () => {
     if (!formData) return;
     
     const existingIndex = adminRegions.findIndex(r => r.id === formData.id);
-    let updatedRegions;
     
     if (existingIndex >= 0) {
-      updatedRegions = [...adminRegions];
-      updatedRegions[existingIndex] = formData;
-      
-      toast({
-        title: "지역 수정 완료",
-        description: `${formData.name} 지역 정보가 업데이트되었습니다.`
-      });
+      updateRegion(formData);
     } else {
-      updatedRegions = [...adminRegions, formData];
-      
-      toast({
-        title: "지역 추가 완료",
-        description: `${formData.name} 지역이 추가되었습니다.`
-      });
+      addRegion(formData);
     }
     
-    setAdminRegions(updatedRegions);
     setEditingRegion(null);
     setActiveTab('regions');
   };
 
   const handleDeleteRegion = (id: string) => {
     if (window.confirm('정말로 이 지역을 삭제하시겠습니까?')) {
-      const regionToDelete = adminRegions.find(r => r.id === id);
-      
-      setAdminRegions(adminRegions.filter(region => region.id !== id));
+      deleteRegion(id);
       
       if (activeRegion === id) {
         setActiveRegion(null);
-      }
-      
-      if (regionToDelete) {
-        toast({
-          title: "지역 삭제 완료",
-          description: `${regionToDelete.name} 지역이 삭제되었습니다.`
-        });
       }
     }
   };
   
   const handleToggleActive = (id: string) => {
-    setAdminRegions(adminRegions.map(r => 
-      r.id === id ? {...r, active: !r.active} : r
-    ));
-    
-    const region = adminRegions.find(r => r.id === id);
-    if (region) {
-      toast({
-        title: region.active ? "지역 비활성화" : "지역 활성화",
-        description: `${region.name} 지역이 ${region.active ? '비활성화' : '활성화'}되었습니다.`
-      });
-    }
+    toggleRegionActive(id);
   };
 
   return (
@@ -212,63 +183,103 @@ const RegionsManagement: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {adminRegions.map((region) => (
-                <Card 
-                  key={region.id} 
-                  className={`cursor-pointer hover:shadow-md transition-shadow ${!region.active ? 'opacity-60' : ''}`}
-                  onClick={() => setActiveRegion(region.id)}
-                >
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start">
-                      <h3 className="flex items-center gap-2 font-bold">
-                        <MapPin className="h-5 w-5 text-primary" />
-                        {region.name}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <Switch 
-                          checked={region.active}
-                          onCheckedChange={() => handleToggleActive(region.id)}
-                          onClick={(e) => e.stopPropagation()}
-                        />
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteRegion(region.id);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-2 mt-4 mb-4">
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">전문가 {region.expertCount || 0}명</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">서비스 {region.serviceCount || 0}개</span>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">주요 도시:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {region.mainCities?.map((city, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {city}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <>
+              <div className="mb-6">
+                <div className="relative">
+                  <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="지역, 담당자 또는 도시로 검색..."
+                    className="pl-10"
+                  />
+                </div>
+                {searchQuery && (
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-sm text-muted-foreground">
+                      {filteredRegions.length}개의 결과를 찾았습니다
+                    </p>
+                    {searchQuery && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => setSearchQuery('')}
+                      >
+                        초기화
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {filteredRegions.length === 0 ? (
+                <div className="text-center py-12">
+                  <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="font-medium text-xl mb-2">검색 결과 없음</h3>
+                  <p className="text-muted-foreground">
+                    검색어를 변경하거나 새 지역을 추가해보세요.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredRegions.map((region) => (
+                    <Card 
+                      key={region.id} 
+                      className={`cursor-pointer hover:shadow-md transition-shadow ${!region.active ? 'opacity-60' : ''}`}
+                      onClick={() => setActiveRegion(region.id)}
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex justify-between items-start">
+                          <h3 className="flex items-center gap-2 font-bold">
+                            <MapPin className="h-5 w-5 text-primary" />
+                            {region.name}
+                          </h3>
+                          <div className="flex items-center gap-2">
+                            <Switch 
+                              checked={region.active}
+                              onCheckedChange={() => handleToggleActive(region.id)}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteRegion(region.id);
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2 mt-4 mb-4">
+                          <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">전문가 {getRegionalExpertCount(region.name)}명</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">서비스 {region.serviceCount || 0}개</span>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <p className="text-sm text-muted-foreground mb-1">주요 도시:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {region.mainCities?.map((city, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                {city}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </TabsContent>
 
