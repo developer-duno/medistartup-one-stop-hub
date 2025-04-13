@@ -4,15 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Edit, Trash2, Play } from 'lucide-react';
-
-interface Simulator {
-  id: number;
-  title: string;
-  description: string;
-  type: string;
-  active: boolean;
-  views: number;
-}
+import { Simulator } from './types';
 
 interface SimulatorListProps {
   simulators: Simulator[];

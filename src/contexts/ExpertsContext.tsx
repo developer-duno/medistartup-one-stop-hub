@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { ExpertsContextType, ExpertsProviderProps } from './expertsTypes';
 import { useExpertOperations } from './expertsOperations';
 import { initialExperts } from '../data/initialExperts';
@@ -52,12 +52,12 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       displayOrder: index,
       showOnMain: true,
       isApproved: true,
-      applicationStatus: 'approved'
+      applicationStatus: 'approved' as const
     }));
   });
   
   // Save experts to local storage whenever they change
-  useEffect(() => {
+  React.useEffect(() => {
     try {
       localStorage.setItem(EXPERTS_STORAGE_KEY, JSON.stringify(experts));
       console.log('Saved experts to local storage:', experts);
@@ -93,7 +93,7 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   };
 
   // Calculate pending applications
-  const pendingApplications = useMemo(() => {
+  const pendingApplications = React.useMemo(() => {
     return experts.filter(expert => expert.applicationStatus === 'pending');
   }, [experts]);
 
