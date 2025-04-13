@@ -87,6 +87,20 @@ const SimulatorSection = () => {
     }
   };
 
+  // Get default parameters for simulator types
+  const getDefaultParamsForType = (type: string) => {
+    switch(type) {
+      case 'financial':
+        return { specialty: '내과', size: 50, location: '중형상가' };
+      case 'revenue':
+        return { specialty: '피부과', patients: 30, region: '서울/경기' };
+      case 'staffing':
+        return { specialty: '치과', size: 100, services: ['일반진료', '미용'] };
+      default:
+        return { specialty: '내과', size: 50, location: '중형상가' };
+    }
+  };
+
   return (
     <section id="simulators" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -116,7 +130,7 @@ const SimulatorSection = () => {
                 simulatorType={(simulator.type as 'financial' | 'revenue' | 'staffing')}
                 onSimulate={() => {
                   trackSimulatorUsage(simulator.id);
-                  return getSimulatorFunction(simulator.type)({});
+                  return getSimulatorFunction(simulator.type)(getDefaultParamsForType(simulator.type));
                 }}
               />
             ))}
