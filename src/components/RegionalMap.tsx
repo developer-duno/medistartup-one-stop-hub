@@ -1,22 +1,25 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useExperts } from '@/contexts/ExpertsContext';
+import { useRegions } from '@/contexts/RegionsContext';
 import KakaoMap from './map/KakaoMap';
 import RegionCard from './map/RegionCard';
-import { regions } from './map/regionData';
 import { getActiveRegionInfo, getFilteredUrl, getRegionalExpertCount } from './map/regionUtils';
 
 const RegionalMap = () => {
   const [activeRegion, setActiveRegion] = useState('서울/경기');
   const { experts } = useExperts();
+  const { regions, updateExpertCount } = useRegions();
   
-  // Add expert count to regions for display in the SVG
-  const regionsWithCounts = regions.map(region => ({
-    ...region,
-    expertCount: getRegionalExpertCount(region.name, experts)
-  }));
+  // 각 지역별 전문가 수 계산 및 RegionsContext 업데이트
+  useEffect(() => {
+    regions.forEach(region => {
+      const expertCount = getRegionalExpertCount(region.name, experts);
+      updateExpertCount(region.name, expertCount);
+    });
+  }, [experts, regions, updateExpertCount]);
   
-  // Get active region information
+  // 활성화된 지역 정보 가져오기
   const activeRegionInfo = getActiveRegionInfo(activeRegion, experts);
 
   return (
@@ -34,7 +37,7 @@ const RegionalMap = () => {
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
             <KakaoMap 
-              regions={regionsWithCounts} 
+              regions={regions} 
               activeRegion={activeRegion} 
               setActiveRegion={setActiveRegion} 
             />

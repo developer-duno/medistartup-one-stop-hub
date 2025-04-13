@@ -2,31 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Region } from './types';
 
-// 타입스크립트 인터페이스로 Window.kakao에서 필요한 타입들을 참조
-type KakaoMap = {
-  setCenter: (position: KakaoLatLng) => void;
-  setLevel: (level: number) => void;
-  getLevel: () => number;
-  getCenter: () => KakaoLatLng;
-};
-
-type KakaoLatLng = {
-  getLat: () => number;
-  getLng: () => number;
-};
-
-type KakaoMarker = {
-  setMap: (map: KakaoMap | null) => void;
-  setPosition: (position: KakaoLatLng) => void;
-  setTitle: (title: string) => void;
-};
-
-type KakaoCustomOverlay = {
-  setMap: (map: KakaoMap | null) => void;
-  setPosition: (position: KakaoLatLng) => void;
-  setContent: (content: string | HTMLElement) => void;
-};
-
 interface KakaoMapProps {
   regions: Region[];
   activeRegion: string;
@@ -35,9 +10,9 @@ interface KakaoMapProps {
 
 const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveRegion }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<KakaoMap | null>(null);
-  const [markers, setMarkers] = useState<KakaoMarker[]>([]);
-  const [customOverlays, setCustomOverlays] = useState<KakaoCustomOverlay[]>([]);
+  const [mapInstance, setMapInstance] = useState<any>(null);
+  const [markers, setMarkers] = useState<any[]>([]);
+  const [customOverlays, setCustomOverlays] = useState<any[]>([]);
 
   // 카카오맵 스크립트 로드
   useEffect(() => {
@@ -66,14 +41,14 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
 
   // 지역 마커 생성
   useEffect(() => {
-    if (!mapInstance) return;
+    if (!mapInstance || !window.kakao) return;
 
     // 기존 마커와 오버레이 제거
     markers.forEach(marker => marker.setMap(null));
     customOverlays.forEach(overlay => overlay.setMap(null));
     
-    const newMarkers: KakaoMarker[] = [];
-    const newOverlays: KakaoCustomOverlay[] = [];
+    const newMarkers: any[] = [];
+    const newOverlays: any[] = [];
 
     regions.forEach(region => {
       if (region.latitude && region.longitude) {
@@ -105,7 +80,7 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
         
         const countDiv = document.createElement('div');
         countDiv.className = 'text-xs mt-0.5';
-        countDiv.textContent = `${region.expertCount}명의 전문가`;
+        countDiv.textContent = `${region.expertCount || 0}명의 전문가`;
         content.appendChild(countDiv);
         
         const overlay = new window.kakao.maps.CustomOverlay({
