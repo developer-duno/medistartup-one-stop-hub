@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Play } from 'lucide-react';
 
 interface Simulator {
   id: number;
@@ -19,13 +19,15 @@ interface SimulatorListProps {
   onEdit: (simulator: Simulator) => void;
   onToggleActive: (id: number) => void;
   onDelete: (id: number) => void;
+  onTest: (simulator: Simulator) => void;
 }
 
 const SimulatorList: React.FC<SimulatorListProps> = ({
   simulators,
   onEdit,
   onToggleActive,
-  onDelete
+  onDelete,
+  onTest
 }) => {
   return (
     <Table>
@@ -64,6 +66,9 @@ const SimulatorList: React.FC<SimulatorListProps> = ({
             <TableCell>{simulator.views}</TableCell>
             <TableCell>
               <div className="flex space-x-2">
+                <Button variant="outline" size="sm" onClick={() => onTest(simulator)}>
+                  <Play className="h-4 w-4" />
+                </Button>
                 <Button variant="outline" size="sm" onClick={() => onEdit(simulator)}>
                   <Edit className="h-4 w-4" />
                 </Button>

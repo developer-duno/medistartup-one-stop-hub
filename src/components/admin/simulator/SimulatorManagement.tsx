@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Play } from 'lucide-react';
 import SimulatorList from './SimulatorList';
 import SimulatorForm from './SimulatorForm';
 import SimulatorUsage from './SimulatorUsage';
+import SimulatorTest from './SimulatorTest';
 import { Simulator, UsageData } from './types';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -52,6 +53,7 @@ const generateUsageData = (simulators: Simulator[]): UsageData[] => {
 const SimulatorManagement: React.FC = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
   const [editingSimulator, setEditingSimulator] = useState<Simulator | null>(null);
+  const [testingSimulator, setTestingSimulator] = useState<Simulator | null>(null);
   const [activeTab, setActiveTab] = useState('list');
   const [usageData, setUsageData] = useState<UsageData[]>([]);
   const { toast } = useToast();
@@ -98,6 +100,11 @@ const SimulatorManagement: React.FC = () => {
   const handleEditSimulator = (simulator: Simulator) => {
     setEditingSimulator({...simulator});
     setActiveTab('edit');
+  };
+
+  const handleTestSimulator = (simulator: Simulator) => {
+    setTestingSimulator({...simulator});
+    setActiveTab('test');
   };
 
   const handleUpdateSimulator = (field: string, value: any) => {
@@ -156,6 +163,11 @@ const SimulatorManagement: React.FC = () => {
     setActiveTab('list');
   };
 
+  const handleBackFromTest = () => {
+    setTestingSimulator(null);
+    setActiveTab('list');
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
@@ -175,6 +187,9 @@ const SimulatorManagement: React.FC = () => {
           <TabsTrigger value="edit" disabled={!editingSimulator}>
             {editingSimulator?.id ? '시뮬레이터 수정' : '시뮬레이터 추가'}
           </TabsTrigger>
+          <TabsTrigger value="test" disabled={!testingSimulator}>
+            시뮬레이터 테스트
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="list">
@@ -183,6 +198,7 @@ const SimulatorManagement: React.FC = () => {
             onEdit={handleEditSimulator}
             onToggleActive={handleToggleActive}
             onDelete={handleDeleteSimulator}
+            onTest={handleTestSimulator}
           />
         </TabsContent>
 
@@ -197,6 +213,15 @@ const SimulatorManagement: React.FC = () => {
               onSave={handleSaveSimulator}
               onCancel={handleCancelEdit}
               onUpdate={handleUpdateSimulator}
+            />
+          )}
+        </TabsContent>
+
+        <TabsContent value="test">
+          {testingSimulator && (
+            <SimulatorTest 
+              simulator={testingSimulator}
+              onBack={handleBackFromTest}
             />
           )}
         </TabsContent>
