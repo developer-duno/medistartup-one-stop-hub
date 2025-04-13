@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Filter, Search, CheckCircle, Clock, MapPin, Award, ChevronDown, X, Download } from 'lucide-react';
+import { Search, CheckCircle, Clock, MapPin, Award, Download } from 'lucide-react';
 import CustomButton from '../components/ui/CustomButton';
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useExperts } from '@/contexts/ExpertsContext';
+import ExpertFilters from '@/components/experts/ExpertFilters';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
@@ -107,17 +107,6 @@ const ExpertList = () => {
               병원창업에 필요한 각 분야 전문가들을 만나보세요.
               풍부한 경력과 성공 사례를 바탕으로 최적의 솔루션을 제공해 드립니다.
             </p>
-            
-            <div className="relative w-full max-w-lg mx-auto">
-              <input
-                type="text"
-                className="w-full px-5 py-3 pr-12 rounded-lg border border-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary-300"
-                placeholder="전문가 이름, 분야 또는 지역 검색"
-                value={filters.search}
-                onChange={(e) => setFilters({...filters, search: e.target.value})}
-              />
-              <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-neutral-400" />
-            </div>
           </div>
         </div>
       </div>
@@ -134,130 +123,26 @@ const ExpertList = () => {
               </p>
             </div>
             
-            <div className="flex items-center gap-4">
-              <button 
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2 text-neutral-700 hover:text-primary transition-colors"
-              >
-                <Filter className="h-5 w-5" />
-                필터
-                <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-              </button>
-              
-              <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="hidden md:block">
-                <TabsList>
-                  <TabsTrigger value="grid">그리드 보기</TabsTrigger>
-                  <TabsTrigger value="compare" disabled={selectedExperts.length < 2}>
-                    비교 보기 ({selectedExperts.length}/3)
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
+            <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="hidden md:block">
+              <TabsList>
+                <TabsTrigger value="grid">그리드 보기</TabsTrigger>
+                <TabsTrigger value="compare" disabled={selectedExperts.length < 2}>
+                  비교 보기 ({selectedExperts.length}/3)
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
           
-          {showFilters && (
-            <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-6 animate-fade-in">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-pretendard font-medium">상세 필터</h3>
-                <button 
-                  onClick={() => setShowFilters(false)}
-                  className="text-neutral-500 hover:text-neutral-700"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-pretendard text-sm mb-2">지역별 필터</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {regions.map((region) => (
-                      <label key={region} className="flex items-center space-x-2">
-                        <Checkbox 
-                          checked={filters.regions.includes(region)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setFilters({...filters, regions: [...filters.regions, region]});
-                            } else {
-                              setFilters({...filters, regions: filters.regions.filter(r => r !== region)});
-                            }
-                          }}
-                        />
-                        <span className="text-sm">{region}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <h4 className="font-pretendard text-sm mb-2">서비스별 필터</h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {serviceCategories.map((service) => (
-                      <label key={service} className="flex items-center space-x-2">
-                        <Checkbox 
-                          checked={filters.services.includes(service)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setFilters({...filters, services: [...filters.services, service]});
-                            } else {
-                              setFilters({...filters, services: filters.services.filter(s => s !== service)});
-                            }
-                          }}
-                        />
-                        <span className="text-sm">{service}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end mt-4 gap-2">
-                <CustomButton 
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setFilters({search: "", regions: [], services: []})}
-                >
-                  필터 초기화
-                </CustomButton>
-                <CustomButton 
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setShowFilters(false)}
-                >
-                  적용하기
-                </CustomButton>
-              </div>
-            </div>
-          )}
-          
-          <div className="overflow-x-auto pb-2">
-            <div className="flex border-b border-neutral-200 min-w-max">
-              <button
-                className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                  activeCategory === "all"
-                    ? "border-primary text-primary"
-                    : "border-transparent text-neutral-500 hover:text-neutral-800"
-                }`}
-                onClick={() => setActiveCategory("all")}
-              >
-                전체 보기
-              </button>
-              
-              {serviceCategories.map((category) => (
-                <button
-                  key={category}
-                  className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-                    activeCategory === category
-                      ? "border-primary text-primary"
-                      : "border-transparent text-neutral-500 hover:text-neutral-800"
-                  }`}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
+          <ExpertFilters 
+            filters={filters}
+            setFilters={setFilters}
+            regions={regions}
+            serviceCategories={serviceCategories}
+            showFilters={showFilters}
+            setShowFilters={setShowFilters}
+            activeCategory={activeCategory}
+            setActiveCategory={setActiveCategory}
+          />
         </div>
 
         {selectedExperts.length > 0 && (
@@ -400,6 +285,7 @@ const ExpertList = () => {
         )}
 
         {viewMode === "compare" && (
+          
           <div>
             {selectedExperts.length >= 2 ? (
               <div>

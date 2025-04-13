@@ -11,6 +11,9 @@ const HeroSection = () => {
   const regions = ['대전/충남', '서울/경기', '부산/경남', '대구/경북', '광주/전라', '강원', '제주'];
   const [isLoading, setIsLoading] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  
+  // Sample consultation video URL - replace with your actual hospital consulting video
+  const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
   useEffect(() => {
     const generateHospitalImage = async () => {
@@ -174,13 +177,11 @@ const HeroSection = () => {
                 muted
                 loop
                 controls={isVideoPlaying}
-                onClick={() => setIsVideoPlaying(true)}
-              >
-                <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+                onClick={handleVideoPlay}
+                src={videoUrl}
+              />
               {!isVideoPlaying && (
-                <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={() => setIsVideoPlaying(true)}>
+                <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={handleVideoPlay}>
                   <div className="w-20 h-20 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center animate-pulse-light">
                     <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">

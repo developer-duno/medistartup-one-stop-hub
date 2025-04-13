@@ -22,8 +22,10 @@ const Index = () => {
       <SimulatorSection />
       <RegionalMap />
       <ExpertsSection />
+      <NewsInsightsSection />
+      <SuccessStoriesSection />
       
-      {/* Expert application CTA section */}
+      {/* Expert application CTA section - moved above contact section */}
       <section className="py-12 bg-primary-50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -42,8 +44,6 @@ const Index = () => {
         </div>
       </section>
       
-      <NewsInsightsSection />
-      <SuccessStoriesSection />
       <ContactSection />
       <Footer />
     </div>
