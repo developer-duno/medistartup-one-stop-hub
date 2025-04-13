@@ -13,6 +13,8 @@ import {
   filterInsights, 
   getAllTags 
 } from '@/components/insights/insightUtils';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const Insights = () => {
   const { id } = useParams();
@@ -54,6 +56,8 @@ const Insights = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <Navbar />
+      
       <div className="pt-28 pb-16 bg-gradient-to-b from-primary-100 to-white">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
@@ -138,6 +142,8 @@ const Insights = () => {
           />
         )}
       </Dialog>
+      
+      <Footer />
     </div>
   );
 };
