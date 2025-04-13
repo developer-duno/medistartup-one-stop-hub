@@ -8,6 +8,7 @@ import ExpertProfile from './pages/ExpertProfile';
 import ExpertList from './pages/ExpertList';
 import SuccessStories from './pages/SuccessStories';
 import NotFound from './pages/NotFound';
+import Services from './pages/Services';
 import { ExpertsProvider } from './contexts/ExpertsContext';
 import { ServicesProvider } from './contexts/ServicesContext';
 import { InsightsProvider } from './contexts/InsightsContext';
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/experts" element={<ExpertList />} />
                 <Route path="/expert/:id" element={<ExpertProfile />} />
                 <Route path="/success-stories" element={<SuccessStories />} />
+                <Route path="/services" element={<Services />} />
                 {/* Services routes */}
                 <Route path="/services/location-analysis" element={<LocationAnalysis />} />
                 <Route path="/services/licensing" element={<Licensing />} />
