@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -67,7 +66,7 @@ const RegionsManagement: React.FC = () => {
       labelY: editingRegion.labelY || 0,
       includesRegions: Array.isArray(editingRegion.includesRegions) ? 
         editingRegion.includesRegions : 
-        (editingRegion.mainCities as unknown as string[] || []),
+        [],
       expertCount: editingRegion.expertCount || 0,
       latitude: editingRegion.latitude || 0,
       longitude: editingRegion.longitude || 0
@@ -93,8 +92,6 @@ const RegionsManagement: React.FC = () => {
   };
   
   const handleToggleActive = (region: Region) => {
-    // 이 애플리케이션에서는 지역 활성/비활성이 실제로 어떤 필드를 통해 관리되는지 명확하지 않으므로
-    // 예시로 가상의 active 필드를 추가하는 방식으로 구현합니다
     updateRegion({
       ...region,
       active: !region.active
@@ -105,7 +102,6 @@ const RegionsManagement: React.FC = () => {
     if (!editingRegion) return;
     
     const citiesInput = e.target.value;
-    // Split by comma and trim whitespace
     const citiesArray = citiesInput.split(',').map(city => city.trim()).filter(Boolean);
     setEditingRegion({...editingRegion, includesRegions: citiesArray});
   };
@@ -288,14 +284,14 @@ const RegionsManagement: React.FC = () => {
                   <Card key={expert.id} className="overflow-hidden">
                     <div className="h-40 overflow-hidden">
                       <img 
-                        src={expert.profileImage} 
+                        src={expert.image} 
                         alt={expert.name} 
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <CardContent className="pt-4">
                       <h4 className="font-medium text-lg">{expert.name}</h4>
-                      <p className="text-sm text-muted-foreground">{expert.title}</p>
+                      <p className="text-sm text-muted-foreground">{expert.role}</p>
                       <div className="flex justify-between mt-4">
                         <Button variant="outline" size="sm">
                           <Edit className="h-3 w-3 mr-1" />
