@@ -1,0 +1,46 @@
+
+/* Theme classes for each main section - updated with soft pastel colors */
+.theme-services {
+  --theme-hue: 25; /* Soft Peach */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(253, 225, 211, 0.7) 0%, rgba(255, 236, 217, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 100%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 50%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 50%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 60%, 75%);
+}
+
+.theme-regions {
+  --theme-hue: 210; /* Soft Blue */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(211, 228, 253, 0.7) 0%, rgba(228, 237, 250, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 70%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 50%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 50%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 60%, 75%);
+}
+
+.theme-experts {
+  --theme-hue: 270; /* Soft Lavender */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(229, 222, 255, 0.7) 0%, rgba(237, 233, 250, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 60%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 40%, 70%);
+  --theme-primary-light: hsl(var(--theme-hue), 40%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 50%, 80%);
+}
+
+.theme-insights {
+  --theme-hue: 180; /* Soft Teal */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(211, 242, 240, 0.7) 0%, rgba(226, 245, 244, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 60%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 40%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 40%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 50%, 75%);
+}
+
+.theme-success {
+  --theme-hue: 120; /* Soft Mint */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(224, 248, 232, 0.7) 0%, rgba(236, 248, 235, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 50%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 35%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 35%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 45%, 75%);
+}

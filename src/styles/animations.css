@@ -1,0 +1,18 @@
+
+.number-counter {
+  counter-reset: count var(--num-start);
+  animation: counter 1s linear forwards;
+}
+
+.number-counter::after {
+  content: counter(count);
+}
+
+@keyframes counter {
+  from {
+    counter-increment: count var(--num-start);
+  }
+  to {
+    counter-increment: count var(--num-end);
+  }
+}

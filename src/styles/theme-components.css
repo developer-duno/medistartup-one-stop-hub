@@ -1,0 +1,43 @@
+
+.theme-page-header {
+  background: var(--theme-bg-gradient, linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%));
+  color: var(--theme-primary, inherit);
+}
+
+.theme-page-header h1 span {
+  color: var(--theme-primary, inherit);
+}
+
+.theme-btn {
+  background-color: var(--theme-primary);
+  color: white;
+}
+
+.theme-btn:hover {
+  filter: brightness(1.1);
+}
+
+.theme-link {
+  color: var(--theme-primary);
+}
+
+.theme-link:hover {
+  color: var(--theme-accent);
+}
+
+.theme-bg-light {
+  background-color: var(--theme-bg-light);
+}
+
+.theme-border {
+  border-color: var(--theme-primary-light);
+}
+
+.theme-text {
+  color: var(--theme-primary);
+}
+
+.theme-tab.active {
+  color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
