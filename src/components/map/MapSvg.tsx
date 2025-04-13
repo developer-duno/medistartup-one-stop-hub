@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Region } from './types';
+import { useRegions } from '@/contexts/RegionsContext';
 
 interface MapSvgProps {
   regions: Region[];
@@ -9,6 +10,8 @@ interface MapSvgProps {
 }
 
 const MapSvg: React.FC<MapSvgProps> = ({ regions, activeRegion, setActiveRegion }) => {
+  const { getRegionalExpertCount } = useRegions();
+  
   return (
     <div className="relative bg-white rounded-xl shadow-md p-4 h-[400px] md:h-[500px]">
       <svg 
@@ -36,7 +39,7 @@ const MapSvg: React.FC<MapSvgProps> = ({ regions, activeRegion, setActiveRegion 
               textAnchor="middle"
               className={`${activeRegion === region.name ? 'opacity-100' : 'opacity-70'} fill-primary text-xs font-medium cursor-pointer`}
             >
-              {getRegionalExpertCount(region.name)}명의 전문가
+              {region.expertCount !== undefined ? region.expertCount : getRegionalExpertCount(region.name)}명의 전문가
             </text>
             {/* 활성화된 지역에 표시할 하이라이트 원 */}
             {activeRegion === region.name && (
@@ -52,14 +55,6 @@ const MapSvg: React.FC<MapSvgProps> = ({ regions, activeRegion, setActiveRegion 
       </svg>
     </div>
   );
-  
-  // Function to calculate region expert count
-  function getRegionalExpertCount(regionName: string): number {
-    const currentRegion = regions.find(region => region.name === regionName);
-    if (!currentRegion || !currentRegion.includesRegions) return 0;
-    
-    return currentRegion.expertCount || 0;
-  }
 };
 
 export default MapSvg;

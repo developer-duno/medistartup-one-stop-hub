@@ -4,7 +4,7 @@ import { Expert } from '@/types/expert';
 import { Region, RegionInfo } from './types';
 
 // 지역 매니저 정보 가져오기 (isRegionalManager가 true인 전문가 중 해당 지역을 담당하는 전문가)
-export const getRegionalManager = (regionName: string, experts: Expert[]) => {
+export const getRegionalManager = (regionName: string, experts: Expert[]): Expert | null => {
   const currentRegion = regions.find(region => region.name === regionName);
   if (!currentRegion) return null;
   
@@ -13,11 +13,11 @@ export const getRegionalManager = (regionName: string, experts: Expert[]) => {
   return experts.find(expert => 
     expert.isRegionalManager && 
     expert.regions.some(region => includesRegions.includes(region))
-  );
+  ) || null;
 };
 
 // 지역별 전문가 수 계산
-export const getRegionalExpertCount = (regionName: string, experts: Expert[]) => {
+export const getRegionalExpertCount = (regionName: string, experts: Expert[]): number => {
   const currentRegion = regions.find(region => region.name === regionName);
   if (!currentRegion) return 0;
   
@@ -41,7 +41,7 @@ export const getRegionTopServices = (regionName: string, experts: Expert[]): str
     .flatMap(expert => expert.services);
   
   // 서비스별 출현 횟수를 계산
-  const serviceCounts: {[key: string]: number} = {};
+  const serviceCounts: Record<string, number> = {};
   allServices.forEach(service => {
     serviceCounts[service] = (serviceCounts[service] || 0) + 1;
   });

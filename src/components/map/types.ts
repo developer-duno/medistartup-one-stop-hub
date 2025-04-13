@@ -21,3 +21,22 @@ export interface RegionInfo extends Region {
   topServices: string[];
   hasManager: boolean;
 }
+
+export interface RegionAdmin extends Region {
+  manager?: string;
+  active?: boolean;
+  mainCities?: string[];
+  serviceCount?: number;
+}
+
+export interface RegionExpert {
+  expert: Expert;
+  assignedRegions: string[];
+}
+
+export type RegionFormData = Partial<Region> & {
+  id?: number | string;
+  manager?: string;
+  active?: boolean;
+  mainCities?: string[];
+};

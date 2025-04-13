@@ -1,23 +1,20 @@
 
-import React, { useState } from 'react';
-import { useExperts } from '@/contexts/ExpertsContext';
+import React from 'react';
 import KakaoMap from './map/KakaoMap';
 import RegionCard from './map/RegionCard';
-import { regions } from './map/regionData';
-import { getActiveRegionInfo, getFilteredUrl, getRegionalExpertCount } from './map/regionUtils';
+import { useRegions } from '@/contexts/RegionsContext';
 
 const RegionalMap = () => {
-  const [activeRegion, setActiveRegion] = useState('서울/경기');
-  const { experts } = useExperts();
-  
-  // Add expert count to regions for display in the SVG
-  const regionsWithCounts = regions.map(region => ({
-    ...region,
-    expertCount: getRegionalExpertCount(region.name, experts)
-  }));
+  const { 
+    regions, 
+    activeRegion, 
+    setActiveRegion, 
+    getActiveRegionInfo, 
+    getFilteredUrl 
+  } = useRegions();
   
   // Get active region information
-  const activeRegionInfo = getActiveRegionInfo(activeRegion, experts);
+  const activeRegionInfo = getActiveRegionInfo();
 
   return (
     <section id="regions" className="py-16 md:py-24 bg-neutral-50">
@@ -34,7 +31,7 @@ const RegionalMap = () => {
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
             <KakaoMap 
-              regions={regionsWithCounts} 
+              regions={regions} 
               activeRegion={activeRegion} 
               setActiveRegion={setActiveRegion} 
             />
