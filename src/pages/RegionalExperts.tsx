@@ -1,14 +1,16 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, MapPin, Search, Users } from 'lucide-react';
 import { useRegions } from '@/contexts/RegionsContext';
-import RegionCard from './map/RegionCard';
-import { Search, MapPin, Users, ArrowRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Link } from 'react-router-dom';
+import RegionCard from '@/components/map/RegionCard';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
-const RegionalMap = () => {
+const RegionalExperts = () => {
   const { 
     regions, 
     activeRegion, 
@@ -18,6 +20,16 @@ const RegionalMap = () => {
   } = useRegions();
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  
+  // Get region from query params if available
+  useEffect(() => {
+    const regionParam = searchParams.get('region');
+    if (regionParam) {
+      setActiveRegion(regionParam);
+    }
+  }, [searchParams, setActiveRegion]);
   
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
@@ -31,17 +43,28 @@ const RegionalMap = () => {
     : regions;
 
   return (
-    <section id="regions" className="py-16 md:py-24 bg-neutral-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
-            지역별 <span className="text-primary">전문가 네트워크</span>
-          </h2>
-          <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
-            각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다. 지역에 특화된 전문지식을 바탕으로 보다 효과적인 병원창업을 도와드립니다.
-          </p>
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      
+      <div className="pt-28 pb-16 bg-gradient-to-b from-secondary-100 to-white">
+        <div className="container mx-auto px-4">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            홈으로 돌아가기
+          </Link>
+          
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
+              지역별 <span className="text-primary">전문가 네트워크</span>
+            </h1>
+            <p className="font-noto text-neutral-600 mb-8">
+              각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다. 지역에 특화된 전문지식을 바탕으로 보다 효과적인 병원창업을 도와드립니다.
+            </p>
+          </div>
         </div>
+      </div>
 
+      <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
             <div className="mb-6">
@@ -104,13 +127,6 @@ const RegionalMap = () => {
                 </div>
               )}
             </div>
-            
-            <div className="flex justify-center mt-4">
-              <Link to="/regions" className="inline-flex items-center bg-white px-6 py-3 rounded-md shadow-sm border border-neutral-200 hover:shadow-md transition-shadow font-pretendard font-medium">
-                지역 전체 보기
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </div>
           </div>
 
           <div className="w-full lg:w-2/5">
@@ -123,8 +139,10 @@ const RegionalMap = () => {
           </div>
         </div>
       </div>
-    </section>
+      
+      <Footer />
+    </div>
   );
 };
 
-export default RegionalMap;
+export default RegionalExperts;

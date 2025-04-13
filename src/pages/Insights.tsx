@@ -54,19 +54,21 @@ const Insights = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-accent py-16 md:py-24">
+      <div className="pt-28 pb-16 bg-gradient-to-b from-primary-100 to-white">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
             홈으로 돌아가기
           </Link>
           
-          <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
-            뉴스 & 인사이트
-          </h1>
-          <p className="font-noto text-lg text-neutral-700 max-w-2xl">
-            병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.
-          </p>
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
+              뉴스 & <span className="text-primary">인사이트</span>
+            </h1>
+            <p className="font-noto text-neutral-600 mb-8">
+              병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.
+            </p>
+          </div>
         </div>
       </div>
 

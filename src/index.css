@@ -34,6 +34,14 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+    
+    /* Extended colors */
+    --primary-50: 222.2 47.4% 97%;
+    --primary-100: 222.2 47.4% 94%;
+    --primary-700: 222.2 47.4% 9%;
+    
+    --secondary-50: 210 40% 98%;
+    --secondary-100: 210 40% 94%;
   }
 
   .dark {
