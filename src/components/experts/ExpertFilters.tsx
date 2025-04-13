@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Search, Filter, ChevronDown, X, MapPin, Tag, CheckCircle, ChevronsUpDown } from 'lucide-react';
+import { Search, Filter, ChevronDown, X, MapPin, Tag, ChevronsUpDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +60,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   const activeFiltersCount = filters.regions.length + filters.services.length;
 
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <div className="w-full relative mb-6">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-5 w-5" />
         <Input
@@ -70,7 +71,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
         />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <Popover>
             <PopoverTrigger asChild>
@@ -216,37 +217,6 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
               )}
             </div>
           )}
-        </div>
-      </div>
-
-      <div className="overflow-x-auto scrollbar-none pb-2">
-        <div className="flex border-b border-neutral-200 min-w-max">
-          <button
-            className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex items-center gap-1 ${
-              activeCategory === "all"
-                ? "border-primary text-primary"
-                : "border-transparent text-neutral-500 hover:text-neutral-800"
-            }`}
-            onClick={() => setActiveCategory("all")}
-          >
-            {activeCategory === "all" && <CheckCircle className="h-4 w-4" />}
-            전체 보기
-          </button>
-          
-          {serviceCategories.map((category) => (
-            <button
-              key={category}
-              className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex items-center gap-1 ${
-                activeCategory === category
-                  ? "border-primary text-primary"
-                  : "border-transparent text-neutral-500 hover:text-neutral-800"
-              }`}
-              onClick={() => setActiveCategory(category)}
-            >
-              {activeCategory === category && <CheckCircle className="h-4 w-4" />}
-              {category}
-            </button>
-          ))}
         </div>
       </div>
     </div>
