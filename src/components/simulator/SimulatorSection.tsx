@@ -4,6 +4,7 @@ import { Calculator, TrendingUp, Users } from 'lucide-react';
 import SimulatorCard from './SimulatorCard';
 import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './SimulatorUtils';
 import { Simulator } from '../admin/simulator/types';
+import { useToast } from '@/components/ui/use-toast';
 
 // Default simulators if none found in localStorage
 const defaultSimulators: Simulator[] = [
@@ -35,6 +36,7 @@ const defaultSimulators: Simulator[] = [
 
 const SimulatorSection = () => {
   const [simulators, setSimulators] = useState<Simulator[]>([]);
+  const { toast } = useToast();
 
   // Load simulators from localStorage
   useEffect(() => {
@@ -114,6 +116,15 @@ const SimulatorSection = () => {
     }
   };
 
+  // Handle simulation completion
+  const handleSimulationComplete = (type: string) => {
+    toast({
+      title: "시뮬레이션 완료",
+      description: `${type} 시뮬레이션이 성공적으로 완료되었습니다.`,
+      variant: "default",
+    });
+  };
+
   return (
     <section id="simulators" className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-4">
@@ -145,13 +156,21 @@ const SimulatorSection = () => {
                   trackSimulatorUsage(simulator.id);
                   // Handle simulation with proper type safety
                   if (simulator.type === 'financial') {
-                    return simulateFinancialCosts(getFinancialParams());
+                    const result = simulateFinancialCosts(getFinancialParams());
+                    handleSimulationComplete("재무");
+                    return result;
                   } else if (simulator.type === 'revenue') {
-                    return simulateRevenue(getRevenueParams());
+                    const result = simulateRevenue(getRevenueParams());
+                    handleSimulationComplete("수익");
+                    return result;
                   } else if (simulator.type === 'staffing') {
-                    return simulateStaffing(getStaffingParams());
+                    const result = simulateStaffing(getStaffingParams());
+                    handleSimulationComplete("인력");
+                    return result;
                   } else {
-                    return simulateFinancialCosts(getFinancialParams());
+                    const result = simulateFinancialCosts(getFinancialParams());
+                    handleSimulationComplete("기본");
+                    return result;
                   }
                 }}
               />

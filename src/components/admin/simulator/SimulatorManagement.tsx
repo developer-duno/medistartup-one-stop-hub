@@ -42,7 +42,7 @@ const generateUsageData = (simulators: Simulator[]): UsageData[] => {
   const totalViews = simulators.reduce((sum, sim) => sum + (sim.views || 0), 0);
   const months = ['1월', '2월', '3월', '4월', '5월', '6월'];
   
-  // Generate mock data based on total views
+  // Generate data based on total views
   return months.map((month, index) => ({
     date: `2023-0${index + 1}`,
     views: Math.floor((totalViews / 6) * (0.8 + Math.random() * 0.4))
@@ -65,9 +65,11 @@ const SimulatorManagement: React.FC = () => {
       } catch (error) {
         console.error('Error parsing stored simulators:', error);
         setSimulators(mockSimulators);
+        localStorage.setItem('simulators', JSON.stringify(mockSimulators));
       }
     } else {
       setSimulators(mockSimulators);
+      localStorage.setItem('simulators', JSON.stringify(mockSimulators));
     }
   }, []);
 
@@ -145,6 +147,7 @@ const SimulatorManagement: React.FC = () => {
     toast({
       title: `시뮬레이터 ${newStatus ? '활성화' : '비활성화'}됨`,
       description: `시뮬레이터가 성공적으로 ${newStatus ? '활성화' : '비활성화'}되었습니다.`,
+      variant: newStatus ? "default" : "destructive",
     });
   };
 
