@@ -43,9 +43,9 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-8">
           <div className="flex gap-6">
             <Link to="/services" className="font-noto text-neutral-700 hover:text-primary transition-colors">서비스</Link>
-            <Link to="/#regions" className="font-noto text-neutral-700 hover:text-primary transition-colors">지역별 데스크</Link>
-            <Link to="/experts" className="font-noto text-neutral-700 hover:text-primary transition-colors">전문가</Link>
-            <Link to="/insights" className="font-noto text-neutral-700 hover:text-primary transition-colors">인사이트</Link>
+            <Link to="/#regions" className="font-noto text-neutral-700 hover:text-primary transition-colors">지역별 전문가 네트워크</Link>
+            <Link to="/experts" className="font-noto text-neutral-700 hover:text-primary transition-colors">전문분야별 최고의 전문가</Link>
+            <Link to="/insights" className="font-noto text-neutral-700 hover:text-primary transition-colors">뉴스 & 인사이트</Link>
             <Link to="/success-stories" className="font-noto text-neutral-700 hover:text-primary transition-colors">성공 스토리</Link>
           </div>
           
@@ -76,9 +76,9 @@ const Navbar = () => {
       )}>
         <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
           <Link to="/services" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">서비스</Link>
-          <Link to="/#regions" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">지역별 데스크</Link>
-          <Link to="/experts" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">전문가</Link>
-          <Link to="/insights" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">인사이트</Link>
+          <Link to="/#regions" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">지역별 전문가 네트워크</Link>
+          <Link to="/experts" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">전문분야별 최고의 전문가</Link>
+          <Link to="/insights" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">뉴스 & 인사이트</Link>
           <Link to="/success-stories" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">성공 스토리</Link>
           <Link 
             to="/#contact"
