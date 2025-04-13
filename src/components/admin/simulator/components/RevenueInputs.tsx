@@ -47,11 +47,21 @@ const RevenueInputs: React.FC<RevenueInputsProps> = ({ params, onParamChange }) 
             <SelectValue placeholder="지역 선택" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="서울/경기">서울/경기</SelectItem>
-            <SelectItem value="부산/경남">부산/경남</SelectItem>
-            <SelectItem value="대전/충남">대전/충남</SelectItem>
-            <SelectItem value="대구/경북">대구/경북</SelectItem>
-            <SelectItem value="광주/전라">광주/전라</SelectItem>
+            <SelectItem value="서울">서울</SelectItem>
+            <SelectItem value="경기남부">경기남부</SelectItem>
+            <SelectItem value="경기북부">경기북부</SelectItem>
+            <SelectItem value="인천">인천</SelectItem>
+            <SelectItem value="대전">대전</SelectItem>
+            <SelectItem value="세종">세종</SelectItem>
+            <SelectItem value="충남">충남</SelectItem>
+            <SelectItem value="충북">충북</SelectItem>
+            <SelectItem value="부산">부산</SelectItem>
+            <SelectItem value="울산">울산</SelectItem>
+            <SelectItem value="대구">대구</SelectItem>
+            <SelectItem value="경남">경남</SelectItem>
+            <SelectItem value="경북">경북</SelectItem>
+            <SelectItem value="광주">광주</SelectItem>
+            <SelectItem value="제주">제주</SelectItem>
           </SelectContent>
         </Select>
       </div>

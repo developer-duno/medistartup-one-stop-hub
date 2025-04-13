@@ -18,7 +18,10 @@ const ExpertRegions: React.FC<ExpertRegionsProps> = ({
   isRegionalManager = false,
   setIsRegionalManager
 }) => {
-  const regionOptions = ['서울', '경기', '인천', '대전', '충남', '충북', '부산', '대구', '광주', '제주'];
+  const regionOptions = [
+    '서울', '경기남부', '경기북부', '인천', '대전', '세종', '충남', '충북', 
+    '부산', '울산', '대구', '경남', '경북', '광주', '제주'
+  ];
 
   const handleRegionToggle = (region: string) => {
     // Create a new array instead of using a callback function
