@@ -1,79 +1,60 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Search, Calendar, Tag, ChevronRight, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import CustomButton from '../components/ui/CustomButton';
+import { useInsights } from '@/contexts/InsightsContext';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 
 const Insights = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { insights } = useInsights();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'all' | 'news' | 'trends'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewingInsight, setViewingInsight] = useState<typeof insights[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [email, setEmail] = useState('');
 
-  const insights = [
-    {
-      id: 1,
-      title: '2025년 의료기관 개설 허가 간소화법 시행 - 주요 변경사항 및 영향',
-      excerpt: '2025년 1월부터 시행된 의료기관 개설 허가 간소화법의 주요 내용과 개원 절차에 미치는 영향을 분석합니다.',
-      image: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=2070&auto=format&fit=crop',
-      date: '2025-04-10',
-      author: '김법규',
-      category: 'news',
-      tags: ['의료법', '개원', '인허가']
-    },
-    {
-      id: 2,
-      title: '대전/충남 지역 의료 시장 분석 - 2025년 1분기 보고서',
-      excerpt: '대전 및 충남 지역의 의료 시장 현황, 성장 가능성이 높은 진료과목, 그리고 주목할만한 지역별 특성을 분석한 보고서입니다.',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop',
-      date: '2025-04-05',
-      author: '박상권',
-      category: 'trends',
-      tags: ['대전', '충남', '시장분석', '트렌드']
-    },
-    {
-      id: 3,
-      title: '디지털 헬스케어 도입으로 환자 만족도 70% 향상 사례',
-      excerpt: '최신 디지털 헬스케어 기술을 도입한 개원의들의 성공 사례와 ROI 분석, 그리고 실질적인 구현 전략을 소개합니다.',
-      image: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop',
-      date: '2025-03-28',
-      author: '이기술',
-      category: 'trends',
-      tags: ['디지털헬스케어', '기술', '환자경험']
-    },
-    {
-      id: 4,
-      title: '의료기관 필수 폐기물 처리 규정 개정 발표',
-      excerpt: '보건복지부에서 발표한 의료폐기물 처리 관련 새로운 규정과 의료기관의 대응 방안을 상세히 설명합니다.',
-      image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop',
-      date: '2025-03-15',
-      author: '한환경',
-      category: 'news',
-      tags: ['의료폐기물', '규제', '환경']
-    },
-    {
-      id: 5,
-      title: '2025년 2분기 의료장비 기술 트렌드',
-      excerpt: '최신 의료장비 기술 동향과 비용 효율적인 장비 도입 전략, 그리고 주목할만한 신기술을 소개합니다.',
-      image: 'https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?q=80&w=2032&auto=format&fit=crop',
-      date: '2025-03-10',
-      author: '정의료',
-      category: 'trends',
-      tags: ['의료장비', '기술', '트렌드']
-    },
-    {
-      id: 6,
-      title: '의사면허 갱신제도 도입 예정 - 개원의가 알아야 할 사항',
-      excerpt: '2026년부터 단계적 시행 예정인 의사면허 갱신제도의 주요 내용과 개원의가 준비해야 할 사항들을 정리했습니다.',
-      image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop',
-      date: '2025-03-05',
-      author: '김법규',
-      category: 'news',
-      tags: ['의사면허', '제도', '개원의']
+  // Handle direct URL access to an insight
+  useEffect(() => {
+    if (id) {
+      const insight = insights.find(item => item.id.toString() === id);
+      if (insight) {
+        setViewingInsight(insight);
+        setIsDialogOpen(true);
+      } else {
+        navigate('/insights');
+        toast({
+          title: "찾을 수 없는 인사이트",
+          description: "요청하신 인사이트를 찾을 수 없습니다.",
+          variant: "destructive",
+        });
+      }
     }
-  ];
+  }, [id, insights, navigate, toast]);
+
+  // Map categories from our data structure to UI tabs
+  const getCategoryType = (category: string): 'news' | 'trends' => {
+    switch(category) {
+      case 'licensing':
+      case 'finance':
+      case 'recruitment':
+        return 'news';
+      case 'trend':
+      case 'marketing':
+      case 'equipment':
+        return 'trends';
+      default:
+        return 'trends';
+    }
+  };
 
   const filteredInsights = insights.filter(insight => {
     // Filter by tab
-    if (activeTab !== 'all' && insight.category !== activeTab) return false;
+    if (activeTab !== 'all' && getCategoryType(insight.category) !== activeTab) return false;
     
     // Filter by search
     if (searchQuery && !insight.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
@@ -84,7 +65,45 @@ const Insights = () => {
     return true;
   });
 
-  const allTags = [...new Set(insights.flatMap(insight => insight.tags))];
+  const getCategoryDisplayName = (category: string) => {
+    switch (category) {
+      case 'trend': return '트렌드';
+      case 'marketing': return '마케팅';
+      case 'licensing': return '인허가';
+      case 'finance': return '재무';
+      case 'recruitment': return '인력채용';
+      case 'equipment': return '의료장비';
+      default: return category;
+    }
+  };
+
+  // Get all unique tags from our insights (simulated with categories for now)
+  const allTags = [...new Set(insights.map(insight => getCategoryDisplayName(insight.category)))];
+
+  const handleNewsletterSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast({
+        title: "이메일 필요",
+        description: "구독하시려면 이메일을 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "뉴스레터 구독 완료",
+      description: "뉴스레터 구독이 완료되었습니다. 감사합니다!",
+    });
+    setEmail('');
+  };
+
+  const handleViewInsight = (insight: typeof insights[0]) => {
+    setViewingInsight(insight);
+    setIsDialogOpen(true);
+    // Update URL without page refresh
+    navigate(`/insights/${insight.id}`, { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -146,9 +165,12 @@ const Insights = () => {
               {filteredInsights.map((article) => (
                 <div key={article.id} className="bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <img
-                    src={article.image}
+                    src={article.image || 'https://placehold.co/600x400?text=No+Image'}
                     alt={article.title}
                     className="w-full h-48 object-cover"
+                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                      e.currentTarget.src = 'https://placehold.co/600x400?text=Loading+Error';
+                    }}
                   />
                   <div className="p-6">
                     <div className="flex items-center text-sm text-neutral-500 mb-2">
@@ -164,22 +186,17 @@ const Insights = () => {
                       {article.excerpt}
                     </p>
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {article.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-800"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      <span className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-800">
+                        {getCategoryDisplayName(article.category)}
+                      </span>
                     </div>
-                    <Link
-                      to={`/insights/${article.id}`}
+                    <button
+                      onClick={() => handleViewInsight(article)}
                       className="font-pretendard font-medium text-primary inline-flex items-center hover:underline"
                     >
                       자세히 보기
                       <ChevronRight className="h-4 w-4 ml-1" />
-                    </Link>
+                    </button>
                   </div>
                 </div>
               ))}
@@ -247,7 +264,10 @@ const Insights = () => {
               </div>
             </div>
 
-            <div className="bg-primary-50 border border-primary-100 rounded-lg p-6 shadow-sm">
+            <form
+              onSubmit={handleNewsletterSignup}
+              className="bg-primary-50 border border-primary-100 rounded-lg p-6 shadow-sm"
+            >
               <h3 className="font-pretendard font-bold text-lg text-primary mb-2">뉴스레터 구독</h3>
               <p className="font-noto text-sm text-neutral-600 mb-4">
                 최신 의료법 개정 소식과 트렌드 리포트를 이메일로 받아보세요.
@@ -256,14 +276,54 @@ const Insights = () => {
                 type="email"
                 placeholder="이메일 주소"
                 className="w-full py-2 px-4 border border-neutral-300 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              <CustomButton variant="primary" fullWidth>
+              <CustomButton variant="primary" fullWidth type="submit">
                 구독하기
               </CustomButton>
-            </div>
+            </form>
           </aside>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        setIsDialogOpen(open);
+        if (!open) {
+          navigate('/insights', { replace: true });
+        }
+      }}>
+        <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+          {viewingInsight && (
+            <div className="p-2">
+              <div className="aspect-video w-full relative overflow-hidden mb-6">
+                <img 
+                  src={viewingInsight.image || 'https://placehold.co/600x400?text=No+Image'} 
+                  alt={viewingInsight.title}
+                  className="w-full h-full object-cover rounded-lg"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    e.currentTarget.src = 'https://placehold.co/600x400?text=Loading+Error';
+                  }}
+                />
+              </div>
+              <h2 className="font-pretendard font-bold text-2xl mb-4">{viewingInsight.title}</h2>
+              <div className="flex items-center text-sm text-neutral-500 mb-6">
+                <Calendar className="h-4 w-4 mr-1" />
+                <span>{viewingInsight.date}</span>
+                <span className="mx-2">•</span>
+                <span>{viewingInsight.author}</span>
+                <span className="mx-2">•</span>
+                <span>{getCategoryDisplayName(viewingInsight.category)}</span>
+                <span className="mx-2">•</span>
+                <span>조회수 {viewingInsight.views}</span>
+              </div>
+              <div className="font-noto text-neutral-700 leading-relaxed whitespace-pre-line">
+                {viewingInsight.content}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -1,37 +1,39 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
-
-// Dummy insights data - in a real application, this would come from an API
-const latestInsights = [
-  {
-    id: 1,
-    title: "2025년 병원창업 트렌드 보고서 - 의료정책 변화와 대응방안",
-    category: "트렌드 리포트",
-    date: "2025.03.15",
-    image: "https://images.unsplash.com/photo-1576091160550-bdfa8387f952?q=80&w=2070&auto=format&fit=crop",
-    excerpt: "2025년 1월부터 시행된 '의료기관 개설 허가 간소화법'의 핵심 내용과 개원의가 알아야 할 대응 방안을 소개합니다."
-  },
-  {
-    id: 2,
-    title: "디지털 헬스케어 시대의 병원 공간 설계 - 효율과 환자경험의 균형",
-    category: "설계 & 인테리어",
-    date: "2025.02.28",
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop",
-    excerpt: "디지털 장비와 전통적 의료공간의 조화로운 설계로 환자 만족도와 진료 효율성을 모두 높이는 방법을 알아봅니다."
-  },
-  {
-    id: 3,
-    title: "빅데이터로 보는 2025년 입지 분석 - 지역별 의료수요 예측",
-    category: "입지 분석",
-    date: "2025.02.10",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-    excerpt: "최신 인구통계와 의료이용 패턴 데이터를 기반으로 2025년 지역별 의료수요 변화를 예측하고 분석합니다."
-  }
-];
+import { useInsights } from '@/contexts/InsightsContext';
 
 const NewsInsightsSection = () => {
+  const { insights } = useInsights();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Get the most recent 3 insights
+  const latestInsights = [...insights]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
+
+  const handlePrevious = () => {
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : 0));
+  };
+
+  const handleNext = () => {
+    const maxIndex = Math.max(0, latestInsights.length - 3);
+    setCurrentIndex(prev => (prev < maxIndex ? prev + 1 : maxIndex));
+  };
+  
+  const getCategoryDisplayName = (category: string) => {
+    switch (category) {
+      case 'trend': return '트렌드';
+      case 'marketing': return '마케팅';
+      case 'licensing': return '인허가';
+      case 'finance': return '재무';
+      case 'recruitment': return '인력채용';
+      case 'equipment': return '의료장비';
+      default: return category;
+    }
+  };
+
   return (
     <section className="py-16 bg-neutral-50">
       <div className="container mx-auto px-4">
@@ -55,15 +57,18 @@ const NewsInsightsSection = () => {
                   <Link to={`/insights/${insight.id}`} className="block">
                     <div className="h-48 overflow-hidden">
                       <img 
-                        src={insight.image} 
+                        src={insight.image || 'https://placehold.co/600x400?text=No+Image'} 
                         alt={insight.title}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                          e.currentTarget.src = 'https://placehold.co/600x400?text=Loading+Error';
+                        }}
                       />
                     </div>
                     <div className="p-5">
                       <div className="flex justify-between items-center mb-3">
                         <span className="inline-block px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded-md">
-                          {insight.category}
+                          {getCategoryDisplayName(insight.category)}
                         </span>
                         <div className="flex items-center text-neutral-500 text-xs">
                           <Clock className="h-3 w-3 mr-1" />
@@ -84,10 +89,16 @@ const NewsInsightsSection = () => {
           </div>
           
           {/* Navigation buttons for larger screens */}
-          <button className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hidden md:block hover:bg-white">
+          <button 
+            onClick={handlePrevious} 
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hidden md:block hover:bg-white"
+          >
             <ChevronLeft className="h-5 w-5 text-neutral-700" />
           </button>
-          <button className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hidden md:block hover:bg-white">
+          <button 
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md hidden md:block hover:bg-white"
+          >
             <ChevronRight className="h-5 w-5 text-neutral-700" />
           </button>
         </div>

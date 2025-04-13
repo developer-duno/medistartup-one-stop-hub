@@ -3,22 +3,20 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/components/ui/use-toast';
 import InsightsList from './InsightsList';
 import InsightForm from './InsightForm';
-import { mockInsights } from './insightData';
 import { InsightType } from './types';
+import { useInsights } from '@/contexts/InsightsContext';
+import ApiIntegrationForm from './ApiIntegrationForm';
 
 const InsightsManagement: React.FC = () => {
-  const [insights, setInsights] = useState<InsightType[]>(mockInsights);
+  const { insights, addInsight, updateInsight, deleteInsight, getInsightsByCategory } = useInsights();
   const [activeTab, setActiveTab] = useState('list');
   const [editingInsight, setEditingInsight] = useState<InsightType | null>(null);
   const [activeCategory, setActiveCategory] = useState('all');
-  const { toast } = useToast();
+  const [isApiDialogOpen, setIsApiDialogOpen] = useState(false);
 
-  const filteredInsights = activeCategory === 'all' 
-    ? insights 
-    : insights.filter(insight => insight.category === activeCategory);
+  const filteredInsights = getInsightsByCategory(activeCategory);
 
   const handleEditInsight = (insight: InsightType) => {
     setEditingInsight({...insight});
@@ -26,7 +24,7 @@ const InsightsManagement: React.FC = () => {
   };
 
   const handleCreateInsight = () => {
-    const newId = Math.max(...insights.map(i => i.id)) + 1;
+    const newId = insights.length > 0 ? Math.max(...insights.map(i => i.id)) + 1 : 1;
     setEditingInsight({
       id: newId,
       title: '',
@@ -45,44 +43,26 @@ const InsightsManagement: React.FC = () => {
     if (!editingInsight) return;
     
     const existingIndex = insights.findIndex(i => i.id === editingInsight.id);
-    let updatedInsights;
     
     if (existingIndex >= 0) {
       // Update existing insight
-      updatedInsights = [...insights];
-      updatedInsights[existingIndex] = editingInsight;
+      updateInsight(editingInsight);
     } else {
       // Add new insight
-      updatedInsights = [...insights, editingInsight];
+      addInsight(editingInsight);
     }
     
-    setInsights(updatedInsights);
     setEditingInsight(null);
     setActiveTab('list');
-    
-    toast({
-      title: "인사이트 저장 완료",
-      description: "인사이트가 성공적으로 저장되었습니다.",
-      variant: "default",
-    });
   };
 
   const handleDeleteInsight = (id: number) => {
-    setInsights(insights.filter(insight => insight.id !== id));
-    
-    toast({
-      title: "인사이트 삭제 완료",
-      description: "인사이트가 성공적으로 삭제되었습니다.",
-      variant: "default",
-    });
+    deleteInsight(id);
   };
 
   const handleViewInsight = (insight: InsightType) => {
-    toast({
-      title: insight.title,
-      description: "인사이트 상세 보기 기능은 준비 중입니다.",
-      variant: "default",
-    });
+    // Navigate to view the insight
+    window.open(`/insights/${insight.id}`, '_blank');
   };
 
   const handleCancelEdit = () => {
@@ -94,12 +74,16 @@ const InsightsManagement: React.FC = () => {
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-pretendard font-bold text-2xl">뉴스 & 인사이트 관리</h2>
-        {activeTab === 'list' && (
+        <div className="flex gap-2">
           <Button onClick={handleCreateInsight}>
             <Plus className="h-4 w-4 mr-2" />
             인사이트 추가
           </Button>
-        )}
+          <ApiIntegrationForm 
+            isOpen={isApiDialogOpen}
+            onOpenChange={setIsApiDialogOpen}
+          />
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
