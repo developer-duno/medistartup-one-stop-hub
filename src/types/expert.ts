@@ -19,6 +19,11 @@ export interface Expert {
   managedRegions?: string[];    // 총괄 책임자가 담당하는 지역들
   displayOrder?: number;        // 전문가 표시 순서
   showOnMain?: boolean;         // 메인 페이지에 표시 여부
+  isApproved?: boolean;         // 관리자 승인 여부
+  applicationStatus?: 'pending' | 'approved' | 'rejected'; // 신청 상태
+  applicationDate?: string;     // 신청 날짜
+  approvalDate?: string;        // 승인 날짜
+  rejectionReason?: string;     // 반려 사유
 }
 
 export interface NewExpert extends Omit<Expert, 'id'> {}

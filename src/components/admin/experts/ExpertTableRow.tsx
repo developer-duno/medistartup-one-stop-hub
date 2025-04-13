@@ -14,6 +14,8 @@ interface ExpertTableRowProps {
   onDeleteExpert: (id: number, name: string) => void;
   onToggleVisibility: (id: number, name: string, currentVisibility: boolean) => void;
   onMoveExpert: (index: number, direction: 'up' | 'down') => void;
+  onApproveExpert: (id: number) => void;
+  onRejectExpert: (id: number) => void;
 }
 
 const ExpertTableRow: React.FC<ExpertTableRowProps> = ({
@@ -23,10 +25,16 @@ const ExpertTableRow: React.FC<ExpertTableRowProps> = ({
   onEditExpert,
   onDeleteExpert,
   onToggleVisibility,
-  onMoveExpert
+  onMoveExpert,
+  onApproveExpert,
+  onRejectExpert
 }) => {
   return (
-    <tr className={!expert.showOnMain ? "bg-gray-50" : ""}>
+    <tr className={
+      expert.applicationStatus === 'pending' ? "bg-yellow-50" : 
+      expert.applicationStatus === 'rejected' ? "bg-red-50" : 
+      !expert.showOnMain ? "bg-gray-50" : ""
+    }>
       <td className="px-3 py-4 whitespace-nowrap">
         <div className="flex flex-col items-center">
           <Button 
@@ -64,10 +72,18 @@ const ExpertTableRow: React.FC<ExpertTableRowProps> = ({
               <div className="text-sm font-medium text-gray-900">{expert.name}</div>
               <ExpertStatusBadges 
                 isRegionalManager={expert.isRegionalManager || false} 
-                showOnMain={expert.showOnMain || false} 
+                showOnMain={expert.showOnMain || false}
+                applicationStatus={expert.applicationStatus || 'approved'}
               />
             </div>
-            <div className="text-sm text-gray-500">{expert.specialty}</div>
+            <div className="text-sm text-gray-500">
+              {expert.specialty}
+              {expert.applicationDate && (
+                <span className="ml-2 text-xs text-gray-400">
+                  신청일: {new Date(expert.applicationDate).toLocaleDateString()}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </td>
@@ -90,6 +106,8 @@ const ExpertTableRow: React.FC<ExpertTableRowProps> = ({
           onEditExpert={onEditExpert}
           onDeleteExpert={onDeleteExpert}
           onToggleVisibility={onToggleVisibility}
+          onApproveExpert={onApproveExpert}
+          onRejectExpert={onRejectExpert}
         />
       </td>
     </tr>

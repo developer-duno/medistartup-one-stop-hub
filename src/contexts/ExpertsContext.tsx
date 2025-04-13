@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import { ExpertsContextType, ExpertsProviderProps } from './expertsTypes';
 import { useExpertOperations } from './expertsOperations';
 import { initialExperts } from '../data/initialExperts';
@@ -13,6 +13,10 @@ const ExpertsContext = createContext<ExpertsContextType>({
   deleteExpert: () => {},
   updateExpertsOrder: () => {},
   toggleExpertMainVisibility: () => {},
+  applyAsExpert: () => {},
+  approveExpert: () => {},
+  rejectExpert: () => {},
+  pendingApplications: [],
 });
 
 // Local storage key for experts data
@@ -26,11 +30,13 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       const storedExperts = localStorage.getItem(EXPERTS_STORAGE_KEY);
       if (storedExperts) {
         const parsedExperts = JSON.parse(storedExperts);
-        // Ensure displayOrder and showOnMain are set for all experts
+        // Ensure displayOrder, showOnMain and isApproved are set for all experts
         const updatedExperts = parsedExperts.map((expert: Expert, index: number) => ({
           ...expert,
           displayOrder: expert.displayOrder !== undefined ? expert.displayOrder : index,
-          showOnMain: expert.showOnMain !== undefined ? expert.showOnMain : true
+          showOnMain: expert.showOnMain !== undefined ? expert.showOnMain : true,
+          isApproved: expert.isApproved !== undefined ? expert.isApproved : true,
+          applicationStatus: expert.applicationStatus || 'approved'
         }));
         console.log('Loaded experts from local storage:', updatedExperts);
         return updatedExperts;
@@ -40,11 +46,13 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     }
     
     console.log('Using initial experts data');
-    // Initialize display order and showOnMain for initial experts
+    // Initialize display order, showOnMain and isApproved for initial experts
     return initialExperts.map((expert, index) => ({
       ...expert,
       displayOrder: index,
-      showOnMain: true
+      showOnMain: true,
+      isApproved: true,
+      applicationStatus: 'approved'
     }));
   });
   
@@ -59,7 +67,14 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   }, [experts]);
   
   // Get the operations from our custom hook
-  const { addExpert, updateExpert, deleteExpert } = useExpertOperations(setExperts);
+  const { 
+    addExpert, 
+    updateExpert, 
+    deleteExpert,
+    applyAsExpert,
+    approveExpert,
+    rejectExpert
+  } = useExpertOperations(setExperts);
 
   // Update the order of experts
   const updateExpertsOrder = (newOrder: Expert[]) => {
@@ -77,6 +92,11 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     );
   };
 
+  // Calculate pending applications
+  const pendingApplications = useMemo(() => {
+    return experts.filter(expert => expert.applicationStatus === 'pending');
+  }, [experts]);
+
   // Create the context value object
   const contextValue: ExpertsContextType = {
     experts,
@@ -84,7 +104,11 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     updateExpert,
     deleteExpert,
     updateExpertsOrder,
-    toggleExpertMainVisibility
+    toggleExpertMainVisibility,
+    applyAsExpert,
+    approveExpert,
+    rejectExpert,
+    pendingApplications
   };
 
   return (

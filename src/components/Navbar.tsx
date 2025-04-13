@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
+import ExpertApplicationButton from './expert/ExpertApplicationButton';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -47,12 +48,16 @@ const Navbar = () => {
             <Link to="/insights" className="font-noto text-neutral-700 hover:text-primary transition-colors">인사이트</Link>
             <Link to="/success-stories" className="font-noto text-neutral-700 hover:text-primary transition-colors">성공 스토리</Link>
           </div>
-          <Link 
-            to="/#contact"
-            className="bg-accent hover:bg-accent-700 text-white font-pretendard font-medium px-5 py-2 rounded-md transition-colors"
-          >
-            무료 상담
-          </Link>
+          
+          <div className="flex items-center gap-3">
+            <Link 
+              to="/#contact"
+              className="bg-accent hover:bg-accent-700 text-white font-pretendard font-medium px-5 py-2 rounded-md transition-colors"
+            >
+              무료 상담
+            </Link>
+            <ExpertApplicationButton />
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -67,7 +72,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <div className={cn(
         "lg:hidden absolute top-full left-0 right-0 bg-white shadow-lg transition-all duration-300 overflow-hidden",
-        isMobileMenuOpen ? "max-h-[400px]" : "max-h-0"
+        isMobileMenuOpen ? "max-h-[500px]" : "max-h-0"
       )}>
         <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
           <Link to="/#services" className="font-noto text-neutral-700 py-2 border-b border-neutral-100">서비스</Link>
@@ -81,6 +86,7 @@ const Navbar = () => {
           >
             무료 상담
           </Link>
+          <ExpertApplicationButton />
         </div>
       </div>
     </nav>

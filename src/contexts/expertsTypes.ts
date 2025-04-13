@@ -9,6 +9,10 @@ export interface ExpertsContextType {
   deleteExpert: (id: number) => void;
   updateExpertsOrder: (newOrder: Expert[]) => void;
   toggleExpertMainVisibility: (id: number) => void;
+  applyAsExpert: (expert: NewExpert) => void;
+  approveExpert: (id: number) => void;
+  rejectExpert: (id: number, reason: string) => void;
+  pendingApplications: Expert[];
 }
 
 export interface ExpertsProviderProps {

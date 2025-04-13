@@ -6,11 +6,12 @@ import AddExpertForm from './AddExpertForm';
 import ExpertsTable from './ExpertsTable';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
+import { Badge } from '@/components/ui/badge';
 
 const ExpertsManagement: React.FC = () => {
   const [isAddingExpert, setIsAddingExpert] = useState(false);
   const [editingExpert, setEditingExpert] = useState<Expert | null>(null);
-  const { experts } = useExperts();
+  const { experts, pendingApplications } = useExperts();
   
   const handleExpertAdded = useCallback(() => {
     console.log("Expert added, resetting form state");
@@ -49,7 +50,14 @@ const ExpertsManagement: React.FC = () => {
         <div>
           <h2 className="font-pretendard font-bold text-2xl">전문가 관리</h2>
           <p className="text-sm text-gray-500 mt-1">
-            총 {experts.length}명의 전문가, {experts.filter(e => e.showOnMain).length}명 메인에 표시 중
+            총 {experts.length}명의 전문가, {experts.filter(e => e.showOnMain && e.isApproved).length}명 메인에 표시 중
+            {pendingApplications.length > 0 && (
+              <span className="ml-2">
+                <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                  검토 대기 {pendingApplications.length}건
+                </Badge>
+              </span>
+            )}
           </p>
         </div>
         <Button onClick={() => setIsAddingExpert(true)}>

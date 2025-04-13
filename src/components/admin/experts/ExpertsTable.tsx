@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
 import { useToast } from '@/components/ui/use-toast';
 import ExpertTableHeader from './ExpertTableHeader';
 import ExpertTableRow from './ExpertTableRow';
 import ExpertEmptyTableRow from './ExpertEmptyTableRow';
+import { Button } from '@/components/ui/button';
+import { Filter } from 'lucide-react';
 
 interface ExpertsTableProps {
   experts: Expert[];
@@ -13,8 +15,9 @@ interface ExpertsTableProps {
 }
 
 const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) => {
-  const { deleteExpert, toggleExpertMainVisibility, updateExpertsOrder } = useExperts();
+  const { deleteExpert, toggleExpertMainVisibility, updateExpertsOrder, approveExpert, rejectExpert } = useExperts();
   const { toast } = useToast();
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
   
   const handleDelete = (id: number, name: string) => {
     if (window.confirm(`${name} 전문가를 삭제하시겠습니까?`)) {
@@ -29,6 +32,16 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
       description: `${name} 전문가가 메인 페이지에 ${currentVisibility ? '표시되지 않습니다.' : '표시됩니다.'}`,
       variant: "default",
     });
+  };
+
+  const handleApproveExpert = (id: number) => {
+    if (window.confirm('이 전문가 지원을 승인하시겠습니까?')) {
+      approveExpert(id);
+    }
+  };
+
+  const handleRejectExpert = (id: number) => {
+    rejectExpert(id, '');
   };
 
   const moveExpert = (index: number, direction: 'up' | 'down') => {
@@ -61,13 +74,69 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
     });
   };
 
+  const filteredExperts = experts.filter(expert => {
+    if (filter === 'all') return true;
+    return expert.applicationStatus === filter;
+  });
+
   // Sort experts by display order for the table
-  const sortedExperts = [...experts].sort((a, b) => {
+  const sortedExperts = [...filteredExperts].sort((a, b) => {
+    // First sort by application status (pending first)
+    if (a.applicationStatus === 'pending' && b.applicationStatus !== 'pending') return -1;
+    if (a.applicationStatus !== 'pending' && b.applicationStatus === 'pending') return 1;
+    
+    // Then by display order
     return (a.displayOrder || 0) - (b.displayOrder || 0);
   });
 
+  const pendingCount = experts.filter(e => e.applicationStatus === 'pending').length;
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="p-4 border-b flex justify-between items-center">
+        <div className="text-sm text-gray-500">
+          {filter === 'all' ? '모든 전문가' : 
+           filter === 'pending' ? '승인 대기 중' : 
+           filter === 'approved' ? '승인된 전문가' : '반려된 지원'}
+        </div>
+        <div className="flex gap-2">
+          <Button 
+            variant={filter === 'all' ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter('all')}
+          >
+            전체
+          </Button>
+          <Button 
+            variant={filter === 'pending' ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter('pending')}
+            className="flex items-center"
+          >
+            대기 중
+            {pendingCount > 0 && (
+              <span className="ml-1 bg-red-100 text-red-800 rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {pendingCount}
+              </span>
+            )}
+          </Button>
+          <Button 
+            variant={filter === 'approved' ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter('approved')}
+          >
+            승인됨
+          </Button>
+          <Button 
+            variant={filter === 'rejected' ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter('rejected')}
+          >
+            반려됨
+          </Button>
+        </div>
+      </div>
+      
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <ExpertTableHeader />
@@ -83,6 +152,8 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
                   onDeleteExpert={handleDelete}
                   onToggleVisibility={handleToggleVisibility}
                   onMoveExpert={moveExpert}
+                  onApproveExpert={handleApproveExpert}
+                  onRejectExpert={handleRejectExpert}
                 />
               ))
             ) : (
