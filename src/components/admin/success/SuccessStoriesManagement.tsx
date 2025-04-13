@@ -1,59 +1,162 @@
 
-import React from 'react';
-import { Plus, Edit, Trash } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Edit, Trash, Eye, EyeOff, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-
-interface SuccessStory {
-  id: number;
-  title: string;
-  hospital: string;
-  location: string;
-  services: string[];
-  date: string;
-  imageUrl: string;
-  featured: boolean;
-}
+import { useToast } from '@/components/ui/use-toast';
+import { useSuccessStories, SuccessStory } from '@/contexts/SuccessStoriesContext';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from '@/components/ui/table';
+import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { Switch } from '@/components/ui/switch';
 
 const SuccessStoriesManagement = () => {
-  const successStories: SuccessStory[] = [
-    {
-      id: 1,
-      title: '서울 강남구 피부과 성공적 개원',
-      hospital: '미소피부과의원',
-      location: '서울 강남',
-      services: ['입지 분석', '인테리어', '마케팅'],
-      date: '2023-03-15',
-      imageUrl: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2068&auto=format&fit=crop',
-      featured: true
-    },
-    {
-      id: 2,
-      title: '대전 둔산동 소아과 리모델링',
-      hospital: '행복소아과의원',
-      location: '대전 서구',
-      services: ['인테리어', '의료기기'],
-      date: '2023-02-10',
-      imageUrl: 'https://images.unsplash.com/photo-1629909614088-7dd6c3197533?q=80&w=2069&auto=format&fit=crop',
-      featured: false
-    },
-    {
-      id: 3,
-      title: '부산 해운대 치과 개원 컨설팅',
-      hospital: '스마일치과의원',
-      location: '부산 해운대',
-      services: ['재무 컨설팅', '인력 채용'],
-      date: '2023-01-22',
-      imageUrl: 'https://images.unsplash.com/photo-1606811971618-4486d14f3f99?q=80&w=1974&auto=format&fit=crop',
-      featured: true
+  const { 
+    successStories, 
+    addSuccessStory, 
+    updateSuccessStory, 
+    deleteSuccessStory,
+    toggleVisibility,
+    toggleFeatured
+  } = useSuccessStories();
+  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentStory, setCurrentStory] = useState<SuccessStory | null>(null);
+  const { toast } = useToast();
+  
+  const form = useForm<Omit<SuccessStory, 'id'>>({
+    defaultValues: {
+      title: '',
+      hospital: '',
+      location: '',
+      services: [],
+      date: new Date().toISOString().split('T')[0],
+      imageUrl: '',
+      featured: false,
+      visible: true,
+      content: '',
+      summary: ''
     }
-  ];
+  });
+
+  const handleAddNew = () => {
+    setCurrentStory(null);
+    form.reset({
+      title: '',
+      hospital: '',
+      location: '',
+      services: [],
+      date: new Date().toISOString().split('T')[0],
+      imageUrl: '',
+      featured: false,
+      visible: true,
+      content: '',
+      summary: ''
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleEdit = (story: SuccessStory) => {
+    setCurrentStory(story);
+    form.reset({
+      title: story.title,
+      hospital: story.hospital,
+      location: story.location,
+      services: story.services,
+      date: story.date,
+      imageUrl: story.imageUrl,
+      featured: story.featured,
+      visible: story.visible,
+      content: story.content,
+      summary: story.summary
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleDelete = (id: number) => {
+    deleteSuccessStory(id);
+    toast({
+      title: "성공 사례 삭제됨",
+      description: "성공 사례가 성공적으로 삭제되었습니다.",
+    });
+  };
+
+  const handleToggleVisibility = (id: number) => {
+    toggleVisibility(id);
+    const story = successStories.find(s => s.id === id);
+    toast({
+      title: story?.visible ? "성공 사례 숨겨짐" : "성공 사례 공개됨",
+      description: story?.visible 
+        ? "이 성공 사례는 이제 웹사이트에 표시되지 않습니다." 
+        : "이 성공 사례가 웹사이트에 다시 표시됩니다.",
+    });
+  };
+
+  const handleToggleFeatured = (id: number) => {
+    toggleFeatured(id);
+    const story = successStories.find(s => s.id === id);
+    toast({
+      title: story?.featured ? "메인 노출 설정됨" : "일반 노출로 변경됨",
+      description: story?.featured 
+        ? "이 성공 사례는 메인 페이지에 노출됩니다." 
+        : "이 성공 사례는 메인 페이지에 노출되지 않습니다.",
+    });
+  };
+
+  const onSubmit = (data: Omit<SuccessStory, 'id'>) => {
+    // Make sure services is always an array
+    const formattedData = {
+      ...data,
+      services: typeof data.services === 'string' 
+        ? data.services.split(',').map(s => s.trim())
+        : Array.isArray(data.services) ? data.services : []
+    };
+
+    if (currentStory) {
+      // Update existing story
+      updateSuccessStory({ ...formattedData, id: currentStory.id });
+      toast({
+        title: "성공 사례 업데이트됨",
+        description: "성공 사례가 성공적으로 업데이트되었습니다.",
+      });
+    } else {
+      // Add new story
+      addSuccessStory(formattedData);
+      toast({
+        title: "성공 사례 추가됨",
+        description: "새로운 성공 사례가 추가되었습니다.",
+      });
+    }
+    setIsDialogOpen(false);
+  };
+
+  // Helper to format services display
+  const formatServices = (services: string[]) => {
+    return services.map((service, index) => (
+      <span 
+        key={index} 
+        className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 mr-1 mb-1"
+      >
+        {service}
+      </span>
+    ));
+  };
 
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="font-pretendard font-bold text-2xl">성공사례 관리</h2>
-        <Button>
+        <Button onClick={handleAddNew}>
           <Plus className="h-4 w-4 mr-2" />
           성공사례 추가
         </Button>
@@ -61,66 +164,280 @@ const SuccessStoriesManagement = () => {
 
       <Card>
         <CardContent className="p-0">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b">
-                <th className="text-left p-4 font-medium text-muted-foreground">제목</th>
-                <th className="text-left p-4 font-medium text-muted-foreground">의료기관</th>
-                <th className="text-left p-4 font-medium text-muted-foreground">지역</th>
-                <th className="text-left p-4 font-medium text-muted-foreground">서비스</th>
-                <th className="text-left p-4 font-medium text-muted-foreground">등록일</th>
-                <th className="text-left p-4 font-medium text-muted-foreground">상태</th>
-                <th className="text-right p-4 font-medium text-muted-foreground">관리</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>제목</TableHead>
+                <TableHead>의료기관</TableHead>
+                <TableHead>지역</TableHead>
+                <TableHead>서비스</TableHead>
+                <TableHead>등록일</TableHead>
+                <TableHead>상태</TableHead>
+                <TableHead className="text-right">관리</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {successStories.map((story) => (
-                <tr key={story.id} className="border-b">
-                  <td className="p-4">
+                <TableRow key={story.id}>
+                  <TableCell>
                     <div className="flex items-center">
                       <img 
                         src={story.imageUrl} 
                         className="w-12 h-8 rounded object-cover mr-3" 
                         alt={story.title} 
                       />
-                      {story.title}
+                      <span className={!story.visible ? "text-gray-400" : ""}>
+                        {story.title}
+                      </span>
                     </div>
-                  </td>
-                  <td className="p-4">{story.hospital}</td>
-                  <td className="p-4">{story.location}</td>
-                  <td className="p-4">
+                  </TableCell>
+                  <TableCell className={!story.visible ? "text-gray-400" : ""}>
+                    {story.hospital}
+                  </TableCell>
+                  <TableCell className={!story.visible ? "text-gray-400" : ""}>
+                    {story.location}
+                  </TableCell>
+                  <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {story.services.map((service, index) => (
-                        <span 
-                          key={index} 
-                          className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700"
-                        >
-                          {service}
-                        </span>
-                      ))}
+                      {formatServices(story.services)}
                     </div>
-                  </td>
-                  <td className="p-4">{story.date}</td>
-                  <td className="p-4">
-                    {story.featured ? 
-                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">메인 노출</span> :
-                      <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">일반</span>
-                    }
-                  </td>
-                  <td className="p-4 text-right">
-                    <Button variant="ghost" size="sm" className="text-blue-600 hover:text-blue-900">
+                  </TableCell>
+                  <TableCell className={!story.visible ? "text-gray-400" : ""}>
+                    {story.date}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {story.featured ? 
+                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">메인 노출</span> :
+                        <span className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">일반</span>
+                      }
+                      {!story.visible && 
+                        <span className="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">숨김</span>
+                      }
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-yellow-600 hover:text-yellow-900"
+                      onClick={() => handleToggleFeatured(story.id)}
+                      title={story.featured ? "일반으로 변경" : "메인 노출로 설정"}
+                    >
+                      <Star className={`h-4 w-4 ${story.featured ? "fill-yellow-500" : ""}`} />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className={story.visible ? "text-green-600 hover:text-green-900" : "text-red-600 hover:text-red-900"}
+                      onClick={() => handleToggleVisibility(story.id)}
+                      title={story.visible ? "숨기기" : "보이기"}
+                    >
+                      {story.visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-blue-600 hover:text-blue-900"
+                      onClick={() => handleEdit(story)}
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-900">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-red-600 hover:text-red-900"
+                      onClick={() => handleDelete(story.id)}
+                    >
                       <Trash className="h-4 w-4" />
                     </Button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+              {successStories.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                    등록된 성공 사례가 없습니다
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
+
+      {/* Success Story Form Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {currentStory ? '성공 사례 수정' : '새 성공 사례 추가'}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>제목</FormLabel>
+                    <FormControl>
+                      <Input placeholder="성공 사례 제목" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="hospital"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>의료기관명</FormLabel>
+                      <FormControl>
+                        <Input placeholder="의료기관명" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>지역</FormLabel>
+                      <FormControl>
+                        <Input placeholder="지역 (예: 서울 강남)" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>날짜</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="services"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>서비스</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="서비스 (쉼표로 구분)" 
+                          value={Array.isArray(field.value) ? field.value.join(', ') : field.value}
+                          onChange={e => field.onChange(e.target.value)}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={form.control}
+                name="imageUrl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이미지 URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="이미지 URL" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="summary"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>요약</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="성공 사례 요약 (1-2줄)" 
+                        className="resize-none" 
+                        {...field} 
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>상세 내용</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="성공 사례 상세 내용" 
+                        className="resize-none min-h-[100px]" 
+                        {...field} 
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              
+              <div className="flex justify-between">
+                <FormField
+                  control={form.control}
+                  name="visible"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Switch 
+                          checked={field.value} 
+                          onCheckedChange={field.onChange} 
+                        />
+                      </FormControl>
+                      <FormLabel>웹사이트에 표시</FormLabel>
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="featured"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <Switch 
+                          checked={field.value} 
+                          onCheckedChange={field.onChange} 
+                        />
+                      </FormControl>
+                      <FormLabel>메인 페이지 노출</FormLabel>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <DialogFooter>
+                <Button type="submit">{currentStory ? '수정' : '추가'}</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

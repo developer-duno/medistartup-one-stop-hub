@@ -4,10 +4,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 
 const SuccessStories = () => {
-  // The original content of this file is not in the provided code, so I'll create a basic structure
-  // with the green theme applied
+  const { getVisibleStories } = useSuccessStories();
+  const visibleStories = getVisibleStories();
   
   return (
     <div className="theme-success min-h-screen bg-white">
@@ -32,28 +33,58 @@ const SuccessStories = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Success stories content would go here */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Example success story cards */}
-          {[1, 2, 3].map((item) => (
-            <div key={item} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
-              <div className="aspect-video bg-neutral-100"></div>
-              <div className="p-5">
-                <h3 className="font-pretendard font-bold text-lg mb-2">
-                  성공 사례 #{item}
-                </h3>
-                <p className="text-neutral-600 text-sm mb-3">
-                  MediStartup과 함께 효율적인 운영 시스템을 구축하여 환자 만족도를 크게 향상시켰습니다.
-                </p>
-                <div className="flex justify-end">
-                  <Link to="#" className="theme-text font-medium text-sm">
-                    자세히 보기
-                  </Link>
+        {visibleStories.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visibleStories.map((story) => (
+              <div key={story.id} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
+                <div className="aspect-video bg-neutral-100 relative">
+                  <img 
+                    src={story.imageUrl} 
+                    alt={story.title} 
+                    className="w-full h-full object-cover"
+                  />
+                  {story.featured && (
+                    <div className="absolute top-2 left-2 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                      추천 사례
+                    </div>
+                  )}
+                </div>
+                <div className="p-5">
+                  <h3 className="font-pretendard font-bold text-lg mb-2">
+                    {story.title}
+                  </h3>
+                  <div className="flex items-center mb-3 text-sm text-neutral-500">
+                    <span className="font-medium text-neutral-700">{story.hospital}</span>
+                    <span className="mx-2">•</span>
+                    <span>{story.location}</span>
+                  </div>
+                  <p className="text-neutral-600 text-sm mb-4">
+                    {story.summary}
+                  </p>
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {story.services.map((service, index) => (
+                      <span 
+                        key={index} 
+                        className="inline-flex items-center rounded-full bg-neutral-100 px-2 py-1 text-xs text-neutral-700"
+                      >
+                        {service}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex justify-end">
+                    <Link to={`/success-stories/${story.id}`} className="theme-text font-medium text-sm">
+                      자세히 보기
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-neutral-500">등록된 성공 사례가 없습니다.</p>
+          </div>
+        )}
       </div>
       
       <Footer />
