@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Plus, Edit, Trash, Eye, EyeOff, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,20 @@ import { Form, FormField, FormItem, FormLabel, FormControl } from '@/components/
 import { useForm } from 'react-hook-form';
 import { Switch } from '@/components/ui/switch';
 
+// Define form type to avoid the 'never' type issue
+interface SuccessStoryFormData {
+  title: string;
+  hospital: string;
+  location: string;
+  services: string[] | string;
+  date: string;
+  imageUrl: string;
+  featured: boolean;
+  visible: boolean;
+  content: string;
+  summary: string;
+}
+
 const SuccessStoriesManagement = () => {
   const { 
     successStories, 
@@ -33,7 +48,7 @@ const SuccessStoriesManagement = () => {
   const [currentStory, setCurrentStory] = useState<SuccessStory | null>(null);
   const { toast } = useToast();
   
-  const form = useForm<Omit<SuccessStory, 'id'>>({
+  const form = useForm<SuccessStoryFormData>({
     defaultValues: {
       title: '',
       hospital: '',
@@ -112,7 +127,7 @@ const SuccessStoriesManagement = () => {
     });
   };
 
-  const onSubmit = (data: Omit<SuccessStory, 'id'>) => {
+  const onSubmit = (data: SuccessStoryFormData) => {
     const formattedData = {
       ...data,
       services: typeof data.services === 'string' 
