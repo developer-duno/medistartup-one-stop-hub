@@ -24,7 +24,7 @@ export const useExpertOperations = (
         ...expertWithArrays, 
         id: newId,
         isApproved: true, // Admin added experts are auto-approved
-        applicationStatus: 'approved',
+        applicationStatus: 'approved' as const,
         approvalDate: new Date().toISOString()
       };
       
@@ -61,7 +61,7 @@ export const useExpertOperations = (
         ...expertWithArrays, 
         id: newId,
         isApproved: false,
-        applicationStatus: 'pending',
+        applicationStatus: 'pending' as const,
         applicationDate: new Date().toISOString(),
         showOnMain: false // Default to not showing on main until approved
       };
@@ -88,7 +88,7 @@ export const useExpertOperations = (
         expert.id === id ? {
           ...expert, 
           isApproved: true,
-          applicationStatus: 'approved',
+          applicationStatus: 'approved' as const,
           approvalDate: new Date().toISOString()
         } : expert
       );
@@ -113,7 +113,7 @@ export const useExpertOperations = (
         expert.id === id ? {
           ...expert, 
           isApproved: false,
-          applicationStatus: 'rejected',
+          applicationStatus: 'rejected' as const,
           rejectionReason: reason
         } : expert
       );
