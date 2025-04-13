@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, Edit, Trash, Eye, EyeOff, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -114,7 +113,6 @@ const SuccessStoriesManagement = () => {
   };
 
   const onSubmit = (data: Omit<SuccessStory, 'id'>) => {
-    // Make sure services is always an array
     const formattedData = {
       ...data,
       services: typeof data.services === 'string' 
@@ -123,14 +121,12 @@ const SuccessStoriesManagement = () => {
     };
 
     if (currentStory) {
-      // Update existing story
       updateSuccessStory({ ...formattedData, id: currentStory.id });
       toast({
         title: "성공 사례 업데이트됨",
         description: "성공 사례가 성공적으로 업데이트되었습니다.",
       });
     } else {
-      // Add new story
       addSuccessStory(formattedData);
       toast({
         title: "성공 사례 추가됨",
@@ -140,7 +136,6 @@ const SuccessStoriesManagement = () => {
     setIsDialogOpen(false);
   };
 
-  // Helper to format services display
   const formatServices = (services: string[]) => {
     return services.map((service, index) => (
       <span 
@@ -266,7 +261,6 @@ const SuccessStoriesManagement = () => {
         </CardContent>
       </Card>
 
-      {/* Success Story Form Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
