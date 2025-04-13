@@ -1,8 +1,11 @@
 
-import React from 'react';
-import KakaoMap from './map/KakaoMap';
-import RegionCard from './map/RegionCard';
+import React, { useState } from 'react';
 import { useRegions } from '@/contexts/RegionsContext';
+import RegionCard from './map/RegionCard';
+import { Search, MapPin, Users } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 const RegionalMap = () => {
   const { 
@@ -13,8 +16,18 @@ const RegionalMap = () => {
     getFilteredUrl 
   } = useRegions();
   
+  const [searchTerm, setSearchTerm] = useState('');
+  
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
+  
+  // Filter regions based on search term
+  const filteredRegions = searchTerm
+    ? regions.filter(r => 
+        r.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        r.includesRegions.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))
+      )
+    : regions;
 
   return (
     <section id="regions" className="py-16 md:py-24 bg-neutral-50">
@@ -30,11 +43,66 @@ const RegionalMap = () => {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            <KakaoMap 
-              regions={regions} 
-              activeRegion={activeRegion} 
-              setActiveRegion={setActiveRegion} 
-            />
+            <div className="mb-6">
+              <div className="relative">
+                <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
+                <Input
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="지역 또는 도시 검색..."
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+              {filteredRegions.map((region) => (
+                <Card 
+                  key={region.id} 
+                  className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === region.name ? 'ring-2 ring-primary' : ''}`}
+                  onClick={() => setActiveRegion(region.name)}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-bold flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        {region.name}
+                      </h3>
+                      <Badge variant="outline" className="bg-primary-50 text-primary">
+                        <Users className="h-3 w-3 mr-1" />
+                        {region.expertCount || 0}명
+                      </Badge>
+                    </div>
+                    
+                    <div className="mt-2">
+                      <p className="text-sm text-muted-foreground">주요 도시:</p>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {region.includesRegions.slice(0, 3).map((city, i) => (
+                          <Badge key={i} variant="secondary" className="text-xs">
+                            {city}
+                          </Badge>
+                        ))}
+                        {region.includesRegions.length > 3 && (
+                          <Badge variant="secondary" className="text-xs">
+                            +{region.includesRegions.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              
+              {filteredRegions.length === 0 && (
+                <div className="col-span-2 text-center py-12">
+                  <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="font-medium text-xl mb-2">검색 결과 없음</h3>
+                  <p className="text-muted-foreground">
+                    다른 지역 이름이나 도시를 검색해보세요.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="w-full lg:w-2/5">
