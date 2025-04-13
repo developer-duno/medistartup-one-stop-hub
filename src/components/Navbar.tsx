@@ -4,11 +4,13 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import ExpertApplicationButton from './expert/ExpertApplicationButton';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { openConsultation } = useConsultation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,12 +57,12 @@ const Navbar = () => {
           </div>
           
           <div className="flex items-center gap-3">
-            <Link 
-              to="/#contact"
+            <button 
+              onClick={openConsultation}
               className="bg-accent hover:bg-accent-700 text-white font-pretendard font-medium px-5 py-2 rounded-md transition-colors"
             >
               무료 상담
-            </Link>
+            </button>
             <ExpertApplicationButton />
           </div>
         </div>
@@ -115,13 +117,15 @@ const Navbar = () => {
           >
             성공 스토리
           </Link>
-          <Link 
-            to="/#contact"
+          <button 
+            onClick={() => {
+              openConsultation();
+              handleNavLinkClick();
+            }}
             className="bg-accent text-white font-pretendard font-medium px-5 py-2 rounded-md text-center"
-            onClick={handleNavLinkClick}
           >
             무료 상담
-          </Link>
+          </button>
           <ExpertApplicationButton />
         </div>
       </div>

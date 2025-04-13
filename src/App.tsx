@@ -23,8 +23,10 @@ import { ServicesProvider } from './contexts/ServicesContext';
 import { RegionsProvider } from './contexts/RegionsContext';
 import { InsightsProvider } from './contexts/InsightsContext';
 import { Toaster } from '@/components/ui/toaster';
-
 import { SuccessStoriesProvider } from './contexts/SuccessStoriesContext';
+import { ConsultationProvider } from './contexts/ConsultationContext';
+import FloatingConsultButton from './components/consultation/FloatingConsultButton';
+import ConsultationDialog from './components/consultation/ConsultationDialog';
 import SuccessStoryDetail from './pages/SuccessStoryDetail';
 
 function App() {
@@ -34,27 +36,31 @@ function App() {
         <RegionsProvider>
           <InsightsProvider>
             <SuccessStoriesProvider>
-              <Toaster />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/services/licensing" element={<Licensing />} />
-                <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
-                <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
-                <Route path="/services/location-analysis" element={<LocationAnalysis />} />
-                <Route path="/services/design-interior" element={<DesignInterior />} />
-                <Route path="/services/waste-management" element={<WasteManagement />} />
-                <Route path="/services/recruitment" element={<Recruitment />} />
-                <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
-                <Route path="/experts" element={<ExpertList />} />
-                <Route path="/experts/:id" element={<ExpertProfile />} />
-                <Route path="/regions/:regionCode?" element={<RegionalExperts />} />
-                <Route path="/insights/:category?" element={<Insights />} />
-                <Route path="/success-stories" element={<SuccessStories />} />
-                <Route path="/success-stories/:id" element={<SuccessStoryDetail />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <ConsultationProvider>
+                <Toaster />
+                <FloatingConsultButton />
+                <ConsultationDialog />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/services/licensing" element={<Licensing />} />
+                  <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
+                  <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
+                  <Route path="/services/location-analysis" element={<LocationAnalysis />} />
+                  <Route path="/services/design-interior" element={<DesignInterior />} />
+                  <Route path="/services/waste-management" element={<WasteManagement />} />
+                  <Route path="/services/recruitment" element={<Recruitment />} />
+                  <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
+                  <Route path="/experts" element={<ExpertList />} />
+                  <Route path="/experts/:id" element={<ExpertProfile />} />
+                  <Route path="/regions/:regionCode?" element={<RegionalExperts />} />
+                  <Route path="/insights/:category?" element={<Insights />} />
+                  <Route path="/success-stories" element={<SuccessStories />} />
+                  <Route path="/success-stories/:id" element={<SuccessStoryDetail />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </ConsultationProvider>
             </SuccessStoriesProvider>
           </InsightsProvider>
         </RegionsProvider>

@@ -5,14 +5,25 @@ import { CheckCircle, Award, Clock, MapPin } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '../ui/CustomButton';
 import { Expert } from '@/types/expert';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 interface ExpertCardProps {
   expert: Expert;
-  selectedExperts: number[];
-  onSelectExpert: (expertId: number) => void;
+  selectedExperts?: number[];
+  onSelectExpert?: (expertId: number) => void;
 }
 
-const ExpertCard: React.FC<ExpertCardProps> = ({ expert, selectedExperts, onSelectExpert }) => {
+const ExpertCard: React.FC<ExpertCardProps> = ({ 
+  expert, 
+  selectedExperts: propSelectedExperts, 
+  onSelectExpert: propOnSelectExpert 
+}) => {
+  const { selectedExperts: contextSelectedExperts, selectExpert: contextSelectExpert } = useConsultation();
+  
+  // Use props if provided (for backward compatibility), otherwise use context
+  const selectedExperts = propSelectedExperts || contextSelectedExperts;
+  const onSelectExpert = propOnSelectExpert || contextSelectExpert;
+  
   const isSelected = selectedExperts.includes(expert.id);
 
   return (
