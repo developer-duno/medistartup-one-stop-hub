@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -7,6 +7,7 @@ import SimulatorList from './SimulatorList';
 import SimulatorForm from './SimulatorForm';
 import SimulatorUsage from './SimulatorUsage';
 import { Simulator, UsageData } from './types';
+import { useToast } from '@/components/ui/use-toast';
 
 // Mock simulator data
 const mockSimulators: Simulator[] = [
@@ -47,13 +48,34 @@ const mockUsageData: UsageData[] = [
 ];
 
 const SimulatorManagement: React.FC = () => {
-  const [simulators, setSimulators] = useState<Simulator[]>(mockSimulators);
+  const [simulators, setSimulators] = useState<Simulator[]>([]);
   const [editingSimulator, setEditingSimulator] = useState<Simulator | null>(null);
   const [activeTab, setActiveTab] = useState('list');
+  const { toast } = useToast();
+
+  // Load simulators from localStorage or use mock data
+  useEffect(() => {
+    const storedSimulators = localStorage.getItem('simulators');
+    if (storedSimulators) {
+      try {
+        setSimulators(JSON.parse(storedSimulators));
+      } catch (error) {
+        console.error('Error parsing stored simulators:', error);
+        setSimulators(mockSimulators);
+      }
+    } else {
+      setSimulators(mockSimulators);
+    }
+  }, []);
+
+  // Save simulators to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem('simulators', JSON.stringify(simulators));
+  }, [simulators]);
 
   const handleCreateSimulator = () => {
     setEditingSimulator({
-      id: Math.max(...simulators.map(s => s.id)) + 1,
+      id: Math.max(0, ...simulators.map(s => s.id)) + 1,
       title: '',
       description: '',
       type: 'financial',
@@ -87,16 +109,35 @@ const SimulatorManagement: React.FC = () => {
     setSimulators(updatedSimulators);
     setEditingSimulator(null);
     setActiveTab('list');
+    
+    toast({
+      title: "시뮬레이터 저장됨",
+      description: "시뮬레이터가 성공적으로 저장되었습니다.",
+    });
   };
 
   const handleDeleteSimulator = (id: number) => {
     setSimulators(simulators.filter(s => s.id !== id));
+    
+    toast({
+      title: "시뮬레이터 삭제됨",
+      description: "시뮬레이터가 성공적으로 삭제되었습니다.",
+    });
   };
 
   const handleToggleActive = (id: number) => {
-    setSimulators(simulators.map(s => 
+    const updatedSimulators = simulators.map(s => 
       s.id === id ? {...s, active: !s.active} : s
-    ));
+    );
+    setSimulators(updatedSimulators);
+    
+    const simulator = simulators.find(s => s.id === id);
+    const newStatus = !simulator?.active;
+    
+    toast({
+      title: `시뮬레이터 ${newStatus ? '활성화' : '비활성화'}됨`,
+      description: `시뮬레이터가 성공적으로 ${newStatus ? '활성화' : '비활성화'}되었습니다.`,
+    });
   };
 
   const handleCancelEdit = () => {

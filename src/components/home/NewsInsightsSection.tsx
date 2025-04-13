@@ -57,11 +57,11 @@ const NewsInsightsSection = () => {
                   <Link to={`/insights/${insight.id}`} className="block">
                     <div className="h-48 overflow-hidden">
                       <img 
-                        src={insight.image || 'https://placehold.co/600x400?text=No+Image'} 
+                        src={insight.image} 
                         alt={insight.title}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                         onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                          e.currentTarget.src = 'https://placehold.co/600x400?text=Loading+Error';
+                          e.currentTarget.src = 'https://placehold.co/600x400?text=No+Image';
                         }}
                       />
                     </div>
