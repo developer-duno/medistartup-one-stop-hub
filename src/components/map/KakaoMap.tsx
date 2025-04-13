@@ -2,6 +2,31 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Region } from './types';
 
+// 타입스크립트 인터페이스로 Window.kakao에서 필요한 타입들을 참조
+type KakaoMap = {
+  setCenter: (position: KakaoLatLng) => void;
+  setLevel: (level: number) => void;
+  getLevel: () => number;
+  getCenter: () => KakaoLatLng;
+};
+
+type KakaoLatLng = {
+  getLat: () => number;
+  getLng: () => number;
+};
+
+type KakaoMarker = {
+  setMap: (map: KakaoMap | null) => void;
+  setPosition: (position: KakaoLatLng) => void;
+  setTitle: (title: string) => void;
+};
+
+type KakaoCustomOverlay = {
+  setMap: (map: KakaoMap | null) => void;
+  setPosition: (position: KakaoLatLng) => void;
+  setContent: (content: string | HTMLElement) => void;
+};
+
 interface KakaoMapProps {
   regions: Region[];
   activeRegion: string;
@@ -10,9 +35,9 @@ interface KakaoMapProps {
 
 const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveRegion }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [mapInstance, setMapInstance] = useState<kakao.maps.Map | null>(null);
-  const [markers, setMarkers] = useState<kakao.maps.Marker[]>([]);
-  const [customOverlays, setCustomOverlays] = useState<kakao.maps.CustomOverlay[]>([]);
+  const [mapInstance, setMapInstance] = useState<KakaoMap | null>(null);
+  const [markers, setMarkers] = useState<KakaoMarker[]>([]);
+  const [customOverlays, setCustomOverlays] = useState<KakaoCustomOverlay[]>([]);
 
   // 카카오맵 스크립트 로드
   useEffect(() => {
@@ -47,8 +72,8 @@ const KakaoMap: React.FC<KakaoMapProps> = ({ regions, activeRegion, setActiveReg
     markers.forEach(marker => marker.setMap(null));
     customOverlays.forEach(overlay => overlay.setMap(null));
     
-    const newMarkers: kakao.maps.Marker[] = [];
-    const newOverlays: kakao.maps.CustomOverlay[] = [];
+    const newMarkers: KakaoMarker[] = [];
+    const newOverlays: KakaoCustomOverlay[] = [];
 
     regions.forEach(region => {
       if (region.latitude && region.longitude) {
