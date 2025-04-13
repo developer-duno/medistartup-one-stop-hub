@@ -113,10 +113,10 @@ const SimulatorSection = () => {
                   simulator.type === 'revenue' ? <TrendingUp className="h-6 w-6 text-primary" /> :
                   <Users className="h-6 w-6 text-primary" />
                 }
-                simulatorType={simulator.type}
+                simulatorType={(simulator.type as 'financial' | 'revenue' | 'staffing')}
                 onSimulate={() => {
                   trackSimulatorUsage(simulator.id);
-                  return getSimulatorFunction(simulator.type)();
+                  return getSimulatorFunction(simulator.type)({});
                 }}
               />
             ))}
