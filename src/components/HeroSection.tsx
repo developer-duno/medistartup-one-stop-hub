@@ -41,8 +41,8 @@ const HeroSection = () => {
       return;
     }
 
-    // Scroll to simulator section instead of showing toast
-    const simulatorSection = document.getElementById('simulator');
+    // Scroll to simulator section
+    const simulatorSection = document.getElementById('simulators');
     if (simulatorSection) {
       simulatorSection.scrollIntoView({ behavior: 'smooth' });
     }
