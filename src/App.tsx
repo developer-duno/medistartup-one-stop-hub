@@ -34,13 +34,14 @@ function App() {
             <RegionsProvider>
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/admin" element={<Admin />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/experts" element={<ExpertList />} />
                 <Route path="/insights" element={<Insights />} />
                 <Route path="/insights/:id" element={<Insights />} />
-                <Route path="/experts" element={<ExpertList />} />
-                <Route path="/expert/:id" element={<ExpertProfile />} />
                 <Route path="/success-stories" element={<SuccessStories />} />
-                <Route path="/services" element={<Services />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/expert/:id" element={<ExpertProfile />} />
+                
                 {/* Services routes */}
                 <Route path="/services/location-analysis" element={<LocationAnalysis />} />
                 <Route path="/services/licensing" element={<Licensing />} />

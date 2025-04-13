@@ -31,8 +31,11 @@ export class RunwareService {
           {
             taskType: "imageInference",
             taskUUID: crypto.randomUUID(),
-            model: "runware:100@1",
-            ...params,
+            model: params.model || "runware:100@1",
+            positivePrompt: params.positivePrompt,
+            width: params.width || 1024,
+            height: params.height || 1024,
+            numberResults: params.numberResults || 1,
             outputFormat: params.outputFormat || "WEBP",
             CFGScale: 1,
             scheduler: "FlowMatchEulerDiscreteScheduler",
@@ -41,6 +44,11 @@ export class RunwareService {
       });
 
       const data = await response.json();
+
+      if (data.errors && data.errors.length > 0) {
+        console.error("Image generation API error:", data.errors);
+        throw new Error(data.errors[0].message || "Image generation failed");
+      }
 
       if (data.data && data.data.length > 0) {
         const imageData = data.data.find((item: any) => item.taskType === "imageInference");
