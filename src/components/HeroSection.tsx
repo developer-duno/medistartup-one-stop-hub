@@ -14,7 +14,7 @@ const HeroSection = () => {
   useEffect(() => {
     const generateHospitalImage = async () => {
       try {
-        const runwareService = new RunwareService('YOUR_RUNWARE_API_KEY');
+        const runwareService = new RunwareService('6PtVhh4UUUKazd3Uv8K0l7njZsxeaOxQ');
         const result = await runwareService.generateImage({
           positivePrompt: "Modern hospital interior, clean and professional medical clinic, soft lighting, medical equipment, white walls, healthcare design",
           width: 1024,
