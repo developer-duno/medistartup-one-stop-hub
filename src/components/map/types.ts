@@ -11,6 +11,8 @@ export interface Region {
   expertCount?: number;
   latitude?: number;
   longitude?: number;
+  active?: boolean;
+  mainCities?: string[];
 }
 
 export interface RegionInfo extends Region {
@@ -21,6 +23,7 @@ export interface RegionInfo extends Region {
   topServices: Array<{name: string; percent: number}>;
   hasManager: boolean;
   description?: string;
+  mainCities?: string[];
 }
 
 export interface RegionAdmin extends Region {

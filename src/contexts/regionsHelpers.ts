@@ -117,7 +117,8 @@ export const getActiveRegionInfo = (
     expertCount,
     topServices,
     hasManager: !!manager,
-    description: `${region.name} 지역의 의료 창업 환경에 특화된 전문가 서비스를 제공합니다.`
+    description: `${region.name} 지역의 의료 창업 환경에 특화된 전문가 서비스를 제공합니다.`,
+    mainCities: region.mainCities
   };
 };
 

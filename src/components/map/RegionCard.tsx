@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapPin, Users, Phone, Mail, TrendingUp, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,7 +12,7 @@ interface RegionCardProps {
 }
 
 const RegionCard: React.FC<RegionCardProps> = ({ activeRegion, getFilteredUrl }) => {
-  const { name, description, expertCount, manager, topServices, mainCities } = activeRegion;
+  const { name, description, expertCount, manager, topServices } = activeRegion;
   
   // Create the URL for filtering experts by this region
   const expertFilterUrl = getFilteredUrl(name);
