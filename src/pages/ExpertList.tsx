@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -100,10 +99,10 @@ const ExpertList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="theme-experts min-h-screen">
       <Navbar />
       
-      <div className="pt-28 pb-16 bg-gradient-to-b from-primary-100 to-white">
+      <div className="pt-28 pb-16 theme-page-header">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
@@ -117,7 +116,7 @@ const ExpertList = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-10">
         <div className="mb-8">
           <ExpertPageHeader 
             filteredExperts={filteredExperts}

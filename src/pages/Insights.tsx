@@ -55,10 +55,10 @@ const Insights = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="theme-insights min-h-screen bg-white">
       <Navbar />
       
-      <div className="pt-28 pb-16 bg-gradient-to-b from-primary-100 to-white">
+      <div className="pt-28 pb-16 theme-page-header">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -67,7 +67,7 @@ const Insights = () => {
           
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
-              뉴스 & <span className="text-primary">인사이트</span>
+              뉴스 & <span className="theme-text">인사이트</span>
             </h1>
             <p className="font-noto text-neutral-600 mb-8">
               병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.
@@ -84,7 +84,7 @@ const Insights = () => {
               <button
                 className={`px-4 py-3 font-pretendard font-medium ${
                   activeTab === 'all'
-                    ? 'text-primary border-b-2 border-primary'
+                    ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'
                 }`}
                 onClick={() => setActiveTab('all')}
@@ -94,7 +94,7 @@ const Insights = () => {
               <button
                 className={`px-4 py-3 font-pretendard font-medium ${
                   activeTab === 'news'
-                    ? 'text-primary border-b-2 border-primary'
+                    ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'
                 }`}
                 onClick={() => setActiveTab('news')}
@@ -104,7 +104,7 @@ const Insights = () => {
               <button
                 className={`px-4 py-3 font-pretendard font-medium ${
                   activeTab === 'trends'
-                    ? 'text-primary border-b-2 border-primary'
+                    ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'
                 }`}
                 onClick={() => setActiveTab('trends')}

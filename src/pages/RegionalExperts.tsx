@@ -43,10 +43,10 @@ const RegionalExperts = () => {
     : regions;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="theme-regions min-h-screen bg-white">
       <Navbar />
       
-      <div className="pt-28 pb-16 bg-gradient-to-b from-secondary-100 to-white">
+      <div className="pt-28 pb-16 theme-page-header">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
@@ -55,7 +55,7 @@ const RegionalExperts = () => {
           
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
-              지역별 <span className="text-primary">전문가 네트워크</span>
+              지역별 <span className="theme-text">전문가 네트워크</span>
             </h1>
             <p className="font-noto text-neutral-600 mb-8">
               각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다. 지역에 특화된 전문지식을 바탕으로 보다 효과적인 병원창업을 도와드립니다.
@@ -83,16 +83,16 @@ const RegionalExperts = () => {
               {filteredRegions.map((region) => (
                 <Card 
                   key={region.id} 
-                  className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === region.name ? 'ring-2 ring-primary' : ''}`}
+                  className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === region.name ? 'ring-2 theme-border' : ''}`}
                   onClick={() => setActiveRegion(region.name)}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-bold flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-primary" />
+                        <MapPin className="h-4 w-4 theme-text" />
                         {region.name}
                       </h3>
-                      <Badge variant="outline" className="bg-primary-50 text-primary">
+                      <Badge variant="outline" className="theme-bg-light theme-text">
                         <Users className="h-3 w-3 mr-1" />
                         {region.expertCount || 0}명
                       </Badge>

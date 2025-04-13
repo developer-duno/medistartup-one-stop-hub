@@ -77,13 +77,13 @@ const Services = () => {
   };
 
   return (
-    <>
+    <div className="theme-services min-h-screen">
       <Navbar />
       <section className="pt-28 pb-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="font-pretendard font-bold text-3xl md:text-4xl lg:text-5xl text-neutral-900 mb-4">
-              병원창업 <span className="text-primary">서비스</span>
+              병원창업 <span className="theme-text">서비스</span>
             </h1>
             <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
               의료기관 설립의 모든 단계를 위한 전문 서비스입니다. 병원 창업의 계획부터 운영까지 필요한 모든 솔루션을 제공합니다.
@@ -100,7 +100,7 @@ const Services = () => {
                 <TabsTrigger
                   key={category.id}
                   value={category.id}
-                  className="px-6 py-2 font-noto data-[state=active]:bg-primary-100 data-[state=active]:text-primary-700"
+                  className="px-6 py-2 font-noto data-[state=active]:theme-bg-light data-[state=active]:theme-text"
                 >
                   {category.name}
                 </TabsTrigger>
@@ -142,7 +142,7 @@ const Services = () => {
                 >
                   <div className="p-6 border-b border-neutral-100">
                     <div className="flex items-start gap-4 mb-4">
-                      <div className="bg-primary-100 rounded-lg w-12 h-12 flex items-center justify-center shrink-0">
+                      <div className="theme-bg-light rounded-lg w-12 h-12 flex items-center justify-center shrink-0">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -153,7 +153,7 @@ const Services = () => {
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="text-primary"
+                          className="theme-text"
                         >
                           {service.icon === 'MapPin' && <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />}
                           {service.icon === 'MapPin' && <circle cx="12" cy="10" r="3" />}
@@ -187,8 +187,8 @@ const Services = () => {
                     </div>
                     <p className="font-noto text-neutral-600 mb-4">{service.description}</p>
                   </div>
-                  <div className="p-4 bg-neutral-50 group-hover:bg-primary-50 transition-colors">
-                    <span className="font-pretendard font-medium text-primary inline-flex items-center">
+                  <div className="p-4 bg-neutral-50 group-hover:theme-bg-light transition-colors">
+                    <span className="font-pretendard font-medium theme-text inline-flex items-center">
                       자세히 보기
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +217,7 @@ const Services = () => {
       <SimulatorSection />
       
       <Footer />
-    </>
+    </div>
   );
 };
 

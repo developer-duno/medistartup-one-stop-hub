@@ -1,56 +1,67 @@
 
 import React from 'react';
-import { Calendar, ChevronRight } from 'lucide-react';
-import { InsightType } from '@/components/admin/insights/types';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Calendar, Tag } from 'lucide-react';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 
-interface InsightCardProps {
-  article: InsightType;
-  getCategoryDisplayName: (category: string) => string;
-  onViewInsight: (insight: InsightType) => void;
-}
-
-const InsightCard: React.FC<InsightCardProps> = ({ 
-  article, 
-  getCategoryDisplayName, 
-  onViewInsight 
-}) => {
+// Add useThemeStyles prop to optionally use themed styles
+const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles = false }) => {
+  const categoryName = getCategoryDisplayName(insight.category);
+  const formattedDate = format(new Date(insight.publishedAt), 'yyyy년 MM월 dd일', { locale: ko });
+  
+  // Use theme styles if the prop is true
+  const cardClass = useThemeStyles 
+    ? 'cursor-pointer transform transition-all hover:-translate-y-1 hover:shadow-md'
+    : 'cursor-pointer transform transition-all hover:-translate-y-1 hover:shadow-md';
+  
+  const badgeClass = useThemeStyles
+    ? 'theme-bg-light theme-text'
+    : 'bg-primary-100 text-primary';
+  
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <img
-        src={article.image || 'https://placehold.co/600x400?text=No+Image'}
-        alt={article.title}
-        className="w-full h-48 object-cover"
-        onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-          e.currentTarget.src = 'https://placehold.co/600x400?text=Loading+Error';
-        }}
-      />
-      <div className="p-6">
-        <div className="flex items-center text-sm text-neutral-500 mb-2">
-          <Calendar className="h-4 w-4 mr-1" />
-          <span>{article.date}</span>
-          <span className="mx-2">•</span>
-          <span>{article.author}</span>
+    <Card className={cardClass} onClick={onClick}>
+      <CardContent className="p-0">
+        <div className="aspect-video relative overflow-hidden">
+          <img 
+            src={insight.imageUrl || '/placeholder.svg'} 
+            alt={insight.title}
+            className="w-full h-full object-cover"
+          />
+          <Badge className={`absolute top-3 left-3 ${badgeClass}`}>
+            {categoryName}
+          </Badge>
         </div>
-        <h2 className="font-pretendard font-bold text-xl text-neutral-900 mb-2 line-clamp-2">
-          {article.title}
-        </h2>
-        <p className="font-noto text-neutral-600 mb-4 line-clamp-3">
-          {article.excerpt}
-        </p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-800">
-            {getCategoryDisplayName(article.category)}
-          </span>
+        
+        <div className="p-4">
+          <h3 className="font-pretendard font-bold text-lg mb-2 line-clamp-2">
+            {insight.title}
+          </h3>
+          
+          <p className="font-noto text-neutral-600 text-sm mb-3 line-clamp-2">
+            {insight.summary}
+          </p>
+          
+          <div className="flex flex-wrap items-center justify-between text-xs text-neutral-500">
+            <div className="flex items-center gap-1 mr-4">
+              <Calendar className="h-3.5 w-3.5" />
+              <span>{formattedDate}</span>
+            </div>
+            
+            {insight.tags && insight.tags.length > 0 && (
+              <div className="flex items-center gap-1">
+                <Tag className="h-3.5 w-3.5" />
+                <span className="truncate max-w-[150px]">
+                  {insight.tags.slice(0, 2).join(', ')}
+                  {insight.tags.length > 2 ? ` +${insight.tags.length - 2}` : ''}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
-        <button
-          onClick={() => onViewInsight(article)}
-          className="font-pretendard font-medium text-primary inline-flex items-center hover:underline"
-        >
-          자세히 보기
-          <ChevronRight className="h-4 w-4 ml-1" />
-        </button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
