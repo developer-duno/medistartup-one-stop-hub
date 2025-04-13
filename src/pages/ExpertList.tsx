@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -8,6 +9,8 @@ import MobileSelectionBar from '@/components/experts/MobileSelectionBar';
 import ExpertGridView from '@/components/experts/ExpertGridView';
 import ExpertComparisonView from '@/components/experts/ExpertComparisonView';
 import ExpertCTA from '@/components/experts/ExpertCTA';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();
@@ -104,6 +107,11 @@ const ExpertList = () => {
       
       <div className="pt-28 pb-16 theme-page-header">
         <div className="container mx-auto px-4">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            홈으로 돌아가기
+          </Link>
+          
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
               전문 분야별 <span className="text-primary">최고의 전문가</span>

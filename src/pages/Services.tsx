@@ -9,6 +9,7 @@ import { RunwareService } from '@/services/RunwareService';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SimulatorSection from '@/components/simulator/SimulatorSection';
 import { toast } from 'sonner';
+import { ArrowLeft } from 'lucide-react';
 
 const runwareService = new RunwareService('6PtVhh4UUUKazd3Uv8K0l7njZsxeaOxQ');
 
@@ -81,6 +82,11 @@ const Services = () => {
       <Navbar />
       <section className="pt-28 pb-20">
         <div className="container mx-auto px-4">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            홈으로 돌아가기
+          </Link>
+          
           <div className="text-center mb-12">
             <h1 className="font-pretendard font-bold text-3xl md:text-4xl lg:text-5xl text-neutral-900 mb-4">
               병원창업 <span className="theme-text">서비스</span>
