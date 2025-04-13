@@ -109,50 +109,50 @@
   }
 }
 
-/* Theme classes for each main section */
+/* Theme classes for each main section - updated with soft pastel colors */
 .theme-services {
-  --theme-hue: 16; /* Orange */
-  --theme-bg-gradient: linear-gradient(90deg, hsla(16, 100%, 76%, 1) 0%, hsla(49, 100%, 81%, 1) 100%);
+  --theme-hue: 25; /* Soft Peach */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(253, 225, 211, 0.7) 0%, rgba(255, 236, 217, 0.7) 100%);
   --theme-bg-light: hsl(var(--theme-hue), 100%, 97%);
-  --theme-primary: hsl(var(--theme-hue), 85%, 55%);
-  --theme-primary-light: hsl(var(--theme-hue), 85%, 90%);
-  --theme-accent: hsl(var(--theme-hue), 90%, 65%);
+  --theme-primary: hsl(var(--theme-hue), 50%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 50%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 60%, 75%);
 }
 
 .theme-regions {
-  --theme-hue: 220; /* Blue */
-  --theme-bg-gradient: linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%);
+  --theme-hue: 210; /* Soft Blue */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(211, 228, 253, 0.7) 0%, rgba(228, 237, 250, 0.7) 100%);
   --theme-bg-light: hsl(var(--theme-hue), 70%, 97%);
-  --theme-primary: hsl(var(--theme-hue), 70%, 50%);
-  --theme-primary-light: hsl(var(--theme-hue), 70%, 90%);
-  --theme-accent: hsl(var(--theme-hue), 75%, 60%);
+  --theme-primary: hsl(var(--theme-hue), 50%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 50%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 60%, 75%);
 }
 
 .theme-experts {
-  --theme-hue: 280; /* Purple */
-  --theme-bg-gradient: linear-gradient(90deg, hsla(277, 75%, 84%, 1) 0%, hsla(297, 50%, 51%, 1) 100%);
-  --theme-bg-light: hsl(var(--theme-hue), 70%, 97%);
-  --theme-primary: hsl(var(--theme-hue), 60%, 60%);
-  --theme-primary-light: hsl(var(--theme-hue), 60%, 90%);
-  --theme-accent: hsl(var(--theme-hue), 70%, 70%);
+  --theme-hue: 270; /* Soft Lavender */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(229, 222, 255, 0.7) 0%, rgba(237, 233, 250, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 60%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 40%, 70%);
+  --theme-primary-light: hsl(var(--theme-hue), 40%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 50%, 80%);
 }
 
 .theme-insights {
-  --theme-hue: 180; /* Teal */
-  --theme-bg-gradient: linear-gradient(90deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-  --theme-bg-light: hsl(var(--theme-hue), 70%, 97%);
-  --theme-primary: hsl(var(--theme-hue), 60%, 45%);
-  --theme-primary-light: hsl(var(--theme-hue), 60%, 90%);
-  --theme-accent: hsl(var(--theme-hue), 70%, 55%);
+  --theme-hue: 180; /* Soft Teal */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(211, 242, 240, 0.7) 0%, rgba(226, 245, 244, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 60%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 40%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 40%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 50%, 75%);
 }
 
 .theme-success {
-  --theme-hue: 120; /* Green */
-  --theme-bg-gradient: linear-gradient(90deg, hsla(139, 70%, 75%, 1) 0%, hsla(63, 90%, 76%, 1) 100%);
-  --theme-bg-light: hsl(var(--theme-hue), 70%, 97%);
-  --theme-primary: hsl(var(--theme-hue), 50%, 45%);
-  --theme-primary-light: hsl(var(--theme-hue), 50%, 90%);
-  --theme-accent: hsl(var(--theme-hue), 60%, 55%);
+  --theme-hue: 120; /* Soft Mint */
+  --theme-bg-gradient: linear-gradient(90deg, rgba(224, 248, 232, 0.7) 0%, rgba(236, 248, 235, 0.7) 100%);
+  --theme-bg-light: hsl(var(--theme-hue), 50%, 97%);
+  --theme-primary: hsl(var(--theme-hue), 35%, 65%);
+  --theme-primary-light: hsl(var(--theme-hue), 35%, 92%);
+  --theme-accent: hsl(var(--theme-hue), 45%, 75%);
 }
 
 .theme-page-header {

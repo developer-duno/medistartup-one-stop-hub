@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -31,7 +32,28 @@ const SuccessStories = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        {/* The content would normally go here, applying the theme classes as appropriate */}
+        {/* Success stories content would go here */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Example success story cards */}
+          {[1, 2, 3].map((item) => (
+            <div key={item} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
+              <div className="aspect-video bg-neutral-100"></div>
+              <div className="p-5">
+                <h3 className="font-pretendard font-bold text-lg mb-2">
+                  성공 사례 #{item}
+                </h3>
+                <p className="text-neutral-600 text-sm mb-3">
+                  MediStartup과 함께 효율적인 운영 시스템을 구축하여 환자 만족도를 크게 향상시켰습니다.
+                </p>
+                <div className="flex justify-end">
+                  <Link to="#" className="theme-text font-medium text-sm">
+                    자세히 보기
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       
       <Footer />
