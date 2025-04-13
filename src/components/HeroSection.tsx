@@ -41,13 +41,14 @@ const HeroSection = () => {
       return;
     }
 
-    setIsLoading(true);
+    // Scroll to simulator section instead of showing toast
+    const simulatorSection = document.getElementById('simulator');
+    if (simulatorSection) {
+      simulatorSection.scrollIntoView({ behavior: 'smooth' });
+    }
     
-    // Simulating a feasibility analysis request
-    setTimeout(() => {
-      toast.success(`${selectedRegion} 지역의 무료 타당성 분석 요청이 접수되었습니다.`);
-      setIsLoading(false);
-    }, 1500);
+    // Store the selected region in sessionStorage for the simulator to use
+    sessionStorage.setItem('selectedRegion', selectedRegion);
   };
 
   const handleVideoPlay = () => {

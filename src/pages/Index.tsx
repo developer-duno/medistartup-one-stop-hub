@@ -24,10 +24,11 @@ const Index = () => {
       <NewsInsightsSection />
       <SuccessStoriesSection />
       
-      {/* Expert application CTA section - moved above contact section */}
+      <ContactSection />
+      
+      {/* Expert application CTA section - moved below contact section */}
       <ExpertApplicationCTA />
       
-      <ContactSection />
       <Footer />
     </div>
   );

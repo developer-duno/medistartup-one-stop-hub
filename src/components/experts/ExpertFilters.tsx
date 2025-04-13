@@ -1,11 +1,9 @@
-
 import React from 'react';
 import { Search, Filter, ChevronDown, X, MapPin, Tag, CheckCircle, ChevronsUpDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import CustomButton from '@/components/ui/CustomButton';
 import {
   Popover,
   PopoverContent,
@@ -175,7 +173,6 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
             </PopoverContent>
           </Popover>
 
-          {/* Active filters display */}
           {(filters.regions.length > 0 || filters.services.length > 0) && (
             <div className="flex flex-wrap gap-2 ml-2">
               {filters.regions.map((region) => (

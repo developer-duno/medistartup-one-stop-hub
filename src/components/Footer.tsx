@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { Facebook, Instagram, Youtube, ChevronRight } from 'lucide-react';
+import { Facebook, Instagram, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
     <footer className="bg-neutral-800 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-6">
               <div className="h-9 w-9 rounded-full bg-white flex items-center justify-center">
@@ -41,84 +41,6 @@ const Footer = () => {
                 <Youtube size={18} />
               </a>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-pretendard font-bold text-lg mb-6">서비스</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/services/location-analysis" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  입지 분석 서비스
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/financial-consulting" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  재무 컨설팅
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/design-interior" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  설계 및 인테리어
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/licensing" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  인허가 대행
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/recruitment" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  인력 채용
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/marketing-strategy" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  마케팅 전략
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-pretendard font-bold text-lg mb-6">지역별 데스크</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/experts?region=대전/충남" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  대전/충남
-                </Link>
-              </li>
-              <li>
-                <Link to="/experts?region=서울/경기" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  서울/경기
-                </Link>
-              </li>
-              <li>
-                <Link to="/experts?region=부산/경남" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  부산/경남
-                </Link>
-              </li>
-              <li>
-                <Link to="/experts?region=대구/경북" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  대구/경북
-                </Link>
-              </li>
-              <li>
-                <Link to="/experts?region=광주/전라" className="font-noto text-neutral-300 hover:text-white transition-colors flex items-center">
-                  <ChevronRight size={16} className="mr-1" />
-                  광주/전라
-                </Link>
-              </li>
-            </ul>
           </div>
 
           <div>
