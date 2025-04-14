@@ -6,7 +6,7 @@ const MOBILE_BREAKPOINT = 768
 
 // Custom hook to determine if the current viewport is mobile sized
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
+  const [isMobile, setIsMobile] = React.useState<boolean>(window.innerWidth < MOBILE_BREAKPOINT)
 
   React.useEffect(() => {
     // Function to update the state based on window width
@@ -14,19 +14,25 @@ export function useIsMobile() {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     }
     
-    // Create media query list
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
-    
-    // Add event listener
-    mql.addEventListener("change", updateIsMobile)
-    
-    // Set initial value
+    // Set initial value immediately
     updateIsMobile()
     
+    // Create media query list for listening to changes
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    
+    // Add event listener for when the viewport size changes
+    const handleMediaChange = () => updateIsMobile()
+    mql.addEventListener("change", handleMediaChange)
+    
+    // Also listen for resize events as a fallback
+    window.addEventListener('resize', updateIsMobile)
+    
     // Clean up
-    return () => mql.removeEventListener("change", updateIsMobile)
+    return () => {
+      mql.removeEventListener("change", handleMediaChange)
+      window.removeEventListener('resize', updateIsMobile)
+    }
   }, [])
 
-  // Return true if mobile, false if not, with a fallback to false
-  return !!isMobile
+  return isMobile
 }

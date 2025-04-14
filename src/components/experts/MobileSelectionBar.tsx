@@ -22,7 +22,7 @@ const MobileSelectionBar: React.FC<MobileSelectionBarProps> = ({
           <CheckCircle className="h-4 w-4" />
           <span className="text-sm font-medium">{selectedExperts.length}명의 전문가 선택됨</span>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 w-auto min-w-[160px]">
           <CustomButton 
             variant="secondary" 
             size="sm"

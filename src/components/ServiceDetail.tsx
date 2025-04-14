@@ -90,7 +90,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
               {benefits.map((benefit, index) => (
                 <div key={index} className="flex items-start font-noto text-neutral-700 text-sm">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5 mr-2" />
-                  <span>{benefit}</span>
+                  <span className="line-clamp-2">{benefit}</span>
                 </div>
               ))}
             </div>
@@ -125,7 +125,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
               <h2 className="font-pretendard font-bold text-xl md:text-3xl text-neutral-900 mb-4 md:mb-6">
                 주요 기능
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 {features.map((feature, index) => (
                   <div key={index} className="bg-white rounded-lg shadow-sm border border-neutral-100 p-4 md:p-6">
                     <h3 className="font-pretendard font-bold text-lg md:text-xl text-neutral-900 mb-2 md:mb-3">
