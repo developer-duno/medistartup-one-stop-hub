@@ -86,15 +86,15 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
             <h3 className="font-pretendard font-bold text-xl text-neutral-900 mb-3">
               서비스 혜택
             </h3>
-            <ul className="space-y-2 mb-4">
+            <div className="grid grid-cols-2 gap-x-2 gap-y-2 mb-4">
               {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-start font-noto text-neutral-700 text-sm">
+                <div key={index} className="flex items-start font-noto text-neutral-700 text-sm">
                   <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5 mr-2" />
                   <span>{benefit}</span>
-                </li>
+                </div>
               ))}
-            </ul>
-            <div className="space-y-2">
+            </div>
+            <div className="grid grid-cols-2 gap-2">
               <CustomButton 
                 variant="primary" 
                 fullWidth 

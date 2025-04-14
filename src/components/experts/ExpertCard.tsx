@@ -91,11 +91,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
           </div>
         </div>
         
-        <div className={`flex ${isMobile ? 'flex-col' : 'gap-2'} space-y-2 md:space-y-0 md:gap-2`}>
+        <div className="grid grid-cols-2 gap-2">
           <CustomButton 
             variant={isSelected ? "secondary" : "outline"}
             size="sm"
-            className={`${isMobile ? 'w-full' : 'flex-1'}`}
             onClick={() => selectExpert(expert.id)}
           >
             {isSelected ? '선택 취소' : '전문가 선택'}
@@ -104,7 +103,6 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
           <CustomButton 
             variant="primary" 
             size="sm"
-            className={`${isMobile ? 'w-full' : 'flex-1'}`}
             asChild
           >
             <Link to={`/expert/${expert.id}`}>
