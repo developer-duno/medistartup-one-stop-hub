@@ -1,6 +1,6 @@
 
 // Utility functions for simulator calculations
-import { FinancialResult, RevenueResult, StaffingResult, StaffMember } from '../admin/simulator/types';
+import { FinancialResult, RevenueResult, StaffingResult, StaffMember, STANDARDIZED_REGIONS } from '../admin/simulator/types';
 
 export const simulateFinancialCosts = (params: { specialty: string; size: number; location: string }): FinancialResult => {
   // Base costs by specialty (in millions of KRW)

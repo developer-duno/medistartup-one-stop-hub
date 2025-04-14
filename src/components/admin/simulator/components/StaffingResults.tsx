@@ -21,7 +21,7 @@ const StaffingResults: React.FC<StaffingResultsProps> = ({ result }) => {
             </tr>
           </thead>
           <tbody>
-            {result.staffing.map((staff, index) => (
+            {result.staffing.map((staff: StaffMember, index: number) => (
               <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                 <td className="border p-2">{staff.role}</td>
                 <td className="border p-2">{staff.count}명</td>
