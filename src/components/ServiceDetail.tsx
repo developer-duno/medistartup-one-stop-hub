@@ -98,7 +98,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
               <CustomButton 
                 variant="primary" 
                 fullWidth 
-                size={isMobile ? "sm" : "default"}
+                size={isMobile ? "sm" : "md"}
                 asChild
               >
                 <Link to={`/experts?service=${serviceUrlName}`}>
@@ -108,7 +108,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
               <CustomButton 
                 variant="accent" 
                 fullWidth 
-                size={isMobile ? "sm" : "default"}
+                size={isMobile ? "sm" : "md"}
                 asChild
               >
                 <Link to={`/experts?service=${serviceUrlName}&consultation=true`}>
@@ -203,6 +203,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                     variant="primary" 
                     fullWidth 
                     asChild
+                    size="md"
                   >
                     <Link to={`/experts?service=${serviceUrlName}`}>
                       {title} 전문가 만나기
@@ -212,6 +213,7 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
                     variant="accent" 
                     fullWidth 
                     asChild
+                    size="md"
                   >
                     <Link to={`/experts?service=${serviceUrlName}&consultation=true`}>
                       전문 상담 신청하기
