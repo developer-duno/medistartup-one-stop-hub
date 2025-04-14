@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import CustomButton from '../ui/CustomButton';
 import { Expert } from '@/types/expert';
 import { useConsultation } from '@/contexts/ConsultationContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExpertCardProps {
   expert: Expert;
@@ -13,6 +14,7 @@ interface ExpertCardProps {
 
 const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
   const { selectedExperts, selectExpert } = useConsultation();
+  const isMobile = useIsMobile();
   
   const isSelected = selectedExperts.includes(expert.id);
 
@@ -30,6 +32,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
             src={expert.image} 
             alt={expert.name} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
           />
         </div>
         
@@ -41,6 +44,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
                 ? 'bg-primary text-white'
                 : 'bg-white/80 text-neutral-500 hover:bg-primary/10'
             }`}
+            aria-label={isSelected ? "전문가 선택 취소" : "전문가 선택"}
           >
             {isSelected ? (
               <CheckCircle className="h-5 w-5" />
@@ -51,7 +55,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
         </div>
       </div>
       
-      <div className="p-5">
+      <div className="p-4 md:p-5">
         <div className="flex justify-between items-start mb-2">
           <div>
             <h3 className="font-pretendard font-bold text-lg text-neutral-900">
@@ -70,28 +74,28 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
           {expert.specialty}
         </p>
         
-        <div className="flex flex-wrap gap-3 mb-5">
-          <div className="flex items-center gap-1 text-sm text-neutral-500">
-            <Award className="h-4 w-4" />
-            <span>{expert.experience}</span>
+        <div className="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-5">
+          <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
+            <Award className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+            <span className="truncate">{expert.experience}</span>
           </div>
           
-          <div className="flex items-center gap-1 text-sm text-neutral-500">
-            <Clock className="h-4 w-4" />
-            <span>{expert.projects}</span>
+          <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
+            <Clock className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+            <span className="truncate">{expert.projects}</span>
           </div>
           
-          <div className="flex items-center gap-1 text-sm text-neutral-500">
-            <MapPin className="h-4 w-4" />
-            <span>{expert.regions.join(', ')}</span>
+          <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
+            <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+            <span className="truncate">{expert.regions.join(', ')}</span>
           </div>
         </div>
         
-        <div className="flex gap-2">
+        <div className={`flex ${isMobile ? 'flex-col' : 'gap-2'} space-y-2 md:space-y-0 md:gap-2`}>
           <CustomButton 
             variant={isSelected ? "secondary" : "outline"}
             size="sm"
-            className="flex-1"
+            className={`${isMobile ? 'w-full' : 'flex-1'}`}
             onClick={() => selectExpert(expert.id)}
           >
             {isSelected ? '선택 취소' : '전문가 선택'}
@@ -100,7 +104,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
           <CustomButton 
             variant="primary" 
             size="sm"
-            className="flex-1"
+            className={`${isMobile ? 'w-full' : 'flex-1'}`}
             asChild
           >
             <Link to={`/expert/${expert.id}`}>
