@@ -1,4 +1,3 @@
-
 import { Expert } from '../types/expert';
 
 export const initialExperts: Expert[] = [
@@ -12,7 +11,65 @@ export const initialExperts: Expert[] = [
     projects: '320+',
     description: '서울대 의대 출신으로 병원 경영 컨설팅 15년 경력. 특히 개원의를 위한 맞춤형 재무설계와 수익성 분석에 강점이 있습니다.',
     regions: ['서울', '경기'],
-    services: ['재무 컨설팅']
+    services: ['재무 컨설팅'],
+    coverImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '연간 100+ 의료기관 재무 컨설팅 수행',
+      '평균 수익률 25% 이상 달성',
+      '의료기관 특화 투자 포트폴리오 개발'
+    ],
+    educationHistory: [
+      {
+        degree: '의학박사',
+        institution: '서울대학교 의과대학',
+        year: '2005'
+      },
+      {
+        degree: 'MBA',
+        institution: '카이스트 경영대학',
+        year: '2008'
+      }
+    ],
+    careerTimeline: [
+      {
+        year: '2008-2015',
+        position: '수석 컨설턴트',
+        company: '메디컬파트너스',
+        description: '대형 병원 재무 컨설팅 총괄'
+      },
+      {
+        year: '2015-현재',
+        position: '대표 컨설턴트',
+        company: '메디스타트업',
+        description: '의료기관 맞춤형 재무설계 및 투자자문'
+      }
+    ],
+    successCases: [
+      {
+        title: '강남 A병원 수익성 개선',
+        description: '운영 비용 최적화와 수익 구조 개선을 통한 수익성 향상 달성',
+        image: 'https://images.unsplash.com/photo-1504439468489-c8920d796a29?q=80&w=2071&auto=format&fit=crop',
+        results: [
+          '연간 운영비용 20% 절감',
+          '환자 만족도 15% 상승',
+          '순이익률 2배 증가'
+        ]
+      }
+    ],
+    testimonials: [
+      {
+        name: '이상철',
+        position: '서울 힐링병원 원장',
+        content: '김태호 컨설턴트의 전문적인 자문 덕분에 병원 재정이 안정화되었고, 장기 성장 전략을 수립할 수 있었습니다.',
+        image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=2070&auto=format&fit=crop'
+      },
+      {
+        name: '박미영',
+        position: '미래메디컬 대표원장',
+        content: '체계적인 재무 분석과 실행 가능한 해결책을 제시해주셔서 큰 도움이 되었습니다.',
+        image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=2070&auto=format&fit=crop'
+      }
+    ]
   },
   {
     id: 2,
