@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { LoadingState } from '@/components/ui/loading-state';
+import { ErrorBoundary } from '@/components/ui/error-boundary';
 import ExpertHero from '@/components/expert/profile/ExpertHero';
 import ExpertOverview from '@/components/expert/profile/ExpertOverview';
 import ExpertCareer from '@/components/expert/profile/ExpertCareer';
@@ -11,7 +13,7 @@ import ExpertTestimonials from '@/components/expert/profile/ExpertTestimonials';
 import ExpertSidebar from '@/components/expert/profile/ExpertSidebar';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
 
 const ExpertProfile = () => {
@@ -62,16 +64,25 @@ const ExpertProfile = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-neutral-50">
+        <Navbar />
+        <LoadingState className="h-[60vh]" />
+        <Footer />
       </div>
     );
   }
 
   if (!expert) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold mb-4">전문가를 찾을 수 없습니다</h1>
+      <div className="min-h-screen bg-neutral-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">전문가를 찾을 수 없습니다</h1>
+            <p className="text-muted-foreground">요청하신 전문가 정보가 존재하지 않습니다.</p>
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -79,31 +90,45 @@ const ExpertProfile = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
-      <ExpertHero expert={expert} />
-      
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-12">
-            <ExpertOverview expert={expert} />
-            <ExpertCareer expert={expert} />
-            {expert.successCases && expert.successCases.length > 0 && (
-              <ExpertSuccessCases expert={expert} />
-            )}
-            {expert.testimonials && expert.testimonials.length > 0 && (
-              <ExpertTestimonials expert={expert} />
-            )}
+      <ErrorBoundary>
+        <ExpertHero expert={expert} />
+        
+        <main className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-12">
+              <ErrorBoundary>
+                <ExpertOverview expert={expert} />
+              </ErrorBoundary>
+              
+              <ErrorBoundary>
+                <ExpertCareer expert={expert} />
+              </ErrorBoundary>
+              
+              <ErrorBoundary>
+                {expert.successCases && expert.successCases.length > 0 && (
+                  <ExpertSuccessCases expert={expert} />
+                )}
+              </ErrorBoundary>
+              
+              <ErrorBoundary>
+                {expert.testimonials && expert.testimonials.length > 0 && (
+                  <ExpertTestimonials expert={expert} />
+                )}
+              </ErrorBoundary>
+            </div>
+            
+            <div>
+              <ErrorBoundary>
+                <ExpertSidebar
+                  expert={expert}
+                  isExpertSelected={isExpertSelected}
+                  onSelectExpert={handleSelectExpert}
+                />
+              </ErrorBoundary>
+            </div>
           </div>
-          
-          <div>
-            <ExpertSidebar
-              expert={expert}
-              isExpertSelected={isExpertSelected}
-              onSelectExpert={handleSelectExpert}
-            />
-          </div>
-        </div>
-      </main>
-      
+        </main>
+      </ErrorBoundary>
       <Footer />
     </div>
   );
