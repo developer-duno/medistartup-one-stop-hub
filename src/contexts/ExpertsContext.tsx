@@ -17,6 +17,7 @@ const ExpertsContext = createContext<ExpertsContextType>({
   approveExpert: () => {},
   rejectExpert: () => {},
   pendingApplications: [],
+  getExpertById: () => undefined,
 });
 
 // Local storage key for experts data
@@ -92,6 +93,11 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     );
   };
 
+  // Get expert by ID
+  const getExpertById = (id: number): Expert | undefined => {
+    return experts.find(expert => expert.id === id);
+  };
+
   // Calculate pending applications
   const pendingApplications = React.useMemo(() => {
     return experts.filter(expert => expert.applicationStatus === 'pending');
@@ -108,7 +114,8 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     applyAsExpert,
     approveExpert,
     rejectExpert,
-    pendingApplications
+    pendingApplications,
+    getExpertById
   };
 
   return (

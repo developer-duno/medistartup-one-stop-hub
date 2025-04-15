@@ -13,6 +13,7 @@ export interface ExpertsContextType {
   approveExpert: (id: number) => void;
   rejectExpert: (id: number, reason: string) => void;
   pendingApplications: Expert[];
+  getExpertById: (id: number) => Expert | undefined;
 }
 
 export interface ExpertsProviderProps {

@@ -24,6 +24,25 @@ export interface Expert {
   applicationDate?: string;     // 신청 날짜
   approvalDate?: string;        // 승인 날짜
   rejectionReason?: string;     // 반려 사유
+  
+  // 추가 상세 프로필 필드
+  coverImage?: string;
+  keyAchievements?: string[];
+  educationHistory?: Array<{degree: string, institution: string, year: string}>;
+  careerTimeline?: Array<{year: string, position: string, company: string, description: string}>;
+  successCases?: Array<{
+    title: string, 
+    description: string, 
+    image?: string, 
+    results: string[]
+  }>;
+  testimonials?: Array<{
+    name: string, 
+    position: string, 
+    content: string, 
+    image?: string, 
+    video?: string
+  }>;
 }
 
 export interface NewExpert extends Omit<Expert, 'id'> {}
