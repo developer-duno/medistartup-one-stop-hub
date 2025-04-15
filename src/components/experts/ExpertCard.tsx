@@ -105,7 +105,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
             size="sm"
             asChild
           >
-            <Link to={`/expert/${expert.id}`}>
+            <Link to={`/experts/${expert.id}`}>
               상세 프로필
             </Link>
           </CustomButton>
