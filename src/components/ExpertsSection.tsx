@@ -100,7 +100,7 @@ const ExpertsSection = () => {
                       className="flex-1 flex items-center justify-center gap-1"
                       asChild
                     >
-                      <Link to={`/expert/${expert.id}`}>
+                      <Link to={`/experts/${expert.id}`}>
                         프로필 보기
                         <ArrowRight className="h-4 w-4 ml-1" />
                       </Link>
