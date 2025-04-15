@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ServiceCard from './ServiceCard';
 
 interface FAQProps {
   question: string;
@@ -18,14 +19,14 @@ const ServiceFAQs: React.FC<ServiceFAQsProps> = ({ faqs }) => {
       </h2>
       <div className="space-y-4 md:space-y-6">
         {faqs.map((faq, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-sm border border-neutral-100 p-4 md:p-6">
+          <ServiceCard key={index}>
             <h3 className="font-pretendard font-bold text-base md:text-lg text-neutral-900 mb-2 md:mb-3">
               Q. {faq.question}
             </h3>
             <p className="font-noto text-sm md:text-base text-neutral-600">
               A. {faq.answer}
             </p>
-          </div>
+          </ServiceCard>
         ))}
       </div>
     </section>

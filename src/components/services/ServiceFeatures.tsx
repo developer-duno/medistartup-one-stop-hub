@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ServiceCard from './ServiceCard';
 
 interface FeatureProps {
   title: string;
@@ -18,14 +19,14 @@ const ServiceFeatures: React.FC<ServiceFeaturesProps> = ({ features }) => {
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         {features.map((feature, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-sm border border-neutral-100 p-4 md:p-6">
+          <ServiceCard key={index}>
             <h3 className="font-pretendard font-bold text-lg md:text-xl text-neutral-900 mb-2 md:mb-3">
               {feature.title}
             </h3>
             <p className="font-noto text-sm md:text-base text-neutral-600">
               {feature.description}
             </p>
-          </div>
+          </ServiceCard>
         ))}
       </div>
     </section>
