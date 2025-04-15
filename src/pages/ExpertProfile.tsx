@@ -24,10 +24,10 @@ const ExpertProfile = () => {
   const [expert, setExpert] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { selectedExperts, selectExpert } = useConsultation();
-  const isExpertSelected = expert ? selectedExperts.includes(expert.id) : false;
-
+  
   useEffect(() => {
     setIsLoading(true);
+    console.log("Loading expert profile for ID:", id);
     
     const expertId = Number(id);
     if (isNaN(expertId)) {
@@ -41,6 +41,7 @@ const ExpertProfile = () => {
     }
     
     const expertData = getExpertById(expertId);
+    console.log("Expert data loaded:", expertData);
     
     if (expertData) {
       setExpert(expertData);
@@ -50,10 +51,13 @@ const ExpertProfile = () => {
         description: "요청하신 전문가 정보를 찾을 수 없습니다.",
         variant: "destructive",
       });
+      navigate('/experts');
     }
     
     setIsLoading(false);
   }, [id, getExpertById, navigate, uiToast]);
+
+  const isExpertSelected = expert ? selectedExperts.includes(expert.id) : false;
 
   const handleSelectExpert = () => {
     if (expert) {
@@ -87,6 +91,9 @@ const ExpertProfile = () => {
     );
   }
 
+  console.log("Rendering expert profile:", expert.name);
+  console.log("Expert has testimonials:", expert.testimonials ? expert.testimonials.length : "none");
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <Navbar />
@@ -111,9 +118,7 @@ const ExpertProfile = () => {
               </ErrorBoundary>
               
               <ErrorBoundary>
-                {expert.testimonials && expert.testimonials.length > 0 && (
-                  <ExpertTestimonials expert={expert} />
-                )}
+                <ExpertTestimonials expert={expert} />
               </ErrorBoundary>
             </div>
             

@@ -81,7 +81,14 @@ export const initialExperts: Expert[] = [
     projects: '280+',
     description: '빅데이터 기반 상권분석 전문가로 의료기관 특화 입지분석 모델을 개발했습니다. 대전/충남 지역 의료상권에 대한 깊은 이해를 갖고 있습니다.',
     regions: ['대전', '충남'],
-    services: ['입지 분석']
+    services: ['입지 분석'],
+    coverImage: 'https://images.unsplash.com/photo-1501250987900-211872d97eaa?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '의료기관 입지 성공률 90% 이상',
+      '빅데이터 기반 상권분석 시스템 개발',
+      '지역별 의료 수요 예측 모델 구축'
+    ],
+    testimonials: []
   },
   {
     id: 3,
@@ -93,7 +100,14 @@ export const initialExperts: Expert[] = [
     projects: '170+',
     description: '의료공간 특화 인테리어 디자이너로 환자 경험과 의료진 효율성을 모두 고려한 최적의 공간설계를 제안합니다. 다양한 진료과목별 맞춤 설계 경험이 풍부합니다.',
     regions: ['서울', '인천', '경기'],
-    services: ['설계 및 인테리어']
+    services: ['설계 및 인테리어'],
+    coverImage: 'https://images.unsplash.com/photo-1616587894686-c243d4247965?q=80&w=2069&auto=format&fit=crop',
+    keyAchievements: [
+      '환자 만족도 30% 향상',
+      '의료진 업무 효율성 20% 증가',
+      '최적 공간 설계 솔루션 개발'
+    ],
+    testimonials: []
   },
   {
     id: 4,
@@ -105,7 +119,14 @@ export const initialExperts: Expert[] = [
     projects: '250+',
     description: '복잡한 의료기관 인허가 절차를 신속하고 정확하게 처리합니다. 각종 규제와 법률 변화에 즉각 대응하여 개원 지연 리스크를 최소화합니다.',
     regions: ['부산', '경남'],
-    services: ['인허가 대행']
+    services: ['인허가 대행'],
+    coverImage: 'https://images.unsplash.com/photo-1628201537098-f05946692164?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '인허가 성공률 99% 달성',
+      '평균 인허가 기간 30% 단축',
+      '최신 법규 및 규정 완벽 준수'
+    ],
+    testimonials: []
   },
   {
     id: 5,
@@ -117,7 +138,14 @@ export const initialExperts: Expert[] = [
     projects: '210+',
     description: '의료기관별 최적의 인력 구조를 설계하고 적합한 인재를 매칭합니다. 장기적인 인력 안정성과 팀워크를 고려한 채용 솔루션을 제공합니다.',
     regions: ['서울', '인천', '경기'],
-    services: ['인력 채용']
+    services: ['인력 채용'],
+    coverImage: 'https://images.unsplash.com/photo-1580894724668-f2955195791e?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '이직률 15% 감소',
+      '채용 만족도 40% 향상',
+      '맞춤형 인재 매칭 시스템 구축'
+    ],
+    testimonials: []
   },
   {
     id: 6,
@@ -129,7 +157,14 @@ export const initialExperts: Expert[] = [
     projects: '190+',
     description: '의료기관 특화 디지털 마케팅 전략 수립 및 실행 전문가입니다. 지역 타겟팅과 진료과목별 특성을 고려한 효과적인 환자 유치 방안을 제시합니다.',
     regions: ['서울', '경기'],
-    services: ['마케팅 전략']
+    services: ['마케팅 전략'],
+    coverImage: 'https://images.unsplash.com/photo-1587613754453-50e1c8190c84?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '신규 환자 유치율 50% 증가',
+      '온라인 마케팅 ROI 3배 향상',
+      '지역 타겟 마케팅 성공 사례 다수'
+    ],
+    testimonials: []
   },
   {
     id: 7,
@@ -141,7 +176,14 @@ export const initialExperts: Expert[] = [
     projects: '230+',
     description: '의료기관별 최적의 의료장비 구성과 효율적인 도입 방안을 제시합니다. 비용 대비 성능을 고려한 장비 선정과 공간 효율적 배치 설계를 전문으로 합니다.',
     regions: ['대구', '경북'],
-    services: ['의료기기 구입 및 설치']
+    services: ['의료기기 구입 및 설치'],
+    coverImage: 'https://images.unsplash.com/photo-1629412587745-79c1929b324e?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '장비 도입 비용 20% 절감',
+      '공간 효율성 15% 향상',
+      '최신 의료 트렌드 반영'
+    ],
+    testimonials: []
   },
   {
     id: 8,
@@ -153,6 +195,13 @@ export const initialExperts: Expert[] = [
     projects: '160+',
     description: '의료기관의 효율적인 수납 시스템 구축 및 의료폐기물 관리 솔루션을 제공합니다. 비용 절감과 환경 규제 준수를 모두 고려한 최적의 방안을 제시합니다.',
     regions: ['광주', '전라'],
-    services: ['수납 및 의료폐기물 처리']
+    services: ['수납 및 의료폐기물 처리'],
+    coverImage: 'https://images.unsplash.com/photo-1607880539761-7e44c39f44cb?q=80&w=2070&auto=format&fit=crop',
+    keyAchievements: [
+      '폐기물 처리 비용 25% 절감',
+      '수납 효율성 30% 향상',
+      '환경 규제 준수율 100% 달성'
+    ],
+    testimonials: []
   }
 ];
