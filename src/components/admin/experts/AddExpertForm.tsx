@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -61,8 +60,6 @@ const AddExpertForm: React.FC<AddExpertFormProps> = ({ onCancel, onSubmit, exper
       experience: '',
       projects: '',
       description: '',
-      education: '',
-      achievements: '',
       contact: '',
       email: '',
       regions: [],

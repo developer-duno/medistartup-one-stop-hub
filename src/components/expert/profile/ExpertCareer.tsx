@@ -10,8 +10,7 @@ const ExpertCareer: React.FC<ExpertCareerProps> = ({ expert }) => {
   const defaultCareerTimeline = expert.careerTimeline || 
     [{ year: expert.experience, position: expert.role, company: '', description: expert.specialty }];
 
-  const defaultEducation = expert.educationHistory || 
-    (expert.education ? [{ degree: expert.education, institution: '', year: '' }] : []);
+  const defaultEducation = expert.educationHistory || [];
 
   return (
     <section>
@@ -50,9 +49,9 @@ const ExpertCareer: React.FC<ExpertCareerProps> = ({ expert }) => {
                   </span>
                 </div>
                 <h3 className="font-pretendard font-bold text-lg text-neutral-900 mb-1">
-                  {typeof education === 'object' ? education.degree : education}
+                  {education.degree}
                 </h3>
-                {typeof education === 'object' && education.institution && (
+                {education.institution && (
                   <p className="text-neutral-500">{education.institution}</p>
                 )}
               </div>

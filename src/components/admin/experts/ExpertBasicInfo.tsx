@@ -98,20 +98,6 @@ const ExpertBasicInfo: React.FC<ExpertBasicInfoProps> = ({ form }) => {
       
       <FormField
         control={form.control}
-        name="education"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>학력</FormLabel>
-            <FormControl>
-              <Input placeholder="OO대학교 OO학과 졸업" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      
-      <FormField
-        control={form.control}
         name="contact"
         render={({ field }) => (
           <FormItem>

@@ -30,25 +30,6 @@ const ExpertDescription: React.FC<ExpertDescriptionProps> = ({ form }) => {
           </FormItem>
         )}
       />
-      
-      <FormField
-        control={form.control}
-        name="achievements"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>주요 성과</FormLabel>
-            <FormControl>
-              <Textarea 
-                className="w-full p-2 border border-input rounded-md"
-                rows={3}
-                placeholder="주요 성과 및 실적을 입력하세요"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </>
   );
 };

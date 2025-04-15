@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -53,10 +52,8 @@ const ExpertApplicationModal: React.FC<ExpertApplicationModalProps> = ({ open, o
       experience: '',
       projects: '',
       description: '',
-      education: '',
       contact: '',
       email: '',
-      achievements: '',
       coverImage: '',
     }
   });
