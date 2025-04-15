@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -10,8 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useToast } from '@/components/ui/use-toast';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toast } from "sonner";
 
 const ExpertProfile = () => {
@@ -56,6 +55,7 @@ const ExpertProfile = () => {
   const handleSelectExpert = () => {
     if (expert) {
       selectExpert(expert.id);
+      toast.success(isExpertSelected ? "전문가 선택이 취소되었습니다." : "전문가가 선택되었습니다.");
     }
   };
 
