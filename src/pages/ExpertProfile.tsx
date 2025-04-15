@@ -6,6 +6,8 @@ import Footer from '../components/Footer';
 import ExpertHero from '@/components/expert/profile/ExpertHero';
 import ExpertOverview from '@/components/expert/profile/ExpertOverview';
 import ExpertCareer from '@/components/expert/profile/ExpertCareer';
+import ExpertSuccessCases from '@/components/expert/profile/ExpertSuccessCases';
+import ExpertTestimonials from '@/components/expert/profile/ExpertTestimonials';
 import ExpertSidebar from '@/components/expert/profile/ExpertSidebar';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
@@ -81,9 +83,15 @@ const ExpertProfile = () => {
       
       <main className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-12">
             <ExpertOverview expert={expert} />
             <ExpertCareer expert={expert} />
+            {expert.successCases && expert.successCases.length > 0 && (
+              <ExpertSuccessCases expert={expert} />
+            )}
+            {expert.testimonials && expert.testimonials.length > 0 && (
+              <ExpertTestimonials expert={expert} />
+            )}
           </div>
           
           <div>

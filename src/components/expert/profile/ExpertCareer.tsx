@@ -50,7 +50,7 @@ const ExpertCareer: React.FC<ExpertCareerProps> = ({ expert }) => {
                   </span>
                 </div>
                 <h3 className="font-pretendard font-bold text-lg text-neutral-900 mb-1">
-                  {education.degree || education}
+                  {education.degree}
                 </h3>
                 {education.institution && (
                   <p className="text-neutral-500">{education.institution}</p>
