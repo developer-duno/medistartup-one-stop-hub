@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Award, ArrowRight, Check } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
@@ -103,7 +102,6 @@ const ExpertsSection = () => {
                     >
                       <Link to={`/experts/${expert.id}`}>
                         프로필 보기
-                        <ArrowRight className="h-4 w-4 ml-1" />
                       </Link>
                     </CustomButton>
                     <CustomButton
