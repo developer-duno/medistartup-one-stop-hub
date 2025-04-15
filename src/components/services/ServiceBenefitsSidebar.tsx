@@ -18,24 +18,24 @@ const ServiceBenefitsSidebar: React.FC<ServiceBenefitsSidebarProps> = ({
   isMobile
 }) => {
   return (
-    <div className={`${isMobile ? 'mb-8 ' : ''}bg-neutral-50 rounded-xl shadow-sm border border-neutral-100 p-${isMobile ? '4' : '6'}`}>
+    <div className="bg-neutral-50 rounded-xl shadow-sm border border-neutral-100 p-4 md:p-6">
       <h3 className="font-pretendard font-bold text-xl text-neutral-900 mb-3">
         서비스 혜택
       </h3>
       
-      <div className={`${isMobile ? 'grid grid-cols-2 gap-x-2 gap-y-2 mb-4' : 'space-y-3 mb-6'}`}>
+      <div className="grid grid-cols-1 md:block gap-2 mb-4 md:space-y-3 md:mb-6">
         {benefits.map((benefit, index) => (
           <div 
             key={index} 
-            className={`flex items-start font-noto text-neutral-700 ${isMobile ? 'text-sm' : ''}`}
+            className="flex items-start font-noto text-sm md:text-base text-neutral-700"
           >
-            <ChevronRight className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-primary shrink-0 mt-0.5 mr-2`} />
-            <span className={isMobile ? "line-clamp-2" : ""}>{benefit}</span>
+            <ChevronRight className="h-4 w-4 md:h-5 md:w-5 text-primary shrink-0 mt-0.5 mr-2" />
+            <span className="md:line-clamp-none line-clamp-2">{benefit}</span>
           </div>
         ))}
       </div>
       
-      <div className={`${isMobile ? 'grid grid-cols-2 gap-2' : 'space-y-3'}`}>
+      <div className="grid grid-cols-2 md:grid-cols-1 gap-2 md:space-y-3">
         <CustomButton 
           variant="primary" 
           fullWidth 
