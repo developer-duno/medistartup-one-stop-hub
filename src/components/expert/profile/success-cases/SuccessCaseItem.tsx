@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
+import SuccessCaseResults from './SuccessCaseResults';
 
 interface SuccessCaseItemProps {
   title: string;
@@ -42,4 +43,3 @@ const SuccessCaseItem: React.FC<SuccessCaseItemProps> = ({
 };
 
 export default SuccessCaseItem;
-
