@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '@/components/ui/CustomButton';
@@ -38,24 +38,6 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
       </div>
       
       <div className="space-y-4 mb-6">
-        {expert.contact && (
-          <div className="flex items-center gap-3">
-            <div className="bg-primary-50 p-2 rounded-md">
-              <Phone className="h-5 w-5 text-primary" />
-            </div>
-            <span className="font-medium">{expert.contact}</span>
-          </div>
-        )}
-        
-        {expert.email && (
-          <div className="flex items-center gap-3">
-            <div className="bg-primary-50 p-2 rounded-md">
-              <Mail className="h-5 w-5 text-primary" />
-            </div>
-            <span className="font-medium">{expert.email}</span>
-          </div>
-        )}
-        
         {expert.regions && expert.regions.length > 0 && (
           <div className="flex items-start gap-3">
             <div className="bg-primary-50 p-2 rounded-md">
@@ -95,3 +77,4 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
 };
 
 export default ExpertSidebar;
+
