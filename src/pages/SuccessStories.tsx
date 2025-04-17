@@ -5,13 +5,36 @@ import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { Helmet } from 'react-helmet';
+import { getSEOData } from '@/utils/seoUtils';
 
 const SuccessStories = () => {
   const { getVisibleStories } = useSuccessStories();
   const visibleStories = getVisibleStories();
   
+  // SEO data for the page
+  const seoData = getSEOData('/success-stories', '성공 스토리');
+  
   return (
     <div className="theme-success min-h-screen bg-white">
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+        <link rel="canonical" href={seoData.canonicalUrl} />
+        
+        {/* Open Graph / Social Media Meta Tags */}
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:url" content={seoData.canonicalUrl} />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoData.title} />
+        <meta name="twitter:description" content={seoData.description} />
+      </Helmet>
+      
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">

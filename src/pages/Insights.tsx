@@ -15,6 +15,8 @@ import {
 } from '@/components/insights/insightUtils';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Helmet } from 'react-helmet';
+import { getSEOData } from '@/utils/seoUtils';
 
 const Insights = () => {
   const { id } = useParams();
@@ -25,6 +27,9 @@ const Insights = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [viewingInsight, setViewingInsight] = useState<typeof insights[0] | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
+  // SEO data for the page
+  const seoData = getSEOData('/insights', '뉴스 & 인사이트');
 
   // Handle direct URL access to an insight
   useEffect(() => {
@@ -56,6 +61,24 @@ const Insights = () => {
 
   return (
     <div className="theme-insights min-h-screen bg-white">
+      <Helmet>
+        <title>{seoData.title}</title>
+        <meta name="description" content={seoData.description} />
+        <meta name="keywords" content={seoData.keywords} />
+        <link rel="canonical" href={seoData.canonicalUrl} />
+        
+        {/* Open Graph / Social Media Meta Tags */}
+        <meta property="og:title" content={seoData.title} />
+        <meta property="og:description" content={seoData.description} />
+        <meta property="og:url" content={seoData.canonicalUrl} />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoData.title} />
+        <meta name="twitter:description" content={seoData.description} />
+      </Helmet>
+      
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">
