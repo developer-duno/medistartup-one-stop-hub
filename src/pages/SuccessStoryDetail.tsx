@@ -1,13 +1,11 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { Button } from '@/components/ui/button';
-import { Helmet } from 'react-helmet';
-import { getSuccessStorySEOData } from '@/utils/seoUtils';
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,17 +13,6 @@ const SuccessStoryDetail = () => {
   const navigate = useNavigate();
   
   const story = successStories.find(s => s.id === Number(id) && s.visible);
-  
-  // For SEO data
-  const seoData = story ? getSuccessStorySEOData(story) : null;
-  
-  // Update view count when the page loads
-  useEffect(() => {
-    if (story) {
-      // You could implement view tracking here
-      console.log(`Viewing success story: ${story.title}`);
-    }
-  }, [story]);
   
   if (!story) {
     return (
@@ -44,33 +31,6 @@ const SuccessStoryDetail = () => {
   
   return (
     <div className="theme-success min-h-screen bg-white">
-      {seoData && (
-        <Helmet>
-          <title>{seoData.title}</title>
-          <meta name="description" content={seoData.description} />
-          <meta name="keywords" content={seoData.keywords} />
-          <link rel="canonical" href={seoData.canonicalUrl} />
-          
-          {/* Open Graph / Social Media Meta Tags */}
-          <meta property="og:title" content={seoData.title} />
-          <meta property="og:description" content={seoData.description} />
-          <meta property="og:url" content={seoData.canonicalUrl} />
-          <meta property="og:type" content="article" />
-          <meta property="og:image" content={seoData.ogImage} />
-          
-          {/* Twitter Card Tags */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={seoData.title} />
-          <meta name="twitter:description" content={seoData.description} />
-          <meta name="twitter:image" content={seoData.ogImage} />
-          
-          {/* Article specific meta tags */}
-          <meta property="article:published_time" content={story.date} />
-          <meta property="article:section" content="Success Stories" />
-          <meta property="article:tag" content={story.services.join(', ')} />
-        </Helmet>
-      )}
-      
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">

@@ -15,8 +15,6 @@ import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
-import { Helmet } from 'react-helmet';
-import { getExpertSEOData } from '@/utils/seoUtils';
 
 const ExpertProfile = () => {
   const { id } = useParams();
@@ -26,9 +24,6 @@ const ExpertProfile = () => {
   const [expert, setExpert] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { selectedExperts, selectExpert } = useConsultation();
-  
-  // For SEO data
-  const seoData = expert ? getExpertSEOData(expert) : null;
   
   useEffect(() => {
     setIsLoading(true);
@@ -101,34 +96,6 @@ const ExpertProfile = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {seoData && (
-        <Helmet>
-          <title>{seoData.title}</title>
-          <meta name="description" content={seoData.description} />
-          <meta name="keywords" content={seoData.keywords} />
-          <link rel="canonical" href={seoData.canonicalUrl} />
-          
-          {/* Open Graph / Social Media Meta Tags */}
-          <meta property="og:title" content={seoData.title} />
-          <meta property="og:description" content={seoData.description} />
-          <meta property="og:url" content={seoData.canonicalUrl} />
-          <meta property="og:type" content="profile" />
-          <meta property="og:image" content={seoData.ogImage} />
-          
-          {/* Twitter Card Tags */}
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content={seoData.title} />
-          <meta name="twitter:description" content={seoData.description} />
-          <meta name="twitter:image" content={seoData.ogImage} />
-          
-          {/* Profile specific meta tags */}
-          <meta property="profile:first_name" content={expert.name.split(' ')[0]} />
-          <meta property="profile:last_name" content={expert.name.split(' ').slice(1).join(' ')} />
-          <meta property="profile:username" content={expert.name} />
-          <meta property="profile:gender" content="unspecified" />
-        </Helmet>
-      )}
-      
       <Navbar />
       <ErrorBoundary>
         <ExpertHero expert={expert} />
