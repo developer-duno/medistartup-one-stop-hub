@@ -1,12 +1,3 @@
-
-# Allow all crawlers
-User-agent: *
-Allow: /
-
-# Sitemap location (add when your sitemap is generated)
-Sitemap: https://medistartup.kr/sitemap.xml
-
-# Specific search engine directives
 User-agent: Googlebot
 Allow: /
 
@@ -17,4 +8,7 @@ User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
 Allow: /
