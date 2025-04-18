@@ -126,7 +126,7 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
 };
 
 // Custom hook for using the experts context
-export const useExperts = () => {
+export const useExperts = (): ExpertsContextType => {
   const context = useContext(ExpertsContext);
   
   if (context === undefined) {
