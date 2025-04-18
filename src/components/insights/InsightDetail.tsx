@@ -1,8 +1,9 @@
-
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
 import { InsightType } from '@/components/admin/insights/types';
+import { generateSeoData } from '@/utils/seoUtils';
 
 interface InsightDetailProps {
   insight: InsightType;
@@ -13,8 +14,17 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
   insight, 
   getCategoryDisplayName 
 }) => {
+  const seoData = generateSeoData({
+    title: insight.title,
+    description: insight.excerpt,
+    ogImage: insight.image,
+    type: 'article',
+    pathname: `/insights/${insight.id}`,
+  });
+
   return (
     <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+      <Helmet {...seoData} />
       <div className="p-2">
         <div className="aspect-video w-full relative overflow-hidden mb-6">
           <img 
