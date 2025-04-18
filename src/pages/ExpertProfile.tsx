@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { LoadingState } from '@/components/ui/loading-state';
@@ -16,7 +15,6 @@ import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
-import { generateSeoData } from '@/utils/seoUtils';
 
 const ExpertProfile = () => {
   const { id } = useParams();
@@ -93,17 +91,11 @@ const ExpertProfile = () => {
     );
   }
 
-  const seoData = generateSeoData({
-    title: `${expert.name} - ${expert.role}`,
-    description: expert.description || `${expert.name}님은 ${expert.specialty} 전문가로, ${expert.experience}의 경력을 보유하고 있습니다.`,
-    ogImage: expert.image || undefined,
-    type: 'article',
-    pathname: `/experts/${expert.id}`,
-  });
+  console.log("Rendering expert profile:", expert.name);
+  console.log("Expert has testimonials:", expert.testimonials ? expert.testimonials.length : "none");
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <Helmet {...seoData} />
       <Navbar />
       <ErrorBoundary>
         <ExpertHero expert={expert} />

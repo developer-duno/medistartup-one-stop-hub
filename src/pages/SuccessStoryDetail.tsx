@@ -1,13 +1,11 @@
 
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { Button } from '@/components/ui/button';
-import { generateSeoData } from '@/utils/seoUtils';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,13 +17,6 @@ const SuccessStoryDetail = () => {
   if (!story) {
     return (
       <div className="theme-success min-h-screen bg-white">
-        <Helmet 
-          {...generateSeoData({
-            title: '존재하지 않는 성공 사례',
-            description: '요청하신 성공 사례를 찾을 수 없습니다.',
-            pathname: '/success-stories',
-          })}
-        />
         <Navbar />
         <div className="container mx-auto px-4 py-24 text-center">
           <h1 className="font-pretendard font-bold text-2xl mb-6">존재하지 않는 성공 사례입니다</h1>
@@ -38,17 +29,8 @@ const SuccessStoryDetail = () => {
     );
   }
   
-  const seoData = generateSeoData({
-    title: story.title,
-    description: story.summary,
-    ogImage: story.imageUrl,
-    type: 'article',
-    pathname: `/success-stories/${story.id}`,
-  });
-  
   return (
     <div className="theme-success min-h-screen bg-white">
-      <Helmet {...seoData} />
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">
