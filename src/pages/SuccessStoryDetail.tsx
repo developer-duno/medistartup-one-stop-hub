@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -5,6 +6,8 @@ import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { Button } from '@/components/ui/button';
 import { generateSeoData } from '@/utils/seoUtils';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
