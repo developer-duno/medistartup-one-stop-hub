@@ -76,9 +76,9 @@ export const generateInsightSchema = (insight: InsightType, url: string) => {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: insight.title,
-    description: insight.excerpt || insight.summary,
-    image: insight.image || insight.imageUrl,
-    datePublished: insight.date || insight.publishedAt,
+    description: insight.excerpt || insight.content.substring(0, 160),
+    image: insight.image || 'https://medistartup.co.kr/og-image.jpg',
+    datePublished: insight.date,
     author: {
       '@type': 'Person',
       name: insight.author
@@ -93,6 +93,6 @@ export const generateInsightSchema = (insight: InsightType, url: string) => {
     },
     url: url,
     mainEntityOfPage: url,
-    keywords: insight.tags ? insight.tags.join(', ') : null
+    keywords: Array.isArray(insight.category) ? insight.category.join(', ') : insight.category
   };
 };
