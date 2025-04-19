@@ -1,11 +1,14 @@
 
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { Button } from '@/components/ui/button';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { generateSeoData } from '@/utils/seoUtils';
+import { generateSuccessStorySchema } from '@/utils/schemaUtils';
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +20,13 @@ const SuccessStoryDetail = () => {
   if (!story) {
     return (
       <div className="theme-success min-h-screen bg-white">
+        <Helmet
+          {...generateSeoData({
+            title: '존재하지 않는 성공 사례',
+            description: '요청하신 성공 사례를 찾을 수 없습니다.',
+            pathname: '/success-stories'
+          })}
+        />
         <Navbar />
         <div className="container mx-auto px-4 py-24 text-center">
           <h1 className="font-pretendard font-bold text-2xl mb-6">존재하지 않는 성공 사례입니다</h1>
@@ -29,8 +39,26 @@ const SuccessStoryDetail = () => {
     );
   }
   
+  const seoData = generateSeoData({
+    title: story.title,
+    description: story.summary,
+    ogImage: story.imageUrl,
+    type: 'article',
+    pathname: `/success-stories/${story.id}`
+  });
+
+  const schemaData = generateSuccessStorySchema(
+    story,
+    `https://medistartup.co.kr/success-stories/${story.id}`
+  );
+  
   return (
     <div className="theme-success min-h-screen bg-white">
+      <Helmet {...seoData}>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">
@@ -68,7 +96,7 @@ const SuccessStoryDetail = () => {
           <div className="aspect-video w-full rounded-lg overflow-hidden mb-8">
             <img 
               src={story.imageUrl} 
-              alt={story.title} 
+              alt={`${story.title} - ${story.hospital}`} 
               className="w-full h-full object-cover"
             />
           </div>

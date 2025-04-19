@@ -1,14 +1,24 @@
+
+User-agent: *
+Allow: /
+Allow: /services/
+Allow: /experts/
+Allow: /insights/
+Allow: /success-stories/
+Disallow: /admin/
+
+# Specific search engines
 User-agent: Googlebot
+Allow: /
+
+User-agent: Yeti
 Allow: /
 
 User-agent: Bingbot
 Allow: /
 
-User-agent: Twitterbot
+User-agent: Naverbot
 Allow: /
 
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: *
-Allow: /
+# Sitemap
+Sitemap: https://medistartup.co.kr/sitemap.xml

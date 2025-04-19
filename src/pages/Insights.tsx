@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ArrowLeft } from 'lucide-react';
 import { useInsights } from '@/contexts/InsightsContext';
 import { Dialog } from '@/components/ui/dialog';
@@ -15,6 +16,8 @@ import {
 } from '@/components/insights/insightUtils';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { generateSeoData } from '@/utils/seoUtils';
+import { generateInsightSchema } from '@/utils/schemaUtils';
 
 const Insights = () => {
   const { id } = useParams();
@@ -54,8 +57,43 @@ const Insights = () => {
     navigate(`/insights/${insight.id}`, { replace: true });
   };
 
+  // Generate SEO data
+  const pageTitle = activeTab === 'all' 
+    ? '뉴스 & 인사이트' 
+    : activeTab === 'news' 
+      ? '의료법 개정 소식' 
+      : '트렌드 리포트';
+  
+  const pageDescription = activeTab === 'all'
+    ? '병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.'
+    : activeTab === 'news'
+      ? '병원 창업과 운영에 영향을 주는 최신 의료법 개정 소식을 확인하세요.'
+      : '병원 창업과 운영을 위한 최신 의료 트렌드 정보를 확인하세요.';
+  
+  const seoData = generateSeoData({
+    title: pageTitle,
+    description: pageDescription,
+    pathname: `/insights${id ? `/${id}` : ''}`,
+    keywords: ['의료법', '병원창업', '의료트렌드', '개원소식', ...allTags.slice(0, 5)]
+  });
+  
+  // Generate schema for current insight if viewing one
+  const schemaData = viewingInsight 
+    ? generateInsightSchema(
+        viewingInsight, 
+        `https://medistartup.co.kr/insights/${viewingInsight.id}`
+      )
+    : null;
+
   return (
     <div className="theme-insights min-h-screen bg-white">
+      <Helmet {...seoData}>
+        {schemaData && (
+          <script type="application/ld+json">
+            {JSON.stringify(schemaData)}
+          </script>
+        )}
+      </Helmet>
       <Navbar />
       
       <div className="pt-28 pb-16 theme-page-header">

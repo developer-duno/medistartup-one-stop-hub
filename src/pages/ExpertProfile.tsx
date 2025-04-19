@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { LoadingState } from '@/components/ui/loading-state';
@@ -15,6 +16,8 @@ import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
+import { generateSeoData } from '@/utils/seoUtils';
+import { generateExpertSchema } from '@/utils/schemaUtils';
 
 const ExpertProfile = () => {
   const { id } = useParams();
@@ -69,6 +72,13 @@ const ExpertProfile = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-neutral-50">
+        <Helmet
+          {...generateSeoData({
+            title: '전문가 프로필 로딩 중',
+            description: '전문가 정보를 불러오는 중입니다.',
+            pathname: '/experts'
+          })}
+        />
         <Navbar />
         <LoadingState className="h-[60vh]" />
         <Footer />
@@ -79,6 +89,13 @@ const ExpertProfile = () => {
   if (!expert) {
     return (
       <div className="min-h-screen bg-neutral-50">
+        <Helmet
+          {...generateSeoData({
+            title: '전문가를 찾을 수 없습니다',
+            description: '요청하신 전문가 정보를 찾을 수 없습니다.',
+            pathname: '/experts'
+          })}
+        />
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center">
@@ -91,11 +108,29 @@ const ExpertProfile = () => {
     );
   }
 
+  const seoData = generateSeoData({
+    title: `${expert.name} - ${expert.role}`,
+    description: expert.description?.substring(0, 160) || `${expert.name}님은 ${expert.specialty} 전문가로, ${expert.experience}의 경력을 보유하고 있습니다.`,
+    ogImage: expert.image || undefined,
+    type: 'article',
+    pathname: `/experts/${expert.id}`
+  });
+
+  const schemaData = generateExpertSchema(
+    expert,
+    `https://medistartup.co.kr/experts/${expert.id}`
+  );
+
   console.log("Rendering expert profile:", expert.name);
   console.log("Expert has testimonials:", expert.testimonials ? expert.testimonials.length : "none");
 
   return (
     <div className="min-h-screen bg-neutral-50">
+      <Helmet {...seoData}>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
       <Navbar />
       <ErrorBoundary>
         <ExpertHero expert={expert} />

@@ -3,6 +3,9 @@ import React from 'react';
 import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
 import { InsightType } from '@/components/admin/insights/types';
+import { Helmet } from 'react-helmet-async';
+import { generateSeoData } from '@/utils/seoUtils';
+import { generateInsightSchema } from '@/utils/schemaUtils';
 
 interface InsightDetailProps {
   insight: InsightType;
@@ -13,8 +16,26 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
   insight, 
   getCategoryDisplayName 
 }) => {
+  const seoData = generateSeoData({
+    title: insight.title,
+    description: insight.excerpt || insight.content.substring(0, 160),
+    ogImage: insight.image || undefined,
+    type: 'article',
+    pathname: `/insights/${insight.id}`
+  });
+
+  const schemaData = generateInsightSchema(
+    insight,
+    `https://medistartup.co.kr/insights/${insight.id}`
+  );
+
   return (
     <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+      <Helmet {...seoData}>
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
       <div className="p-2">
         <div className="aspect-video w-full relative overflow-hidden mb-6">
           <img 
