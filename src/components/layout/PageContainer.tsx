@@ -9,7 +9,9 @@ type PageContainerProps = {
 const PageContainer: React.FC<PageContainerProps> = ({ children, className = '' }) => {
   return (
     <div className={`min-h-screen bg-white ${className}`}>
-      {children}
+      <div id="page-container-root">
+        {children}
+      </div>
     </div>
   );
 };
