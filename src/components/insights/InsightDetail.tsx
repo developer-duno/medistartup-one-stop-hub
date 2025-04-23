@@ -4,8 +4,8 @@ import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
 import { InsightType } from '@/components/admin/insights/types';
 import { Helmet } from 'react-helmet-async';
-import { generateSeoData } from '@/utils/seoUtils';
-import { generateInsightSchema } from '@/utils/schemaUtils';
+import { generateSeoData } from '@/utils/seo/metaUtils';
+import { generateInsightSchema } from '@/utils/schema/insightSchema';
 
 interface InsightDetailProps {
   insight: InsightType;
@@ -36,6 +36,7 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
           {JSON.stringify(schemaData)}
         </script>
       </Helmet>
+      
       <div className="p-2">
         <div className="aspect-video w-full relative overflow-hidden mb-6">
           <img 
@@ -47,7 +48,9 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
             }}
           />
         </div>
+        
         <h2 className="font-pretendard font-bold text-2xl mb-4">{insight.title}</h2>
+        
         <div className="flex items-center text-sm text-neutral-500 mb-6">
           <Calendar className="h-4 w-4 mr-1" />
           <span>{insight.date}</span>
@@ -58,6 +61,7 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
           <span className="mx-2">•</span>
           <span>조회수 {insight.views}</span>
         </div>
+        
         <div className="font-noto text-neutral-700 leading-relaxed whitespace-pre-line">
           {insight.content}
         </div>
