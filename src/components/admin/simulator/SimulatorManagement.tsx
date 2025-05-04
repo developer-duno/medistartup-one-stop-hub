@@ -39,7 +39,7 @@ const SimulatorManagement: React.FC = () => {
       toast({
         title: "시뮬레이터 데이터 없음",
         description: "등록된 시뮬레이터가 없습니다. 새 시뮬레이터를 추가하세요.",
-        variant: "warning",
+        variant: "destructive", // Changed from "warning" to "destructive"
       });
     }
   }, [simulators, toast]);
