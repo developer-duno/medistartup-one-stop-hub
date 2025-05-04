@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Simulator, UsageData } from '../types';
 
@@ -25,7 +24,7 @@ const mockSimulators: Simulator[] = [
     title: '인력 구성 시뮬레이터',
     description: '병원 규모별 최적 인력 구성 시뮬레이션',
     type: 'staffing',
-    active: false,
+    active: true,
     views: 560
   }
 ];
@@ -43,22 +42,45 @@ const generateUsageData = (simulators: Simulator[]): UsageData[] => {
 };
 
 export const useSimulators = () => {
-  const [simulators, setSimulators] = useState<Simulator[]>([]);
+  const [simulators, setSimulators] = useState<Simulator[]>(mockSimulators);
   const [usageData, setUsageData] = useState<UsageData[]>([]);
 
   // Load simulators from localStorage or use mock data
   useEffect(() => {
-    const storedSimulators = localStorage.getItem('simulators');
-    if (storedSimulators) {
-      try {
-        setSimulators(JSON.parse(storedSimulators));
-      } catch (error) {
-        console.error('Error parsing stored simulators:', error);
+    try {
+      const storedSimulators = localStorage.getItem('simulators');
+      if (storedSimulators) {
+        const parsedData = JSON.parse(storedSimulators);
+        
+        // Check if the parsed data is valid and has at least one simulator
+        if (Array.isArray(parsedData) && parsedData.length > 0) {
+          // Ensure at least one simulator is active
+          const hasActiveSimulator = parsedData.some(sim => sim.active);
+          
+          if (hasActiveSimulator) {
+            setSimulators(parsedData);
+          } else {
+            // If no active simulators, ensure at least the first one is active
+            const updatedData = [...parsedData];
+            updatedData[0] = {...updatedData[0], active: true};
+            setSimulators(updatedData);
+            localStorage.setItem('simulators', JSON.stringify(updatedData));
+          }
+        } else {
+          // Invalid or empty data, use mock data
+          console.log('저장된 시뮬레이터 데이터가 없거나 잘못되었습니다. 기본 데이터를 사용합니다.');
+          setSimulators(mockSimulators);
+          localStorage.setItem('simulators', JSON.stringify(mockSimulators));
+        }
+      } else {
+        // No stored data, use mock data
+        console.log('저장된 시뮬레이터 데이터가 없습니다. 기본 데이터를 사용합니다.');
         setSimulators(mockSimulators);
         localStorage.setItem('simulators', JSON.stringify(mockSimulators));
       }
-    } else {
-      setSimulators(mockSimulators);
+    } catch (error) {
+      console.error('시뮬레이터 데이터 로딩 중 오류:', error);
+      setSimulators(mockSimulators); // Fallback to mock data on error
       localStorage.setItem('simulators', JSON.stringify(mockSimulators));
     }
   }, []);
@@ -70,7 +92,12 @@ export const useSimulators = () => {
 
   // Save simulators to localStorage when they change
   useEffect(() => {
-    localStorage.setItem('simulators', JSON.stringify(simulators));
+    if (simulators.length > 0) {
+      localStorage.setItem('simulators', JSON.stringify(simulators));
+      
+      // Dispatch a custom event to notify other components about the change
+      window.dispatchEvent(new CustomEvent('simulatorUpdate'));
+    }
   }, [simulators]);
 
   const updateSimulator = (updatedSimulator: Simulator) => {
@@ -85,13 +112,35 @@ export const useSimulators = () => {
   };
 
   const deleteSimulator = (id: number) => {
-    setSimulators(simulators.filter(s => s.id !== id));
+    const remainingSimulators = simulators.filter(s => s.id !== id);
+    // Ensure we always have at least one simulator
+    if (remainingSimulators.length === 0) {
+      setSimulators(mockSimulators);
+    } else {
+      // Ensure at least one simulator is active
+      const hasActiveSimulator = remainingSimulators.some(sim => sim.active);
+      if (!hasActiveSimulator && remainingSimulators.length > 0) {
+        remainingSimulators[0].active = true;
+      }
+      setSimulators(remainingSimulators);
+    }
   };
 
   const toggleSimulatorActive = (id: number) => {
     const updatedSimulators = simulators.map(s => 
       s.id === id ? {...s, active: !s.active} : s
     );
+    
+    // Ensure at least one simulator is active
+    const hasActiveSimulator = updatedSimulators.some(sim => sim.active);
+    if (!hasActiveSimulator) {
+      // If trying to deactivate the last active simulator, keep it active
+      const original = simulators.find(s => s.id === id);
+      if (original && original.active) {
+        return original.active; // Return previous state without changing
+      }
+    }
+    
     setSimulators(updatedSimulators);
     return !simulators.find(s => s.id === id)?.active;
   };

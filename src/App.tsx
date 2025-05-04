@@ -11,6 +11,7 @@ import { RegionsProvider } from './contexts/RegionsContext';
 import { InsightsProvider } from './contexts/InsightsContext';
 import { SuccessStoriesProvider } from './contexts/SuccessStoriesContext';
 import { ConsultationProvider } from './contexts/ConsultationContext';
+import { SimulatorsProvider } from './contexts/SimulatorsContext';
 
 // Pages
 import Index from './pages/Index';
@@ -89,7 +90,9 @@ const AppProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => 
           <InsightsProvider>
             <SuccessStoriesProvider>
               <ConsultationProvider>
-                {children}
+                <SimulatorsProvider>
+                  {children}
+                </SimulatorsProvider>
               </ConsultationProvider>
             </SuccessStoriesProvider>
           </InsightsProvider>
