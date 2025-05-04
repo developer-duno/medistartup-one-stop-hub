@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
-import SimulatorInputs from './SimulatorInputs';
+import SimulatorInputs from './SimulatorInputs'; // Fixed import path
 import SimulatorResults from './SimulatorResults';
 import SimulatorCardHeader from './components/SimulatorCardHeader';
 import SimulatorCardFooter from './components/SimulatorCardFooter';
-import { FinancialInputs, RevenueInputs, StaffingInputs } from './types/simulatorTypes';
+import { useSimulatorInputs } from './hooks/useSimulatorInputs';
 
 export interface SimulatorCardProps {
   id: number;
@@ -30,24 +30,15 @@ const SimulatorCard: React.FC<SimulatorCardProps> = ({
   const [result, setResult] = useState<FinancialResult | RevenueResult | StaffingResult | null>(null);
   const { toast } = useToast();
   
-  // 초기 상태값 설정
-  const [financialInputs, setFinancialInputs] = useState<FinancialInputs>({
-    specialty: '내과',
-    size: [50],
-    location: '중형상가',
-  });
-  
-  const [revenueInputs, setRevenueInputs] = useState<RevenueInputs>({
-    specialty: '피부과',
-    patients: [30],
-    region: '서울/경기',
-  });
-  
-  const [staffingInputs, setStaffingInputs] = useState<StaffingInputs>({
-    specialty: '치과',
-    size: [100],
-    services: ['일반진료', '미용'],
-  });
+  // Using custom hook for input states
+  const {
+    financialInputs,
+    setFinancialInputs,
+    revenueInputs,
+    setRevenueInputs,
+    staffingInputs,
+    setStaffingInputs
+  } = useSimulatorInputs();
 
   const handleSimulate = () => {
     let simulationData;

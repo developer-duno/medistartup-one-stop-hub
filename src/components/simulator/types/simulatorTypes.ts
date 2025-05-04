@@ -1,6 +1,7 @@
 
 import { FinancialResult, RevenueResult, StaffingResult } from '../../admin/simulator/types';
 
+// Input types
 export interface FinancialInputs {
   specialty: string;
   size: number[];
@@ -19,8 +20,15 @@ export interface StaffingInputs {
   services: string[];
 }
 
+// Common result type for all simulators
+export type SimulatorResult = FinancialResult | RevenueResult | StaffingResult;
+
+// Simulator type identifier
+export type SimulatorType = 'financial' | 'revenue' | 'staffing';
+
+// Props interfaces
 export interface SimulatorInputsProps {
-  simulatorType: 'financial' | 'revenue' | 'staffing';
+  simulatorType: SimulatorType;
   financialInputs: FinancialInputs;
   setFinancialInputs: React.Dispatch<React.SetStateAction<FinancialInputs>>;
   revenueInputs: RevenueInputs;
@@ -30,6 +38,12 @@ export interface SimulatorInputsProps {
 }
 
 export interface SimulatorResultsProps {
-  simulatorType: 'financial' | 'revenue' | 'staffing';
-  result: FinancialResult | RevenueResult | StaffingResult;
+  simulatorType: SimulatorType;
+  result: SimulatorResult;
+}
+
+export interface SimulatorCardFooterProps {
+  result: SimulatorResult | null;
+  handleSimulate: () => void;
+  setResult: React.Dispatch<React.SetStateAction<SimulatorResult | null>>;
 }

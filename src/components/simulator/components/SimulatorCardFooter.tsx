@@ -3,13 +3,7 @@ import React from 'react';
 import { CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
-import { FinancialResult, RevenueResult, StaffingResult } from '../../admin/simulator/types';
-
-interface SimulatorCardFooterProps {
-  result: FinancialResult | RevenueResult | StaffingResult | null;
-  handleSimulate: () => void;
-  setResult: React.Dispatch<React.SetStateAction<FinancialResult | RevenueResult | StaffingResult | null>>;
-}
+import { SimulatorCardFooterProps } from '../types/simulatorTypes';
 
 const SimulatorCardFooter: React.FC<SimulatorCardFooterProps> = ({
   result,
