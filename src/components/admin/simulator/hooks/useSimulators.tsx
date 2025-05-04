@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Simulator, UsageData } from '../types';
 
@@ -93,56 +94,91 @@ export const useSimulators = () => {
   // Save simulators to localStorage when they change
   useEffect(() => {
     if (simulators.length > 0) {
-      localStorage.setItem('simulators', JSON.stringify(simulators));
-      
-      // Dispatch a custom event to notify other components about the change
-      window.dispatchEvent(new CustomEvent('simulatorUpdate'));
+      try {
+        localStorage.setItem('simulators', JSON.stringify(simulators));
+        
+        // Dispatch a custom event to notify other components about the change
+        window.dispatchEvent(new CustomEvent('simulatorUpdate'));
+      } catch (error) {
+        console.error('시뮬레이터 데이터 저장 중 오류:', error);
+      }
     }
   }, [simulators]);
 
   const updateSimulator = (updatedSimulator: Simulator) => {
-    const updatedSimulators = simulators.map(s => 
-      s.id === updatedSimulator.id ? updatedSimulator : s
-    );
-    setSimulators(updatedSimulators);
+    try {
+      const updatedSimulators = simulators.map(s => 
+        s.id === updatedSimulator.id ? updatedSimulator : s
+      );
+      setSimulators(updatedSimulators);
+      return true;
+    } catch (error) {
+      console.error('시뮬레이터 업데이트 중 오류:', error);
+      return false;
+    }
   };
 
   const addSimulator = (newSimulator: Simulator) => {
-    setSimulators([...simulators, newSimulator]);
+    try {
+      // 새 시뮬레이터에 고유 ID 부여 (기존 ID 중 최대값 + 1)
+      const maxId = Math.max(0, ...simulators.map(s => s.id));
+      const simulatorWithId = {
+        ...newSimulator,
+        id: newSimulator.id || maxId + 1
+      };
+      
+      setSimulators([...simulators, simulatorWithId]);
+      return true;
+    } catch (error) {
+      console.error('시뮬레이터 추가 중 오류:', error);
+      return false;
+    }
   };
 
   const deleteSimulator = (id: number) => {
-    const remainingSimulators = simulators.filter(s => s.id !== id);
-    // Ensure we always have at least one simulator
-    if (remainingSimulators.length === 0) {
-      setSimulators(mockSimulators);
-    } else {
-      // Ensure at least one simulator is active
-      const hasActiveSimulator = remainingSimulators.some(sim => sim.active);
-      if (!hasActiveSimulator && remainingSimulators.length > 0) {
-        remainingSimulators[0].active = true;
+    try {
+      const remainingSimulators = simulators.filter(s => s.id !== id);
+      // Ensure we always have at least one simulator
+      if (remainingSimulators.length === 0) {
+        setSimulators(mockSimulators);
+      } else {
+        // Ensure at least one simulator is active
+        const hasActiveSimulator = remainingSimulators.some(sim => sim.active);
+        if (!hasActiveSimulator && remainingSimulators.length > 0) {
+          remainingSimulators[0].active = true;
+        }
+        setSimulators(remainingSimulators);
       }
-      setSimulators(remainingSimulators);
+      return true;
+    } catch (error) {
+      console.error('시뮬레이터 삭제 중 오류:', error);
+      return false;
     }
   };
 
   const toggleSimulatorActive = (id: number) => {
-    const updatedSimulators = simulators.map(s => 
-      s.id === id ? {...s, active: !s.active} : s
-    );
-    
-    // Ensure at least one simulator is active
-    const hasActiveSimulator = updatedSimulators.some(sim => sim.active);
-    if (!hasActiveSimulator) {
-      // If trying to deactivate the last active simulator, keep it active
-      const original = simulators.find(s => s.id === id);
-      if (original && original.active) {
-        return original.active; // Return previous state without changing
+    try {
+      const simulator = simulators.find(s => s.id === id);
+      if (!simulator) return false;
+      
+      // 마지막 활성 시뮬레이터를 비활성화하려는 경우
+      const isLastActive = simulator.active && 
+        simulators.filter(s => s.active).length === 1;
+      
+      if (isLastActive) {
+        return true; // 상태 변경 없이 현재 상태(활성) 반환
       }
+      
+      const updatedSimulators = simulators.map(s => 
+        s.id === id ? {...s, active: !s.active} : s
+      );
+      
+      setSimulators(updatedSimulators);
+      return !simulator.active; // 토글 후 새로운 활성 상태 반환
+    } catch (error) {
+      console.error('시뮬레이터 상태 변경 중 오류:', error);
+      return false;
     }
-    
-    setSimulators(updatedSimulators);
-    return !simulators.find(s => s.id === id)?.active;
   };
 
   return {

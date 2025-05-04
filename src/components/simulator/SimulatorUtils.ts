@@ -161,11 +161,16 @@ export const trackSimulatorUsage = (simulatorId: number): void => {
         }
         return sim;
       });
+      
+      // 조회수 업데이트 저장
       localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
+      
       // Dispatch a custom event to notify other components about the change
       window.dispatchEvent(new CustomEvent('simulatorUpdate', { 
         detail: { action: 'viewIncrement', simulatorId } 
       }));
+      
+      console.log(`시뮬레이터 ID:${simulatorId}의 조회수가 증가되었습니다.`);
     } catch (error) {
       console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
     }

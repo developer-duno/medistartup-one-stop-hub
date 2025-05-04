@@ -101,11 +101,15 @@ const SimulatorSection = () => {
     loadSimulators();
     
     // Custom event listener for simulator updates
-    const handleSimulatorUpdate = () => loadSimulators();
+    const handleSimulatorUpdate = () => {
+      console.log('시뮬레이터 업데이트 이벤트 감지됨');
+      loadSimulators();
+    };
     
     // Listen for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'simulators') {
+        console.log('시뮬레이터 스토리지 변경 감지됨');
         loadSimulators();
       }
     };

@@ -80,17 +80,20 @@ const SimulatorManagement: React.FC = () => {
     
     if (editingSimulator.id && simulators.some(s => s.id === editingSimulator.id)) {
       updateSimulator(editingSimulator);
+      toast({
+        title: "시뮬레이터 업데이트됨",
+        description: "시뮬레이터가 성공적으로 업데이트되었습니다.",
+      });
     } else {
       addSimulator(editingSimulator);
+      toast({
+        title: "시뮬레이터 추가됨",
+        description: "새로운 시뮬레이터가 성공적으로 추가되었습니다.",
+      });
     }
     
     setEditingSimulator(null);
     setActiveTab('list');
-    
-    toast({
-      title: "시뮬레이터 저장됨",
-      description: "시뮬레이터가 성공적으로 저장되었습니다.",
-    });
     
     // 저장 후 시뮬레이터 업데이트 이벤트 발생
     window.dispatchEvent(new CustomEvent('simulatorUpdate'));
