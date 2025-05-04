@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Sparkles } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
-import SimulatorInputs from './SimulatorInputs';
-import SimulatorResults from './SimulatorResults';
 import { FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
+import SimulatorInputs from './components/SimulatorInputs';
+import SimulatorResults from './components/SimulatorResults';
+import SimulatorCardHeader from './components/SimulatorCardHeader';
+import SimulatorCardFooter from './components/SimulatorCardFooter';
 
 export interface SimulatorCardProps {
   id: number;
@@ -86,28 +88,13 @@ const SimulatorCard: React.FC<SimulatorCardProps> = ({
 
   return (
     <Card className={`transition-all duration-300 ${isExpanded ? 'border-primary shadow-md' : 'hover:border-primary/50'}`}>
-      <CardHeader className="pb-3">
-        <div className="flex justify-between items-start">
-          <div className="flex gap-3 items-center">
-            <div className="bg-primary/10 p-2.5 rounded-full">
-              {icon}
-            </div>
-            <div>
-              <CardTitle className="text-lg">{title}</CardTitle>
-              <CardDescription>{description}</CardDescription>
-            </div>
-          </div>
-          <Button 
-            variant={isExpanded ? "outline" : "ghost"} 
-            size="sm" 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="mt-1"
-          >
-            {isExpanded ? '접기' : '시작하기'} 
-            <ChevronRight className={`h-4 w-4 ml-1 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-          </Button>
-        </div>
-      </CardHeader>
+      <SimulatorCardHeader 
+        icon={icon}
+        title={title}
+        description={description}
+        isExpanded={isExpanded}
+        setIsExpanded={setIsExpanded}
+      />
       
       {isExpanded && (
         <>
@@ -132,18 +119,11 @@ const SimulatorCard: React.FC<SimulatorCardProps> = ({
             )}
           </CardContent>
           
-          <CardFooter className="flex justify-between border-t pt-4 mt-4">
-            {!result ? (
-              <Button onClick={handleSimulate} className="w-full">
-                <Sparkles className="h-4 w-4 mr-2" />
-                시뮬레이션 실행
-              </Button>
-            ) : (
-              <Button variant="outline" onClick={() => setResult(null)} className="w-full">
-                다시 시뮬레이션하기
-              </Button>
-            )}
-          </CardFooter>
+          <SimulatorCardFooter
+            result={result}
+            handleSimulate={handleSimulate}
+            setResult={setResult}
+          />
         </>
       )}
     </Card>
