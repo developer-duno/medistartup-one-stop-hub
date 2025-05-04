@@ -1,19 +1,11 @@
-
 import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { MEDICAL_SPECIALTIES, SERVICE_TYPES } from '../../../admin/simulator/types';
+import { StaffingInputs } from '../../types/simulatorTypes';
 
 interface StaffingInputFormProps {
-  staffingInputs: {
-    specialty: string;
-    size: number[];
-    services: string[];
-  };
-  setStaffingInputs: React.Dispatch<React.SetStateAction<{
-    specialty: string;
-    size: number[];
-    services: string[];
-  }>>;
+  staffingInputs: StaffingInputs;
+  setStaffingInputs: React.Dispatch<React.SetStateAction<StaffingInputs>>;
 }
 
 const StaffingInputForm: React.FC<StaffingInputFormProps> = ({ 

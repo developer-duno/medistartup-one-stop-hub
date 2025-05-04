@@ -1,14 +1,12 @@
-
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
-import SimulatorInputs from './components/SimulatorInputs';
-import SimulatorResults from './components/SimulatorResults';
+import SimulatorInputs from './SimulatorInputs';
+import SimulatorResults from './SimulatorResults';
 import SimulatorCardHeader from './components/SimulatorCardHeader';
 import SimulatorCardFooter from './components/SimulatorCardFooter';
+import { FinancialInputs, RevenueInputs, StaffingInputs } from './types/simulatorTypes';
 
 export interface SimulatorCardProps {
   id: number;
@@ -31,22 +29,22 @@ const SimulatorCard: React.FC<SimulatorCardProps> = ({
   const [result, setResult] = useState<FinancialResult | RevenueResult | StaffingResult | null>(null);
   const { toast } = useToast();
   
-  // Form state based on simulator type
-  const [financialInputs, setFinancialInputs] = useState({
+  // 초기 상태값 설정
+  const [financialInputs, setFinancialInputs] = useState<FinancialInputs>({
     specialty: '내과',
-    size: [50], // square meters
+    size: [50],
     location: '중형상가',
   });
   
-  const [revenueInputs, setRevenueInputs] = useState({
+  const [revenueInputs, setRevenueInputs] = useState<RevenueInputs>({
     specialty: '피부과',
-    patients: [30], // daily patients
+    patients: [30],
     region: '서울/경기',
   });
   
-  const [staffingInputs, setStaffingInputs] = useState({
+  const [staffingInputs, setStaffingInputs] = useState<StaffingInputs>({
     specialty: '치과',
-    size: [100], // square meters
+    size: [100],
     services: ['일반진료', '미용'],
   });
 

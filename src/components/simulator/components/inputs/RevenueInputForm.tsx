@@ -1,19 +1,11 @@
-
 import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { MEDICAL_SPECIALTIES, STANDARDIZED_REGIONS } from '../../../admin/simulator/types';
+import { RevenueInputs } from '../../types/simulatorTypes';
 
 interface RevenueInputFormProps {
-  revenueInputs: {
-    specialty: string;
-    patients: number[];
-    region: string;
-  };
-  setRevenueInputs: React.Dispatch<React.SetStateAction<{
-    specialty: string;
-    patients: number[];
-    region: string;
-  }>>;
+  revenueInputs: RevenueInputs;
+  setRevenueInputs: React.Dispatch<React.SetStateAction<RevenueInputs>>;
 }
 
 const RevenueInputForm: React.FC<RevenueInputFormProps> = ({ 

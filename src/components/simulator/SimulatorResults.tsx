@@ -1,14 +1,10 @@
 
 import React from 'react';
+import { SimulatorResultsProps } from './types/simulatorTypes';
 import { FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
 import FinancialResultView from './components/results/FinancialResultView';
 import RevenueResultView from './components/results/RevenueResultView';
 import StaffingResultView from './components/results/StaffingResultView';
-
-interface SimulatorResultsProps {
-  simulatorType: 'financial' | 'revenue' | 'staffing';
-  result: FinancialResult | RevenueResult | StaffingResult;
-}
 
 const SimulatorResults: React.FC<SimulatorResultsProps> = ({
   simulatorType,

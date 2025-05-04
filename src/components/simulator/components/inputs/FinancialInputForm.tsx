@@ -1,19 +1,11 @@
-
 import React from 'react';
 import { Slider } from '@/components/ui/slider';
 import { MEDICAL_SPECIALTIES, LOCATION_TYPES } from '../../../admin/simulator/types';
+import { FinancialInputs } from '../../types/simulatorTypes';
 
 interface FinancialInputFormProps {
-  financialInputs: {
-    specialty: string;
-    size: number[];
-    location: string;
-  };
-  setFinancialInputs: React.Dispatch<React.SetStateAction<{
-    specialty: string;
-    size: number[];
-    location: string;
-  }>>;
+  financialInputs: FinancialInputs;
+  setFinancialInputs: React.Dispatch<React.SetStateAction<FinancialInputs>>;
 }
 
 const FinancialInputForm: React.FC<FinancialInputFormProps> = ({ 
