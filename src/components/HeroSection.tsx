@@ -7,16 +7,21 @@ import HeroHeading from './hero/HeroHeading';
 import RegionSelector from './hero/RegionSelector';
 import StatsDisplay from './hero/StatsDisplay';
 import HeroVideo from './hero/HeroVideo';
+import { useRegionSelection } from '../domains/region/useRegionSelection';
 
+// Domain-driven layout component
 const HeroSection = () => {
-  const [selectedRegion, setSelectedRegion] = useState('대전/충남');
+  // Application state
   const [hospitalImage, setHospitalImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const regions = ['대전/충남', '서울/경기', '부산/경남', '대구/경북', '광주/전라', '강원', '제주'];
+  
+  // Use domain hook for region selection functionality
+  const { selectedRegion, setSelectedRegion, regions } = useRegionSelection();
   
   // Sample consultation video URL - replace with your actual hospital consulting video
   const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
 
+  // Side effect for hospital image generation
   useEffect(() => {
     const generateHospitalImage = async () => {
       try {
@@ -37,15 +42,13 @@ const HeroSection = () => {
     generateHospitalImage();
   }, []);
 
+  // Domain action - handle feasibility analysis request
   const handleFeasibilityAnalysis = () => {
     // Scroll to simulator section
     const simulatorSection = document.getElementById('simulators');
     if (simulatorSection) {
       simulatorSection.scrollIntoView({ behavior: 'smooth' });
     }
-    
-    // Store the selected region in sessionStorage for the simulator to use
-    sessionStorage.setItem('selectedRegion', selectedRegion);
   };
 
   return (
