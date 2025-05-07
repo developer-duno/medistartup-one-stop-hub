@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { MapPin } from 'lucide-react';
-import CustomButton from './ui/CustomButton';
 import { RunwareService } from '../services/RunwareService';
 import { toast } from 'sonner';
 import HeroHeading from './hero/HeroHeading';
@@ -39,11 +38,6 @@ const HeroSection = () => {
   }, []);
 
   const handleFeasibilityAnalysis = () => {
-    if (!selectedRegion) {
-      toast.error('지역을 선택해 주세요');
-      return;
-    }
-
     // Scroll to simulator section
     const simulatorSection = document.getElementById('simulators');
     if (simulatorSection) {
@@ -69,24 +63,13 @@ const HeroSection = () => {
           <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
             <HeroHeading />
             
-            <div className="relative inline-block">
-              <div className="flex">
-                <RegionSelector 
-                  selectedRegion={selectedRegion} 
-                  setSelectedRegion={setSelectedRegion} 
-                  regions={regions}
-                />
-                <CustomButton 
-                  variant="accent" 
-                  size="lg"
-                  className="rounded-l-none"
-                  onClick={handleFeasibilityAnalysis}
-                  disabled={isLoading}
-                >
-                  {isLoading ? '분석 중...' : '무료 타당성 분석 받기'}
-                </CustomButton>
-              </div>
-            </div>
+            <RegionSelector 
+              selectedRegion={selectedRegion} 
+              setSelectedRegion={setSelectedRegion} 
+              regions={regions}
+              isLoading={isLoading}
+              onAnalysisClick={handleFeasibilityAnalysis}
+            />
             
             <StatsDisplay />
           </div>
