@@ -1,13 +1,16 @@
+
 import React from 'react';
 import { Award, ArrowRight, Check } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { useConsultation } from '@/contexts/ConsultationContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ExpertsSection = () => {
   const { experts } = useExperts();
   const { selectedExperts, selectExpert } = useConsultation();
+  const isMobile = useIsMobile();
 
   // Filter experts to only show those who are approved and marked for main page display
   // and sort them by display order
@@ -32,7 +35,8 @@ const ExpertsSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* 수정된 부분: 반응형 그리드 설정 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {mainPageExperts.map((expert) => {
             const isSelected = selectedExperts.includes(expert.id);
             
@@ -40,7 +44,7 @@ const ExpertsSection = () => {
               <div key={expert.id} className={`bg-white rounded-xl shadow-md overflow-hidden group ${
                 isSelected ? 'ring-2 ring-primary border-primary' : ''
               }`}>
-                <div className="relative h-60 overflow-hidden">
+                <div className="relative h-52 sm:h-60 overflow-hidden">
                   <img 
                     src={expert.image || "/placeholder.svg"} 
                     alt={expert.name} 
@@ -94,7 +98,7 @@ const ExpertsSection = () => {
                     {expert.description}
                   </p>
                   
-                  <div className="mt-auto flex gap-2">
+                  <div className="mt-auto flex flex-col sm:flex-row gap-2">
                     <CustomButton 
                       variant="primary" 
                       className="flex-1 flex items-center justify-center gap-1"

@@ -34,7 +34,9 @@ const Index = () => {
       <ServicesSection />
       <SimulatorSection />
       <RegionalMap />
-      <ExpertsSection />
+      <div className="bg-gray-50">
+        <ExpertsSection />
+      </div>
       <NewsInsightsSection />
       <SuccessStoriesSection />
       <ExpertApplicationCTA />
