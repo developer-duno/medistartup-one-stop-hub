@@ -8,11 +8,26 @@ import {
 import { Service } from '@/types/service';
 
 interface ServiceCardProps {
-  service: Service;
-  getServiceUrlParam: (title: string) => string;
+  service?: Service;
+  getServiceUrlParam?: (title: string) => string;
+  children?: React.ReactNode;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, children }) => {
+  if (children) {
+    // When used as a container for other content (in ServiceFAQs and ServiceFeatures)
+    return (
+      <div className="bg-white rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow duration-200">
+        {children}
+      </div>
+    );
+  }
+
+  // Safety check to ensure service exists
+  if (!service) {
+    return null;
+  }
+
   const getIcon = () => {
     switch(service.icon) {
       case 'MapPin': return <MapPin className="h-5 w-5 text-primary" />;
@@ -28,6 +43,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam }
   };
 
   const getBgColor = () => {
+    // Add safety check for category
+    if (!service.category) {
+      return 'bg-primary-50'; // Default color if category is missing
+    }
+    
     switch(service.category) {
       case 'planning': return 'bg-primary-50';
       case 'implementation': return 'bg-secondary-50';
@@ -36,6 +56,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam }
       default: return 'bg-primary-50';
     }
   };
+
+  // Safety check for getServiceUrlParam
+  const getServiceParam = getServiceUrlParam || (() => '');
 
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
@@ -76,7 +99,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam }
           </Link>
           
           <Link 
-            to={`/experts?service=${getServiceUrlParam(service.title)}`}
+            to={`/experts?service=${getServiceParam(service.title)}`}
             className="text-xs text-secondary-foreground hover:text-primary transition-colors"
           >
             전문가 찾기
