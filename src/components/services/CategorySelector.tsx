@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ServiceCategory } from '@/types/service';
 import { TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ServiceCategory } from '@/types/service';
 
 interface CategorySelectorProps {
   categories: { id: ServiceCategory | 'all'; name: string; description: string }[];
@@ -9,17 +9,19 @@ interface CategorySelectorProps {
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ categories }) => {
   return (
-    <TabsList className="w-full flex justify-center flex-wrap mb-6">
-      {categories.map((category) => (
-        <TabsTrigger
-          key={category.id}
-          value={category.id}
-          className="px-8 py-4 font-noto font-semibold text-xl data-[state=active]:theme-bg-light data-[state=active]:theme-text"
-        >
-          {category.name}
-        </TabsTrigger>
-      ))}
-    </TabsList>
+    <div className="mb-8 overflow-x-auto">
+      <TabsList className="w-full flex justify-start md:justify-center p-1 bg-neutral-100 rounded-lg">
+        {categories.map((category) => (
+          <TabsTrigger
+            key={category.id}
+            value={category.id}
+            className="px-4 py-2 text-sm md:text-base whitespace-nowrap"
+          >
+            {category.name}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </div>
   );
 };
 

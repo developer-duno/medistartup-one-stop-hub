@@ -38,21 +38,23 @@ const Services = () => {
       <Navbar />
       <ServicesHeader />
 
-      <Tabs
-        defaultValue="all"
-        className="w-full mb-12"
-        onValueChange={(value) => handleCategoryChange(value as ServiceCategory | 'all')}
-      >
-        <CategorySelector categories={categories} />
+      <div className="container mx-auto px-4 py-8">
+        <Tabs
+          defaultValue="all"
+          className="w-full mb-12"
+          onValueChange={(value) => handleCategoryChange(value as ServiceCategory | 'all')}
+        >
+          <CategorySelector categories={categories} />
 
-        <CategoryImage 
-          category={selectedCategory} 
-          categoryName={activeCategory.name}
-          categoryDescription={activeCategory.description}
-        />
+          <CategoryImage 
+            category={selectedCategory} 
+            categoryName={activeCategory.name}
+            categoryDescription={activeCategory.description}
+          />
 
-        <ServiceGrid services={displayServices} />
-      </Tabs>
+          <ServiceGrid services={displayServices} />
+        </Tabs>
+      </div>
 
       <SimulatorSection />
       
