@@ -4,6 +4,7 @@ import { ExpertsContextType, ExpertsProviderProps } from './expertsTypes';
 import { useExpertOperations } from './expertsOperations';
 import { initialExperts } from '../data/initialExperts';
 import { Expert } from '../types/expert';
+import { migrateExpertRegions } from '../utils/regionMigration';
 
 // Create the context with default values
 const ExpertsContext = createContext<ExpertsContextType>({
@@ -32,13 +33,17 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
       if (storedExperts) {
         const parsedExperts = JSON.parse(storedExperts);
         // Ensure displayOrder, showOnMain and isApproved are set for all experts
-        const updatedExperts = parsedExperts.map((expert: Expert, index: number) => ({
+        let updatedExperts = parsedExperts.map((expert: Expert, index: number) => ({
           ...expert,
           displayOrder: expert.displayOrder !== undefined ? expert.displayOrder : index,
           showOnMain: expert.showOnMain !== undefined ? expert.showOnMain : true,
           isApproved: expert.isApproved !== undefined ? expert.isApproved : true,
           applicationStatus: expert.applicationStatus || 'approved'
         }));
+        
+        // Migrate any experts with "경기" region to "경기남부"
+        updatedExperts = migrateExpertRegions(updatedExperts);
+        
         console.log('Loaded experts from local storage:', updatedExperts);
         return updatedExperts;
       }
@@ -48,13 +53,14 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
     
     console.log('Using initial experts data');
     // Initialize display order, showOnMain and isApproved for initial experts
-    return initialExperts.map((expert, index) => ({
+    // Also migrate any experts with "경기" region
+    return migrateExpertRegions(initialExperts.map((expert, index) => ({
       ...expert,
       displayOrder: index,
       showOnMain: true,
       isApproved: true,
       applicationStatus: 'approved' as const
-    }));
+    })));
   });
   
   // Save experts to local storage whenever they change
