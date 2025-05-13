@@ -31,9 +31,9 @@ const ServiceHeader: React.FC<ServiceHeaderProps> = ({
 };
 
 const BackLink: React.FC = () => (
-  <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6 transition-colors">
+  <Link to="/services" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6 transition-colors">
     <ArrowLeft className="h-4 w-4 mr-2" />
-    홈으로 돌아가기
+    서비스로 돌아가기
   </Link>
 );
 
