@@ -7,6 +7,8 @@ import ServiceFeatures from './services/ServiceFeatures';
 import ServiceProcess from './services/ServiceProcess';
 import ServiceFAQs from './services/ServiceFAQs';
 import ServiceBenefitsSidebar from './services/ServiceBenefitsSidebar';
+import { Helmet } from 'react-helmet-async';
+import { generateServiceSchema } from '@/utils/schemaUtils';
 
 interface ServiceDetailProps {
   title: string;
@@ -41,9 +43,22 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
 }) => {
   const serviceUrlName = getServiceUrlName(title);
   const isMobile = useIsMobile();
+  
+  // Generate service schema for SEO
+  const serviceSchema = generateServiceSchema({
+    serviceName: title,
+    serviceDescription: description,
+    serviceUrl: `https://medistartup.co.kr/services/${serviceUrlName}`
+  });
 
   return (
     <div className="min-h-screen bg-white">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(serviceSchema)}
+        </script>
+      </Helmet>
+      
       <ServiceHeader 
         title={title}
         description={description}
