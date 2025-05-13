@@ -11,7 +11,7 @@ import {
 import SearchInput from './SearchInput';
 import FilterBadges from './FilterBadges';
 import FilterPopoverContent from './FilterPopoverContent';
-import { useRegions } from '@/contexts/RegionsContext';
+import { regionOptions } from '@/utils/schema/regionSchema';
 
 interface ExpertFiltersProps {
   filters: {
@@ -40,28 +40,6 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   activeCategory,
   setActiveCategory
 }) => {
-  // Use regions from RegionsContext instead of prop
-  const { adminRegions } = useRegions();
-  
-  // Extract region names for the filter - only get active regions
-  const activeAdminRegions = adminRegions.filter(region => region.active);
-  
-  // Gather all regions including sub-regions
-  const allRegions: string[] = [];
-  activeAdminRegions.forEach(region => {
-    // Add main region name
-    allRegions.push(region.name);
-    
-    // Add included sub-regions if available
-    if (region.includesRegions && region.includesRegions.length > 0) {
-      region.includesRegions.forEach(subRegion => {
-        if (!allRegions.includes(subRegion)) {
-          allRegions.push(subRegion);
-        }
-      });
-    }
-  });
-  
   const handleRemoveFilter = (type: 'regions' | 'services', value: string) => {
     setFilters(prev => ({
       ...prev,
@@ -118,7 +96,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
             </PopoverTrigger>
             <PopoverContent className="w-80 p-4" align="start">
               <FilterPopoverContent
-                regions={allRegions}
+                regions={regionOptions}
                 serviceCategories={serviceCategories}
                 filters={filters}
                 onRegionChange={handleRegionChange}

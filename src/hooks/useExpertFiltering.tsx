@@ -4,6 +4,7 @@ import { Expert } from '@/types/expert';
 import { useSearchParams } from 'react-router-dom';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useRegions } from '@/contexts/RegionsContext';
+import { regionGroups } from '@/utils/schema/regionSchema';
 
 export function useExpertFiltering(expertsData: Expert[]) {
   const [searchParams] = useSearchParams();
@@ -47,14 +48,20 @@ export function useExpertFiltering(expertsData: Expert[]) {
     
     // Handle region filtering
     if (regionParam) {
-      // Check if the region parameter matches any admin region or subregion
-      const regionExists = adminRegions.some(r => 
-        r.name === regionParam || 
-        (r.includesRegions && r.includesRegions.includes(regionParam))
-      );
-      
-      if (regionExists && !newFilters.regions.includes(regionParam)) {
-        newFilters.regions = [regionParam];
+      // First check if it's a main region group
+      const regionGroup = regionGroups.find(group => group.name === regionParam);
+      if (regionGroup) {
+        // Add all regions from this group
+        const regionsToAdd = regionGroup.regions.filter(r => !newFilters.regions.includes(r));
+        if (regionsToAdd.length > 0) {
+          newFilters.regions = [...newFilters.regions, ...regionsToAdd];
+        }
+      } else {
+        // Check if it's an individual region
+        const allRegions = regionGroups.flatMap(group => group.regions);
+        if (allRegions.includes(regionParam) && !newFilters.regions.includes(regionParam)) {
+          newFilters.regions = [...newFilters.regions, regionParam];
+        }
       }
     }
     
@@ -68,9 +75,9 @@ export function useExpertFiltering(expertsData: Expert[]) {
   }, [searchParams, adminRegions]);
   
   // Get all subregions for a given region name
-  const getSubRegions = (regionName: string): string[] => {
-    const region = adminRegions.find(r => r.name === regionName);
-    return region?.includesRegions || [];
+  const getRegionGroup = (regionName: string): string[] => {
+    const group = regionGroups.find(g => g.regions.includes(regionName));
+    return group ? group.regions : [regionName];
   };
   
   // Filter experts based on active category and filters
@@ -96,18 +103,16 @@ export function useExpertFiltering(expertsData: Expert[]) {
       results = results.filter(expert => {
         // For each selected filter region
         return filters.regions.some(filterRegion => {
-          // Check if expert directly has this region
+          // Direct match
           if (expert.regions.includes(filterRegion)) {
             return true;
           }
           
-          // Check if this filter region is a major region that includes expert's regions
-          const subRegions = getSubRegions(filterRegion);
-          if (subRegions.length > 0) {
-            return expert.regions.some(expertRegion => subRegions.includes(expertRegion));
-          }
-          
-          return false;
+          // Check if expert has any region in the same group
+          const relatedRegions = getRegionGroup(filterRegion);
+          return expert.regions.some(expertRegion => 
+            relatedRegions.includes(expertRegion)
+          );
         });
       });
     }
@@ -119,7 +124,7 @@ export function useExpertFiltering(expertsData: Expert[]) {
     }
     
     setFilteredExperts(results);
-  }, [filters, activeCategory, expertsData, adminRegions]);
+  }, [filters, activeCategory, expertsData]);
   
   // Initialize filtered experts with all experts
   useEffect(() => {

@@ -4,6 +4,7 @@ import { FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { regionOptions } from '@/utils/schema/regionSchema';
 
 interface ExpertRegionsProps {
   selectedRegions: string[];
@@ -18,11 +19,6 @@ const ExpertRegions: React.FC<ExpertRegionsProps> = ({
   isRegionalManager = false,
   setIsRegionalManager
 }) => {
-  const regionOptions = [
-    '서울', '경기남부', '경기북부', '인천', '대전', '세종', '충남', '충북', 
-    '부산', '울산', '대구', '경남', '경북', '광주', '제주'
-  ];
-
   const handleRegionToggle = (region: string) => {
     // Create a new array instead of using a callback function
     if (selectedRegions.includes(region)) {
