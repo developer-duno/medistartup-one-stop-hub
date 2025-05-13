@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 
 const ServicesHeader = () => {
   return (
-    <section className="pt-32 pb-24 theme-page-header">
+    <section className="theme-page-header">
       <div className="container mx-auto px-4">
         <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
           <ArrowLeft className="h-4 w-4 mr-2" />

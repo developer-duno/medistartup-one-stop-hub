@@ -17,11 +17,11 @@ const CategoryImage: React.FC<CategoryImageProps> = ({ category, categoryName, c
 
   const generateImage = async () => {
     if (imageUrl) return;
+    if (category === 'all') return; // Don't generate image for 'all' category
     
     setLoading(true);
     try {
       const prompts = {
-        all: "Modern hospital services overview, professional healthcare services collage, medical facility services",
         planning: "Hospital planning phase, medical facility blueprints, healthcare strategic planning, hospital location analysis",
         implementation: "Hospital construction and implementation phase, medical facility building process, healthcare facility development",
         equipment: "Modern hospital medical equipment installation, healthcare technology setup, medical machinery arrangement",
@@ -45,8 +45,24 @@ const CategoryImage: React.FC<CategoryImageProps> = ({ category, categoryName, c
   };
 
   React.useEffect(() => {
-    generateImage();
+    if (category !== 'all') {
+      generateImage();
+    }
   }, [category]);
+
+  // Return null for 'all' category to not display any image
+  if (category === 'all') {
+    return (
+      <div className="mb-8 text-center">
+        <h2 className="font-pretendard font-bold text-2xl text-neutral-800 mb-2">
+          {categoryName} 서비스
+        </h2>
+        <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
+          {categoryDescription}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative mb-8 rounded-xl overflow-hidden shadow-md aspect-video max-w-4xl mx-auto">

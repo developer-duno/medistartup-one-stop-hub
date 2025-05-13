@@ -44,3 +44,28 @@
   --theme-primary-light: hsl(var(--theme-hue), 35%, 92%);
   --theme-accent: hsl(var(--theme-hue), 45%, 75%);
 }
+
+/* Add standardized theme page header heights */
+.theme-page-header {
+  min-height: 220px;
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+  background: var(--theme-bg-gradient);
+}
+
+@media (min-width: 768px) {
+  .theme-page-header {
+    min-height: 280px;
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+  }
+}
+
+/* Add standardized theme text styles */
+.theme-text {
+  color: var(--theme-primary);
+}
+
+.theme-bg-light {
+  background-color: var(--theme-bg-light);
+}
