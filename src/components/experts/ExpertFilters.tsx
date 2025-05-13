@@ -68,6 +68,11 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
     }
   };
 
+  const handleFilterButtonClick = () => {
+    // Reset the active category to "all" when the filter button is clicked
+    setActiveCategory("all");
+  };
+
   return (
     <div className="mb-6">
       <SearchInput 
@@ -83,6 +88,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
                 variant="outline" 
                 className="flex items-center gap-2"
                 size="lg"
+                onClick={handleFilterButtonClick}
               >
                 <Filter className="h-4 w-4" />
                 필터
