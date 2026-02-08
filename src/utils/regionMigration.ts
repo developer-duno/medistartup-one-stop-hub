@@ -1,32 +1,47 @@
 
 import { Expert } from "@/types/expert";
+import { regionOptions } from "@/utils/schema/regionSchema";
 
 /**
- * Migrates old "경기" region to new "경기남부" and "경기북부" regions
- * @param experts The experts array to update
- * @returns Updated experts array with migrated regions
+ * Migrates deprecated region names to current regionSchema values.
+ * - "경기" → "경기남부", "경기북부"
+ * - "전라" → "광주"
+ * - Removes any region not in regionOptions
  */
 export const migrateExpertRegions = (experts: Expert[]): Expert[] => {
+  const migrationMap: Record<string, string[]> = {
+    "경기": ["경기남부", "경기북부"],
+    "전라": ["광주"],
+    "전남": ["광주"],
+    "전북": ["광주"],
+  };
+
   return experts.map(expert => {
-    // Skip if expert doesn't have regions data
     if (!expert.regions) return expert;
     
-    // Check if expert has the deprecated "경기" region
-    if (expert.regions.includes("경기")) {
-      // Create new regions array without "경기"
-      const updatedRegions = expert.regions.filter(r => r !== "경기");
-      
-      // Add "경기남부" if not already present
-      if (!updatedRegions.includes("경기남부")) {
-        updatedRegions.push("경기남부");
+    let updated = false;
+    let newRegions = [...expert.regions];
+
+    // Apply migration map
+    for (const [oldName, replacements] of Object.entries(migrationMap)) {
+      if (newRegions.includes(oldName)) {
+        newRegions = newRegions.filter(r => r !== oldName);
+        for (const replacement of replacements) {
+          if (!newRegions.includes(replacement)) {
+            newRegions.push(replacement);
+          }
+        }
+        updated = true;
       }
-      
-      return {
-        ...expert,
-        regions: updatedRegions
-      };
     }
-    
-    return expert;
+
+    // Remove any region not in the valid regionOptions
+    const validRegions = newRegions.filter(r => regionOptions.includes(r));
+    if (validRegions.length !== newRegions.length) {
+      updated = true;
+      newRegions = validRegions;
+    }
+
+    return updated ? { ...expert, regions: newRegions } : expert;
   });
 };
