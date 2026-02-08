@@ -5,6 +5,7 @@ import { Users, X } from 'lucide-react';
 import CustomButton from '@/components/ui/CustomButton';
 import { useToast } from '@/hooks/use-toast';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ConsultationFormState {
   name: string;
@@ -20,6 +21,7 @@ const ConsultationDialog: React.FC = () => {
   const { isConsultationOpen, closeConsultation, getSelectedExpertsData, selectedExperts, deselectExpert } = useConsultation();
   const { toast } = useToast();
   const selectedExpertsData = getSelectedExpertsData();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formState, setFormState] = useState<ConsultationFormState>({
     name: '',
@@ -41,27 +43,59 @@ const ConsultationDialog: React.FC = () => {
     setFormState(prev => ({ ...prev, [name]: checked }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    console.log('Form submitted:', formState);
-    console.log('Selected experts:', selectedExpertsData);
-    
-    toast({
-      title: "상담 신청이 완료되었습니다",
-      description: "담당 컨설턴트가 영업일 기준 1일 이내에 연락드릴 예정입니다.",
-    });
-    
-    closeConsultation();
-    setFormState({
-      name: '',
-      phone: '',
-      email: '',
-      region: '',
-      specialty: '',
-      message: '',
-      consent: false
-    });
+    try {
+      const { error } = await supabase
+        .from('consultations')
+        .insert({
+          name: formState.name,
+          phone: formState.phone,
+          email: formState.email || '',
+          region: formState.region,
+          specialty: formState.specialty,
+          message: formState.message || '',
+          selected_expert_ids: selectedExperts,
+          status: 'pending',
+        });
+
+      if (error) {
+        console.error('Error submitting consultation:', error);
+        toast({
+          title: "오류 발생",
+          description: "상담 신청 중 오류가 발생했습니다. 다시 시도해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      toast({
+        title: "상담 신청이 완료되었습니다",
+        description: "담당 컨설턴트가 영업일 기준 1일 이내에 연락드릴 예정입니다.",
+      });
+      
+      closeConsultation();
+      setFormState({
+        name: '',
+        phone: '',
+        email: '',
+        region: '',
+        specialty: '',
+        message: '',
+        consent: false
+      });
+    } catch (error) {
+      console.error('Error submitting consultation:', error);
+      toast({
+        title: "오류 발생",
+        description: "상담 신청 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const removeExpert = (expertId: number) => {
@@ -261,8 +295,9 @@ const ConsultationDialog: React.FC = () => {
                 type="submit" 
                 variant="accent" 
                 fullWidth
+                disabled={isSubmitting}
               >
-                무료 상담 신청하기
+                {isSubmitting ? '신청 중...' : '무료 상담 신청하기'}
               </CustomButton>
             </form>
           </div>
