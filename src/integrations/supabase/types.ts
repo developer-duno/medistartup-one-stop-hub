@@ -14,7 +14,228 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      consultations: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          email: string | null
+          id: string
+          message: string | null
+          name: string
+          phone: string
+          region: string
+          selected_expert_ids: number[] | null
+          specialty: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name: string
+          phone: string
+          region: string
+          selected_expert_ids?: number[] | null
+          specialty: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          message?: string | null
+          name?: string
+          phone?: string
+          region?: string
+          selected_expert_ids?: number[] | null
+          specialty?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      expert_applications: {
+        Row: {
+          career_timeline: Json | null
+          certifications: string[] | null
+          contact: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          education_history: Json | null
+          email: string | null
+          experience: string | null
+          id: string
+          image: string | null
+          key_achievements: string[] | null
+          name: string
+          projects: string | null
+          regions: string[] | null
+          rejection_reason: string | null
+          role: string
+          services: string[] | null
+          specialty: string
+          status: string | null
+          success_cases: Json | null
+          testimonials: Json | null
+          updated_at: string
+        }
+        Insert: {
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          contact?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          education_history?: Json | null
+          email?: string | null
+          experience?: string | null
+          id?: string
+          image?: string | null
+          key_achievements?: string[] | null
+          name: string
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role: string
+          services?: string[] | null
+          specialty: string
+          status?: string | null
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          contact?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          education_history?: Json | null
+          email?: string | null
+          experience?: string | null
+          id?: string
+          image?: string | null
+          key_achievements?: string[] | null
+          name?: string
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role?: string
+          services?: string[] | null
+          specialty?: string
+          status?: string | null
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      experts: {
+        Row: {
+          application_date: string | null
+          application_status: string | null
+          approval_date: string | null
+          career_timeline: Json | null
+          certifications: string[] | null
+          contact: string | null
+          cover_image: string | null
+          created_at: string
+          description: string | null
+          display_order: number | null
+          education_history: Json | null
+          email: string | null
+          experience: string | null
+          id: number
+          image: string | null
+          is_approved: boolean | null
+          is_regional_manager: boolean | null
+          key_achievements: string[] | null
+          managed_regions: string[] | null
+          name: string
+          projects: string | null
+          regions: string[] | null
+          rejection_reason: string | null
+          role: string
+          services: string[] | null
+          show_on_main: boolean | null
+          specialty: string
+          success_cases: Json | null
+          testimonials: Json | null
+          updated_at: string
+        }
+        Insert: {
+          application_date?: string | null
+          application_status?: string | null
+          approval_date?: string | null
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          contact?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          education_history?: Json | null
+          email?: string | null
+          experience?: string | null
+          id?: number
+          image?: string | null
+          is_approved?: boolean | null
+          is_regional_manager?: boolean | null
+          key_achievements?: string[] | null
+          managed_regions?: string[] | null
+          name: string
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role: string
+          services?: string[] | null
+          show_on_main?: boolean | null
+          specialty: string
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          application_date?: string | null
+          application_status?: string | null
+          approval_date?: string | null
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          contact?: string | null
+          cover_image?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          education_history?: Json | null
+          email?: string | null
+          experience?: string | null
+          id?: number
+          image?: string | null
+          is_approved?: boolean | null
+          is_regional_manager?: boolean | null
+          key_achievements?: string[] | null
+          managed_regions?: string[] | null
+          name?: string
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role?: string
+          services?: string[] | null
+          show_on_main?: boolean | null
+          specialty?: string
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
