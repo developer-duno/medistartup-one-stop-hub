@@ -16,7 +16,7 @@ export const initialExperts: Expert[] = [
 특히 개원의를 위한 맞춤형 재무설계, 투자 포트폴리오 구성, 세무 전략 수립에 강점이 있으며, 병원의 장기적인 성장을 위한 전략적 재무 계획을 제시합니다.
 
 매년 100개 이상의 의료기관을 자문하며 평균 25% 이상의 수익률 향상을 달성하고 있습니다.`,
-    regions: ['서울', '경기'],
+    regions: ['서울', '경기남부', '경기북부'],
     services: ['재무 컨설팅'],
     coverImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop',
     keyAchievements: [
@@ -226,7 +226,7 @@ export const initialExperts: Expert[] = [
     experience: '10년+',
     projects: '170+',
     description: '의료공간 특화 인테리어 디자이너로 환자 경험과 의료진 효율성을 모두 고려한 최적의 공간설계를 제안합니다. 다양한 진료과목별 맞춤 설계 경험이 풍부합니다.',
-    regions: ['서울', '인천', '경기'],
+    regions: ['서울', '인천', '경기남부', '경기북부'],
     services: ['설계 및 인테리어'],
     coverImage: 'https://images.unsplash.com/photo-1616587894686-c243d4247965?q=80&w=2069&auto=format&fit=crop',
     keyAchievements: [
@@ -264,7 +264,7 @@ export const initialExperts: Expert[] = [
     experience: '9년+',
     projects: '210+',
     description: '의료기관별 최적의 인력 구조를 설계하고 적합한 인재를 매칭합니다. 장기적인 인력 안정성과 팀워크를 고려한 채용 솔루션을 제공합니다.',
-    regions: ['서울', '인천', '경기'],
+    regions: ['서울', '인천', '경기남부', '경기북부'],
     services: ['인력 채용'],
     coverImage: 'https://images.unsplash.com/photo-1580894724668-f2955195791e?q=80&w=2070&auto=format&fit=crop',
     keyAchievements: [
@@ -283,7 +283,7 @@ export const initialExperts: Expert[] = [
     experience: '11년+',
     projects: '190+',
     description: '의료기관 특화 디지털 마케팅 전략 수립 및 실행 전문가입니다. 지역 타겟팅과 진료과목별 특성을 고려한 효과적인 환자 유치 방안을 제시합니다.',
-    regions: ['서울', '경기'],
+    regions: ['서울', '경기남부', '경기북부'],
     services: ['마케팅 전략'],
     coverImage: 'https://images.unsplash.com/photo-1587613754453-50e1c8190c84?q=80&w=2070&auto=format&fit=crop',
     keyAchievements: [
@@ -321,7 +321,7 @@ export const initialExperts: Expert[] = [
     experience: '8년+',
     projects: '160+',
     description: '의료기관의 효율적인 수납 시스템 구축 및 의료폐기물 관리 솔루션을 제공합니다. 비용 절감과 환경 규제 준수를 모두 고려한 최적의 방안을 제시합니다.',
-    regions: ['광주', '전라'],
+    regions: ['광주', '제주'],
     services: ['수납 및 의료폐기물 처리'],
     coverImage: 'https://images.unsplash.com/photo-1607880539761-7e44c39f44cb?q=80&w=2070&auto=format&fit=crop',
     keyAchievements: [
