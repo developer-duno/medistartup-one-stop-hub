@@ -8,6 +8,7 @@ import ExpertTableRow from './ExpertTableRow';
 import ExpertEmptyTableRow from './ExpertEmptyTableRow';
 import { Button } from '@/components/ui/button';
 import { Filter } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 interface ExpertsTableProps {
   experts: Expert[];
@@ -18,10 +19,16 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
   const { deleteExpert, toggleExpertMainVisibility, updateExpertsOrder, approveExpert, rejectExpert } = useExperts();
   const { toast } = useToast();
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
   
   const handleDelete = (id: number, name: string) => {
-    if (window.confirm(`${name} 전문가를 삭제하시겠습니까?`)) {
-      deleteExpert(id);
+    setDeleteTarget({ id, name });
+  };
+
+  const confirmDelete = () => {
+    if (deleteTarget) {
+      deleteExpert(deleteTarget.id);
+      setDeleteTarget(null);
     }
   };
   
@@ -92,6 +99,7 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
   const pendingCount = experts.filter(e => e.applicationStatus === 'pending').length;
 
   return (
+    <>
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-4 border-b flex justify-between items-center">
         <div className="text-sm text-gray-500">
@@ -163,6 +171,24 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
         </table>
       </div>
     </div>
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>전문가 삭제</AlertDialogTitle>
+            <AlertDialogDescription>
+              {deleteTarget?.name} 전문가를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              삭제
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 };
 
