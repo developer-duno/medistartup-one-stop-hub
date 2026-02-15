@@ -1,6 +1,8 @@
 
 import React from 'react';
-import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy } from 'lucide-react';
+import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface AdminSidebarProps {
   activeSection: string;
@@ -8,6 +10,8 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSection }) => {
+  const { signOut, user } = useAuth();
+  const navigate = useNavigate();
   const sidebarItems = [
     { 
       id: 'dashboard', 
@@ -71,6 +75,19 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
           ))}
         </ul>
       </nav>
+      <div className="mt-6 pt-4 border-t">
+        <p className="text-xs text-muted-foreground mb-2 truncate px-4">{user?.email}</p>
+        <button
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-md text-destructive hover:bg-destructive/10 transition-colors"
+          onClick={async () => {
+            await signOut();
+            navigate('/admin/login');
+          }}
+        >
+          <LogOut className="h-5 w-5" />
+          <span className="font-medium">로그아웃</span>
+        </button>
+      </div>
     </aside>
   );
 };
