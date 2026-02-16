@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy, LogOut } from 'lucide-react';
+import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy, LogOut, ClipboardList } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +22,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
       id: 'experts', 
       label: '전문가 관리', 
       icon: <Users className="h-5 w-5" /> 
+    },
+    {
+      id: 'consultations',
+      label: '상담 신청 관리',
+      icon: <ClipboardList className="h-5 w-5" />
     },
     { 
       id: 'services', 
