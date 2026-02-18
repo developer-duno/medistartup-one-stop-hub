@@ -1,11 +1,16 @@
 
-import React from 'react';
-import { getStatsData, quickLinksData } from './dashboardData';
+import React, { useEffect, useState } from 'react';
+import { quickLinksData } from './dashboardData';
 import DashboardStats from './DashboardStats';
 import QuickLinks from './QuickLinks';
 import RecentItems from './RecentItems';
 import { useExperts } from '@/contexts/ExpertsContext';
+import { useInsights } from '@/contexts/InsightsContext';
+import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Users, Trophy, FileText, ClipboardList } from 'lucide-react';
+import { StatItem } from './dashboardTypes';
 
 interface AdminDashboardProps {
   setActiveSection: (section: string) => void;
@@ -13,8 +18,57 @@ interface AdminDashboardProps {
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ setActiveSection }) => {
   const { experts } = useExperts();
-  const statsData = getStatsData(experts.length);
-  
+  const { insights } = useInsights();
+  const { successStories } = useSuccessStories();
+  const [consultationCount, setConsultationCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+
+  useEffect(() => {
+    const fetchConsultations = async () => {
+      const { count: total } = await supabase
+        .from('consultations')
+        .select('*', { count: 'exact', head: true });
+      const { count: pending } = await supabase
+        .from('consultations')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+      setConsultationCount(total || 0);
+      setPendingCount(pending || 0);
+    };
+    fetchConsultations();
+  }, []);
+
+  const statsData: StatItem[] = [
+    {
+      title: '총 전문가',
+      value: `${experts.length}명`,
+      change: `활성 ${experts.filter(e => e.isApproved !== false).length}명`,
+      icon: <Users className="h-8 w-8 text-primary" />,
+      section: 'experts',
+    },
+    {
+      title: '상담 신청',
+      value: `${consultationCount}건`,
+      change: pendingCount > 0 ? `대기 ${pendingCount}건` : '대기 없음',
+      icon: <ClipboardList className="h-8 w-8 text-accent" />,
+      section: 'consultations',
+    },
+    {
+      title: '인사이트',
+      value: `${insights.length}건`,
+      change: `총 ${insights.length}개 게시`,
+      icon: <FileText className="h-8 w-8 text-secondary" />,
+      section: 'insights',
+    },
+    {
+      title: '성공사례',
+      value: `${successStories.length}건`,
+      change: `노출 ${successStories.filter(s => s.visible).length}건`,
+      icon: <Trophy className="h-8 w-8 text-green-500" />,
+      section: 'success',
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <DashboardHeader />
