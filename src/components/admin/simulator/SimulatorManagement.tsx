@@ -1,156 +1,118 @@
 
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
-import { Simulator } from './types';
-import { useSimulators } from './hooks/useSimulators';
-import SimulatorHeader from './components/SimulatorHeader';
-import SimulatorTabs from './components/SimulatorTabs';
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Eye, EyeOff } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import UnifiedSimulator from '@/components/simulator/UnifiedSimulator';
 
 const SimulatorManagement: React.FC = () => {
-  const [editingSimulator, setEditingSimulator] = useState<Simulator | null>(null);
-  const [testingSimulator, setTestingSimulator] = useState<Simulator | null>(null);
-  const [activeTab, setActiveTab] = useState('list');
+  const [isVisible, setIsVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-  
-  const { 
-    simulators, 
-    usageData, 
-    updateSimulator, 
-    addSimulator, 
-    deleteSimulator, 
-    toggleSimulatorActive 
-  } = useSimulators();
-  
-  // 시뮬레이터가 비어있는 경우 경고
+
+  // DB에서 노출 설정 로드
   useEffect(() => {
-    if (simulators.length === 0) {
+    const loadVisibility = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('admin_settings')
+          .select('value')
+          .eq('key', 'simulator_visible')
+          .single();
+
+        if (error) throw error;
+        setIsVisible(data?.value === 'true');
+      } catch (error) {
+        console.error('시뮬레이터 설정 로드 오류:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadVisibility();
+  }, []);
+
+  // 노출 여부 토글
+  const handleToggleVisibility = async (checked: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('admin_settings')
+        .update({ value: checked ? 'true' : 'false' })
+        .eq('key', 'simulator_visible');
+
+      if (error) throw error;
+
+      setIsVisible(checked);
       toast({
-        title: "시뮬레이터 데이터 없음",
-        description: "등록된 시뮬레이터가 없습니다. 새 시뮬레이터를 추가하세요.",
-        variant: "destructive", // Changed from "warning" to "destructive"
+        title: checked ? '시뮬레이터 노출' : '시뮬레이터 숨김',
+        description: checked
+          ? '메인 홈페이지에 시뮬레이터가 표시됩니다.'
+          : '메인 홈페이지에서 시뮬레이터가 숨겨집니다.',
       });
-    }
-  }, [simulators, toast]);
-
-  const handleCreateSimulator = () => {
-    setEditingSimulator({
-      id: Math.max(0, ...simulators.map(s => s.id)) + 1,
-      title: '',
-      description: '',
-      type: 'financial',
-      active: true,
-      views: 0
-    });
-    setActiveTab('edit');
-  };
-
-  const handleEditSimulator = (simulator: Simulator) => {
-    setEditingSimulator({...simulator});
-    setActiveTab('edit');
-  };
-
-  const handleTestSimulator = (simulator: Simulator) => {
-    setTestingSimulator({...simulator});
-    setActiveTab('test');
-  };
-
-  const handleUpdateSimulator = (field: string, value: any) => {
-    if (editingSimulator) {
-      setEditingSimulator({
-        ...editingSimulator,
-        [field]: value
+    } catch (error) {
+      console.error('시뮬레이터 설정 저장 오류:', error);
+      toast({
+        title: '설정 저장 실패',
+        description: '시뮬레이터 노출 설정을 저장하지 못했습니다.',
+        variant: 'destructive',
       });
     }
   };
 
-  const handleSaveSimulator = async () => {
-    if (!editingSimulator) return;
-    
-    if (simulators.some(s => s.id === editingSimulator.id)) {
-      const success = await updateSimulator(editingSimulator);
-      if (success) {
-        toast({ title: "시뮬레이터 업데이트됨", description: "시뮬레이터가 성공적으로 업데이트되었습니다." });
-      } else {
-        toast({ title: "업데이트 실패", description: "시뮬레이터 업데이트에 실패했습니다.", variant: "destructive" });
-        return;
-      }
-    } else {
-      const success = await addSimulator(editingSimulator);
-      if (success) {
-        toast({ title: "시뮬레이터 추가됨", description: "새로운 시뮬레이터가 성공적으로 추가되었습니다." });
-      } else {
-        toast({ title: "추가 실패", description: "시뮬레이터 추가에 실패했습니다.", variant: "destructive" });
-        return;
-      }
-    }
-    
-    setEditingSimulator(null);
-    setActiveTab('list');
-  };
-
-  const handleDeleteSimulator = async (id: number) => {
-    const remainingCount = simulators.filter(s => s.id !== id).length;
-    
-    if (remainingCount === 0) {
-      toast({ title: "마지막 시뮬레이터 삭제 불가", description: "최소한 하나의 시뮬레이터가 필요합니다.", variant: "destructive" });
-      return;
-    }
-    
-    const success = await deleteSimulator(id);
-    if (success) {
-      toast({ title: "시뮬레이터 삭제됨", description: "시뮬레이터가 성공적으로 삭제되었습니다." });
-    }
-  };
-
-  const handleToggleActive = async (id: number) => {
-    const activeCount = simulators.filter(s => s.active && s.id !== id).length;
-    
-    if (activeCount === 0 && simulators.find(s => s.id === id)?.active) {
-      toast({ title: "비활성화 불가", description: "최소한 하나의 활성화된 시뮬레이터가 필요합니다.", variant: "destructive" });
-      return;
-    }
-    
-    const newStatus = await toggleSimulatorActive(id);
-    toast({
-      title: `시뮬레이터 ${newStatus ? '활성화' : '비활성화'}됨`,
-      description: `시뮬레이터가 성공적으로 ${newStatus ? '활성화' : '비활성화'}되었습니다.`,
-      variant: newStatus ? "default" : "destructive",
-    });
-  };
-
-  const handleCancelEdit = () => {
-    setEditingSimulator(null);
-    setActiveTab('list');
-  };
-
-  const handleBackFromTest = () => {
-    setTestingSimulator(null);
-    setActiveTab('list');
-  };
+  if (isLoading) {
+    return <div className="p-6 text-center text-muted-foreground">로딩 중...</div>;
+  }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <SimulatorHeader 
-        onCreateSimulator={handleCreateSimulator}
-        isListView={activeTab === 'list'}
-      />
+    <div className="space-y-6">
+      {/* 노출 설정 카드 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">시뮬레이터 관리</CardTitle>
+          <CardDescription>
+            메인 홈페이지에 표시되는 병원 창업 종합 시뮬레이터의 노출 여부를 설정합니다.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between p-4 border rounded-lg">
+            <div className="flex items-center gap-3">
+              {isVisible ? (
+                <Eye className="h-5 w-5 text-primary" />
+              ) : (
+                <EyeOff className="h-5 w-5 text-muted-foreground" />
+              )}
+              <div>
+                <Label htmlFor="simulator-visible" className="text-base font-medium cursor-pointer">
+                  메인 홈페이지 노출
+                </Label>
+                <p className="text-sm text-muted-foreground">
+                  {isVisible ? '현재 홈페이지에 시뮬레이터가 표시되고 있습니다.' : '현재 홈페이지에서 시뮬레이터가 숨겨져 있습니다.'}
+                </p>
+              </div>
+            </div>
+            <Switch
+              id="simulator-visible"
+              checked={isVisible}
+              onCheckedChange={handleToggleVisibility}
+            />
+          </div>
+        </CardContent>
+      </Card>
 
-      <SimulatorTabs
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        simulators={simulators}
-        usageData={usageData}
-        editingSimulator={editingSimulator}
-        testingSimulator={testingSimulator}
-        onEditSimulator={handleEditSimulator}
-        onToggleActive={handleToggleActive}
-        onDeleteSimulator={handleDeleteSimulator}
-        onTestSimulator={handleTestSimulator}
-        onSaveSimulator={handleSaveSimulator}
-        onCancelEdit={handleCancelEdit}
-        onUpdateSimulator={handleUpdateSimulator}
-        onBackFromTest={handleBackFromTest}
-      />
+      {/* 시뮬레이터 미리보기 */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">시뮬레이터 미리보기</CardTitle>
+          <CardDescription>사용자에게 보이는 실제 시뮬레이터입니다.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className={`border rounded-lg p-4 bg-muted/30 ${!isVisible ? 'opacity-50' : ''}`}>
+            <UnifiedSimulator />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
