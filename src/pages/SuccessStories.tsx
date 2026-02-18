@@ -14,27 +14,27 @@ const SuccessStories = () => {
     <div className="theme-success min-h-screen bg-white">
       <Navbar />
       
-      <div className="pt-28 pb-16 theme-page-header">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="pt-20 md:pt-28 pb-8 md:pb-16 theme-page-header">
+        <div className="container mx-auto px-3 md:px-4">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-4 md:mb-6 text-xs md:text-sm">
+            <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
             홈으로 돌아가기
           </Link>
           
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
+            <h1 className="font-pretendard font-bold text-xl md:text-5xl text-neutral-900 mb-2 md:mb-4">
               성공 <span className="theme-text">스토리</span>
             </h1>
-            <p className="font-noto text-neutral-600 mb-8">
+            <p className="font-noto text-neutral-600 mb-4 md:mb-8 text-xs md:text-base">
               MediStartup과 함께한 의료기관들의 성공 사례를 확인하세요.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
         {visibleStories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {visibleStories.map((story) => (
               <div key={story.id} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
                 <div className="aspect-video bg-neutral-100 relative">
@@ -44,21 +44,21 @@ const SuccessStories = () => {
                     className="w-full h-full object-cover"
                   />
                   {story.featured && (
-                    <div className="absolute top-2 left-2 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-medium">
+                    <div className="absolute top-2 left-2 bg-green-100 text-green-800 px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium">
                       추천 사례
                     </div>
                   )}
                 </div>
-                <div className="p-5">
-                  <h3 className="font-pretendard font-bold text-lg mb-2">
+                <div className="p-3 md:p-5">
+                  <h3 className="font-pretendard font-bold text-sm md:text-lg mb-1 md:mb-2">
                     {story.title}
                   </h3>
-                  <div className="flex items-center mb-3 text-sm text-neutral-500">
+                  <div className="flex items-center mb-2 md:mb-3 text-[10px] md:text-sm text-neutral-500">
                     <span className="font-medium text-neutral-700">{story.hospital}</span>
-                    <span className="mx-2">•</span>
+                    <span className="mx-1 md:mx-2">•</span>
                     <span>{story.location}</span>
                   </div>
-                  <p className="text-neutral-600 text-sm mb-4">
+                  <p className="text-neutral-600 text-[10px] md:text-sm mb-2 md:mb-4">
                     {story.summary}
                   </p>
                   <div className="flex flex-wrap gap-1 mb-3">

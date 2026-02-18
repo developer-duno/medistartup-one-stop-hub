@@ -13,14 +13,14 @@ const SuccessStoriesSection = () => {
   }
   
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10">
+    <section className="py-10 md:py-20 bg-white">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10">
           <div>
-            <h2 className="font-pretendard text-3xl md:text-4xl font-bold mb-3">
+            <h2 className="font-pretendard text-xl md:text-4xl font-bold mb-2 md:mb-3">
               성공<span className="text-green-600">스토리</span>
             </h2>
-            <p className="text-neutral-600 max-w-xl">
+            <p className="text-neutral-600 max-w-xl text-xs md:text-base">
               MediStartup과 함께한 의료기관들의 성공 사례를 확인하세요. 
               다양한 전문가와 함께 최적의 솔루션을 찾아드립니다.
             </p>
@@ -50,11 +50,11 @@ const SuccessStoriesSection = () => {
                     className="w-full h-full object-cover transition-transform group-hover:scale-105" 
                   />
                 </div>
-                <div className="p-5">
-                  <h3 className="font-pretendard font-bold text-lg mb-2 group-hover:text-green-600 transition-colors">
+                <div className="p-3 md:p-5">
+                  <h3 className="font-pretendard font-bold text-sm md:text-lg mb-1 md:mb-2 group-hover:text-green-600 transition-colors">
                     {story.title}
                   </h3>
-                  <p className="text-neutral-600 text-sm mb-3 line-clamp-2">
+                  <p className="text-neutral-600 text-[10px] md:text-sm mb-2 md:mb-3 line-clamp-2">
                     {story.summary}
                   </p>
                   <div className="flex justify-end">

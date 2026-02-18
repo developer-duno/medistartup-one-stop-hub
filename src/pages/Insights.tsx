@@ -96,31 +96,30 @@ const Insights = () => {
       </Helmet>
       <Navbar />
       
-      <div className="pt-28 pb-16 theme-page-header">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="pt-20 md:pt-28 pb-8 md:pb-16 theme-page-header">
+        <div className="container mx-auto px-3 md:px-4">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-4 md:mb-6 text-xs md:text-sm">
+            <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
             홈으로 돌아가기
           </Link>
           
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
+            <h1 className="font-pretendard font-bold text-xl md:text-5xl text-neutral-900 mb-2 md:mb-4">
               뉴스 & <span className="theme-text">인사이트</span>
             </h1>
-            <p className="font-noto text-neutral-600 mb-8">
+            <p className="font-noto text-neutral-600 mb-4 md:mb-8 text-xs md:text-base">
               병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
           <main className="md:w-2/3">
-            {/* Filter tabs */}
-            <div className="flex mb-6 border-b border-neutral-200">
+            <div className="flex mb-4 md:mb-6 border-b border-neutral-200">
               <button
-                className={`px-4 py-3 font-pretendard font-medium ${
+                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
                   activeTab === 'all'
                     ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'
@@ -130,7 +129,7 @@ const Insights = () => {
                 전체
               </button>
               <button
-                className={`px-4 py-3 font-pretendard font-medium ${
+                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
                   activeTab === 'news'
                     ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'
@@ -140,7 +139,7 @@ const Insights = () => {
                 의료법 개정 소식
               </button>
               <button
-                className={`px-4 py-3 font-pretendard font-medium ${
+                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
                   activeTab === 'trends'
                     ? 'theme-text border-b-2 theme-border'
                     : 'text-neutral-600 hover:text-neutral-900'

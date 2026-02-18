@@ -35,13 +35,13 @@ const NewsInsightsSection = () => {
   };
 
   return (
-    <section className="py-16 bg-neutral-50">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
+    <section className="py-10 md:py-16 bg-neutral-50">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="text-center mb-6 md:mb-12">
+          <h2 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-2 md:mb-4">
             뉴스 & <span className="text-primary">인사이트</span>
           </h2>
-          <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
+          <p className="font-noto text-neutral-600 max-w-2xl mx-auto text-xs md:text-base">
             병원 창업과 운영에 관한 최신 의료법 개정 소식과 트렌드 리포트를 확인하세요.
           </p>
         </div>

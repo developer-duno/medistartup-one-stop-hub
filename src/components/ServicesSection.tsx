@@ -46,13 +46,13 @@ const ServicesSection = () => {
   };
 
   return (
-    <section id="services" className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
+    <section id="services" className="py-10 md:py-24">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-2 md:mb-4">
             병원창업을 위한 <span className="text-primary">원스탑</span> 솔루션
           </h2>
-          <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
+          <p className="font-noto text-neutral-600 max-w-2xl mx-auto text-xs md:text-base">
             의료기관 설립의 모든 과정을 함께합니다. 각 분야 전문가들이 개원 단계별로 필요한 모든 서비스를 제공합니다.
           </p>
         </div>
