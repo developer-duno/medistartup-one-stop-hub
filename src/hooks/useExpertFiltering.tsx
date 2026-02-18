@@ -125,11 +125,6 @@ export function useExpertFiltering(expertsData: Expert[]) {
     
     setFilteredExperts(results);
   }, [filters, activeCategory, expertsData]);
-  
-  // Initialize filtered experts with all experts
-  useEffect(() => {
-    setFilteredExperts(expertsData);
-  }, [expertsData]);
 
   // Reset all filters
   const resetFilters = () => {
