@@ -7,17 +7,17 @@ const ServicesHeader = () => {
   return (
     <section className="theme-page-header">
       <div className="container mx-auto px-3 md:px-4">
-        <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-4 md:mb-6 text-xs md:text-sm">
+        <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-3 md:mb-4 text-xs md:text-sm">
           <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
           홈으로 돌아가기
         </Link>
         
         <div className="max-w-3xl mx-auto text-center">
-          <h1 className="font-pretendard font-bold text-xl md:text-5xl text-neutral-900 mb-2 md:mb-4">
+          <h1 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-1 md:mb-2">
             병원창업 <span className="theme-text">서비스</span>
           </h1>
-          <p className="font-noto text-neutral-600 mb-4 md:mb-8 text-xs md:text-base">
-            의료기관 설립의 모든 단계를 위한 전문 서비스입니다. 병원 창업의 계획부터 운영까지 필요한 모든 솔루션을 제공합니다.
+          <p className="font-noto text-neutral-600 text-xs md:text-sm">
+            의료기관 설립의 모든 단계를 위한 전문 서비스입니다.
           </p>
         </div>
       </div>

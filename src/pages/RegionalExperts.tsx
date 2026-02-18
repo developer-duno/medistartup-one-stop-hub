@@ -95,17 +95,17 @@ const RegionalExperts = () => {
       
       <div className="theme-page-header">
         <div className="container mx-auto px-3 md:px-4">
-          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 md:mb-6 text-xs md:text-sm">
+          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-3 md:mb-4 text-xs md:text-sm">
             <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
             홈으로 돌아가기
           </Link>
           
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-pretendard font-bold text-xl md:text-3xl lg:text-5xl text-foreground mb-2 md:mb-4">
+            <h1 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-1 md:mb-2">
               지역별 <span className="theme-text">전문가 네트워크</span>
             </h1>
-            <p className="font-noto text-muted-foreground mb-4 md:mb-8 text-xs md:text-base">
-              각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다.
+            <p className="font-noto text-neutral-600 text-xs md:text-sm">
+              각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크입니다.
             </p>
           </div>
         </div>
