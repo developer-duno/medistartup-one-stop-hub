@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import AddExpertForm from './AddExpertForm';
+import ExpertProfileBuilder from './ExpertProfileBuilder';
 import ExpertsTable from './ExpertsTable';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Expert } from '@/types/expert';
@@ -36,7 +36,7 @@ const ExpertsManagement: React.FC = () => {
 
   if (isAddingExpert) {
     return (
-      <AddExpertForm 
+      <ExpertProfileBuilder 
         onCancel={handleCancel} 
         onSubmit={handleExpertAdded}
         expertToEdit={editingExpert} 
