@@ -58,7 +58,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
       <div className="p-3 md:p-5">
         <div className="flex justify-between items-start mb-1 md:mb-2">
           <div>
-            <h3 className="font-pretendard font-bold text-sm md:text-lg text-neutral-900">
+            <h3 className="font-pretendard font-bold text-base md:text-lg text-neutral-900">
               {expert.name}
             </h3>
             <p className="font-noto text-neutral-600 text-xs md:text-sm">
