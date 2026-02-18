@@ -12,11 +12,11 @@ const ServicesHeader = () => {
           홈으로 돌아가기
         </Link>
         
-        <div className="text-center">
+        <div className="max-w-3xl mx-auto text-center">
           <h1 className="font-pretendard font-bold text-xl md:text-5xl text-neutral-900 mb-2 md:mb-4">
             병원창업 <span className="theme-text">서비스</span>
           </h1>
-          <p className="font-noto text-neutral-600 max-w-2xl mx-auto text-xs md:text-base">
+          <p className="font-noto text-neutral-600 mb-4 md:mb-8 text-xs md:text-base">
             의료기관 설립의 모든 단계를 위한 전문 서비스입니다. 병원 창업의 계획부터 운영까지 필요한 모든 솔루션을 제공합니다.
           </p>
         </div>
