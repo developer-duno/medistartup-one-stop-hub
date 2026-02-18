@@ -29,6 +29,12 @@ export interface FinancialResult {
   licenseCost: string;
   miscCost: string;
   totalCost: string;
+  // Raw numeric values (백만원 단위) for charts
+  rawInterior: number;
+  rawEquipment: number;
+  rawLicense: number;
+  rawMisc: number;
+  rawTotal: number;
 }
 
 export interface RevenueResult {
@@ -36,6 +42,10 @@ export interface RevenueResult {
   expenses: string;
   profit: string;
   regionComparison: number;
+  // Raw numeric values (만원 단위) for charts
+  rawRevenue: number;
+  rawExpenses: number;
+  rawProfit: number;
 }
 
 export interface StaffMember {

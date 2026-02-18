@@ -65,6 +65,11 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
     licenseCost: formatCost(licenseCost),
     miscCost: formatCost(miscCost),
     totalCost: formatCost(totalCost),
+    rawInterior: interiorCost,
+    rawEquipment: equipmentCost,
+    rawLicense: licenseCost,
+    rawMisc: miscCost,
+    rawTotal: totalCost,
   };
 };
 
@@ -133,6 +138,9 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
     expenses,
     profit,
     regionComparison,
+    rawRevenue: Math.round(monthlyRevenue / 10000),
+    rawExpenses: Math.round(monthlyExpenses / 10000),
+    rawProfit: Math.round(monthlyProfit / 10000),
   };
 };
 
