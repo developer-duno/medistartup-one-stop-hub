@@ -424,6 +424,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_simulator_views: {
+        Args: { simulator_id: number }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
