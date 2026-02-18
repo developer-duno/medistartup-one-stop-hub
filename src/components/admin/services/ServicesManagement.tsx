@@ -70,22 +70,22 @@ const ServicesManagement: React.FC = () => {
   const filteredServices = getServicesByCategory(activeTab);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="font-pretendard font-bold text-2xl">서비스 관리</h2>
-        <Button variant="default" onClick={handleOpenAddForm}>
-          <Plus className="h-4 w-4 mr-2" />
-          새 서비스 추가
+    <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
+        <h2 className="font-pretendard font-bold text-xl md:text-2xl">서비스 관리</h2>
+        <Button size="sm" variant="default" onClick={handleOpenAddForm}>
+          <Plus className="h-4 w-4 mr-1 md:mr-2" />
+          <span className="text-xs md:text-sm">새 서비스 추가</span>
         </Button>
       </div>
 
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="grid grid-cols-5 mb-6">
-          <TabsTrigger value="all">전체</TabsTrigger>
-          <TabsTrigger value="planning">계획 단계</TabsTrigger>
-          <TabsTrigger value="implementation">개원 단계</TabsTrigger>
-          <TabsTrigger value="equipment">설비 및 장비</TabsTrigger>
-          <TabsTrigger value="operation">운영 단계</TabsTrigger>
+        <TabsList className="grid grid-cols-3 sm:grid-cols-5 mb-6 h-auto">
+          <TabsTrigger value="all" className="text-xs md:text-sm px-1 md:px-3 py-2">전체</TabsTrigger>
+          <TabsTrigger value="planning" className="text-xs md:text-sm px-1 md:px-3 py-2">계획</TabsTrigger>
+          <TabsTrigger value="implementation" className="text-xs md:text-sm px-1 md:px-3 py-2">개원</TabsTrigger>
+          <TabsTrigger value="equipment" className="text-xs md:text-sm px-1 md:px-3 py-2">설비/장비</TabsTrigger>
+          <TabsTrigger value="operation" className="text-xs md:text-sm px-1 md:px-3 py-2">운영</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeTab}>

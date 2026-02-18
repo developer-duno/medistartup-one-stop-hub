@@ -164,17 +164,17 @@ const SuccessStoriesManagement = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="font-pretendard font-bold text-2xl">성공사례 관리</h2>
-        <Button onClick={handleAddNew}>
-          <Plus className="h-4 w-4 mr-2" />
-          성공사례 추가
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
+        <h2 className="font-pretendard font-bold text-xl md:text-2xl">성공사례 관리</h2>
+        <Button size="sm" onClick={handleAddNew}>
+          <Plus className="h-4 w-4 mr-1 md:mr-2" />
+          <span className="text-xs md:text-sm">성공사례 추가</span>
         </Button>
       </div>
 
       <Card>
-        <CardContent className="p-0">
-          <Table>
+        <CardContent className="p-0 overflow-x-auto">
+          <Table className="min-w-[700px]">
             <TableHeader>
               <TableRow>
                 <TableHead>제목</TableHead>
