@@ -28,6 +28,8 @@ const RegionalExperts = () => {
   
   const [searchParams] = useSearchParams();
   const [displayRegions, setDisplayRegions] = useState(regions);
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const [activeGroupRegions, setActiveGroupRegions] = useState<string[]>([]);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -64,9 +66,28 @@ const RegionalExperts = () => {
 
   // Experts filtered by active region
   const regionExperts = useMemo(() => {
+    if (activeGroup && activeGroupRegions.length > 0) {
+      return experts.filter(expert => 
+        expert.regions.some(r => activeGroupRegions.includes(r))
+      );
+    }
     if (!activeRegion) return [];
     return experts.filter(expert => expert.regions.includes(activeRegion));
-  }, [activeRegion, experts]);
+  }, [activeRegion, activeGroup, activeGroupRegions, experts]);
+
+  const handleGroupClick = (group: RegionGroup) => {
+    setActiveGroup(group.name);
+    setActiveGroupRegions(group.regions);
+    setActiveRegion('');
+  };
+
+  const handleRegionClick = (regionName: string) => {
+    setActiveGroup(null);
+    setActiveGroupRegions([]);
+    setActiveRegion(regionName);
+  };
+
+  const panelTitle = activeGroup || activeRegion || '지역 선택';
 
   return (
     <div className="theme-regions min-h-screen bg-white">
@@ -96,8 +117,8 @@ const RegionalExperts = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {regionGroups.map((group: RegionGroup) => (
                 <Card key={group.name} className="overflow-hidden">
-                  <div className="bg-muted px-4 py-2">
-                    <h2 className="font-bold text-sm">{group.name}</h2>
+                  <div className="bg-muted px-4 py-2 cursor-pointer hover:bg-muted/80 transition-colors" onClick={() => handleGroupClick(group)}>
+                    <h2 className={`font-bold text-sm ${activeGroup === group.name ? 'text-primary' : ''}`}>{group.name}</h2>
                   </div>
                   <CardContent className="p-3 space-y-1.5">
                     {group.regions.map((regionName) => {
@@ -107,7 +128,7 @@ const RegionalExperts = () => {
                         <div 
                           key={regionName}
                           className={`flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted/50 transition-colors ${activeRegion === regionName ? 'bg-primary/10 ring-1 ring-primary/30' : ''}`}
-                          onClick={() => setActiveRegion(regionName)}
+                          onClick={() => handleRegionClick(regionName)}
                         >
                           <div className="flex items-center gap-2">
                             <MapPin className="h-3.5 w-3.5 text-primary" />
@@ -139,7 +160,7 @@ const RegionalExperts = () => {
               <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-4 rounded-t-lg">
                 <h3 className="font-bold text-lg flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  {activeRegion} 전문가
+                  {panelTitle} 전문가
                 </h3>
                 <p className="text-sm opacity-90 mt-1">{regionExperts.length}명의 전문가</p>
               </div>
