@@ -46,12 +46,25 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
   const miscCost = Math.round(costs.misc * miscSizeMultiplier * locMod.misc);
   const totalCost = interiorCost + equipmentCost + licenseCost + miscCost;
   
+  // 백만원 단위를 만원 단위로 변환하여 표시
+  const formatCost = (valueMillion: number) => {
+    const valueManwon = valueMillion * 100;
+    if (valueManwon >= 10000) {
+      const eok = Math.floor(valueManwon / 10000);
+      const remainder = valueManwon % 10000;
+      return remainder > 0 
+        ? `${eok}억 ${remainder.toLocaleString()}만원`
+        : `${eok}억원`;
+    }
+    return valueManwon.toLocaleString() + '만원';
+  };
+
   return {
-    interiorCost: interiorCost.toLocaleString() + '만원',
-    equipmentCost: equipmentCost.toLocaleString() + '만원',
-    licenseCost: licenseCost.toLocaleString() + '만원',
-    miscCost: miscCost.toLocaleString() + '만원',
-    totalCost: totalCost.toLocaleString() + '만원',
+    interiorCost: formatCost(interiorCost),
+    equipmentCost: formatCost(equipmentCost),
+    licenseCost: formatCost(licenseCost),
+    miscCost: formatCost(miscCost),
+    totalCost: formatCost(totalCost),
   };
 };
 
