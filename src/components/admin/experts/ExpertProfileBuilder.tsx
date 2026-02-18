@@ -127,10 +127,10 @@ const ExpertProfileBuilder: React.FC<ExpertProfileBuilderProps> = ({ onCancel, o
   return (
     <div className="bg-white rounded-lg shadow-md">
       {/* Header */}
-      <div className="flex justify-between items-center p-4 border-b">
-        <div className="flex items-center gap-3">
-          <h3 className="font-pretendard font-bold text-xl">
-            {expertToEdit ? '전문가 프로필 수정' : '전문가 프로필 빌더'}
+      <div className="flex justify-between items-center p-3 md:p-4 border-b gap-2">
+        <div className="flex items-center gap-2 md:gap-3 min-w-0">
+          <h3 className="font-pretendard font-bold text-base md:text-xl truncate">
+            {expertToEdit ? '프로필 수정' : '프로필 빌더'}
           </h3>
           {expertToEdit && (
             <a 
@@ -144,14 +144,15 @@ const ExpertProfileBuilder: React.FC<ExpertProfileBuilderProps> = ({ onCancel, o
             </a>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2 shrink-0">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setShowPreview(!showPreview)}
+            className="text-xs md:text-sm"
           >
-            {showPreview ? <EyeOff className="h-4 w-4 mr-1" /> : <Eye className="h-4 w-4 mr-1" />}
-            {showPreview ? '미리보기 숨기기' : '미리보기 보기'}
+            {showPreview ? <EyeOff className="h-4 w-4 md:mr-1" /> : <Eye className="h-4 w-4 md:mr-1" />}
+            <span className="hidden md:inline">{showPreview ? '미리보기 숨기기' : '미리보기 보기'}</span>
           </Button>
           <Button variant="ghost" size="sm" onClick={onCancel}>
             <X className="h-4 w-4" />
@@ -165,11 +166,11 @@ const ExpertProfileBuilder: React.FC<ExpertProfileBuilderProps> = ({ onCancel, o
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4 max-h-[75vh] overflow-y-auto pr-2">
               <Tabs defaultValue="basic" className="w-full">
-                <TabsList className="grid grid-cols-4 mb-4">
-                  <TabsTrigger value="basic">기본 정보</TabsTrigger>
-                  <TabsTrigger value="detailed">상세 프로필</TabsTrigger>
-                  <TabsTrigger value="cases">성공 사례</TabsTrigger>
-                  <TabsTrigger value="testimonials">추천사</TabsTrigger>
+                <TabsList className="grid grid-cols-4 mb-4 h-auto">
+                  <TabsTrigger value="basic" className="text-xs md:text-sm px-1 md:px-3 py-2">기본 정보</TabsTrigger>
+                  <TabsTrigger value="detailed" className="text-xs md:text-sm px-1 md:px-3 py-2">상세</TabsTrigger>
+                  <TabsTrigger value="cases" className="text-xs md:text-sm px-1 md:px-3 py-2">성공 사례</TabsTrigger>
+                  <TabsTrigger value="testimonials" className="text-xs md:text-sm px-1 md:px-3 py-2">추천사</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="basic" className="space-y-4">
