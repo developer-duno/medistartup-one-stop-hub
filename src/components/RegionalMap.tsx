@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRegions } from '@/contexts/RegionsContext';
 import RegionCard from './map/RegionCard';
-import { Search, MapPin, Users, ArrowRight } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { MapPin, Users, ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
@@ -18,7 +17,6 @@ const RegionalMap = () => {
     adminRegions // Get the admin regions directly to ensure we're using updated data
   } = useRegions();
   
-  const [searchTerm, setSearchTerm] = useState('');
   const [displayRegions, setDisplayRegions] = useState(regions);
   
   // Update display regions whenever regions change
@@ -31,13 +29,6 @@ const RegionalMap = () => {
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
   
-  // Filter regions based on search term
-  const filteredRegions = searchTerm
-    ? displayRegions.filter(r => 
-        r.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        r.includesRegions.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
-    : displayRegions;
 
   return (
     <section id="regions" className="py-16 md:py-24 bg-neutral-50">
@@ -53,20 +44,8 @@ const RegionalMap = () => {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            <div className="mb-6">
-              <div className="relative">
-                <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                <Input
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="지역 또는 도시 검색..."
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-              {filteredRegions.map((region) => (
+              {displayRegions.map((region) => (
                 <Card 
                   key={region.id} 
                   className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === region.name ? 'ring-2 ring-primary' : ''}`}
@@ -113,7 +92,7 @@ const RegionalMap = () => {
                 </Card>
               ))}
               
-              {filteredRegions.length === 0 && (
+              {displayRegions.length === 0 && (
                 <div className="col-span-2 text-center py-12">
                   <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="font-medium text-xl mb-2">검색 결과 없음</h3>

@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MapPin, Search, Users } from 'lucide-react';
+import { ArrowLeft, MapPin, Users } from 'lucide-react';
 import { useRegions } from '@/contexts/RegionsContext';
-import { Input } from '@/components/ui/input';
+
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import RegionCard from '@/components/map/RegionCard';
@@ -21,7 +21,6 @@ const RegionalExperts = () => {
     adminRegions
   } = useRegions();
   
-  const [searchTerm, setSearchTerm] = useState('');
   const [searchParams] = useSearchParams();
   const [displayRegions, setDisplayRegions] = useState(regions);
   const navigate = useNavigate();
@@ -50,14 +49,6 @@ const RegionalExperts = () => {
   // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
   
-  // Filter regions based on search term
-  const filteredRegions = searchTerm
-    ? displayRegions.filter(r => 
-        r.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        (r.mainCities && r.mainCities.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))) ||
-        r.includesRegions.some(city => city.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
-    : displayRegions;
 
   // Group regions by category for display
   const groupedRegions = regionGroups.map(group => ({
@@ -94,18 +85,6 @@ const RegionalExperts = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            <div className="mb-6">
-              <div className="relative">
-                <Search className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                <Input
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="지역 또는 도시 검색..."
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            
             {groupedRegions.map(group => (
               <div key={group.name} className="mb-6">
                 <h2 className="font-bold text-lg mb-3 border-b pb-2">{group.name}</h2>
@@ -160,7 +139,7 @@ const RegionalExperts = () => {
               </div>
             ))}
             
-            {filteredRegions.length === 0 && (
+            {displayRegions.length === 0 && (
               <div className="col-span-2 text-center py-12">
                 <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="font-medium text-xl mb-2">검색 결과 없음</h3>
