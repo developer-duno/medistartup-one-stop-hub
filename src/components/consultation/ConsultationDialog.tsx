@@ -70,6 +70,18 @@ const ConsultationDialog: React.FC = () => {
         });
         return;
       }
+
+      // Send email notification (non-blocking)
+      supabase.functions.invoke('send-consultation-notification', {
+        body: {
+          name: formState.name,
+          phone: formState.phone,
+          email: formState.email,
+          region: formState.region,
+          specialty: formState.specialty,
+          message: formState.message,
+        },
+      }).catch((err) => console.error('Notification error:', err));
       
       toast({
         title: "상담 신청이 완료되었습니다",
