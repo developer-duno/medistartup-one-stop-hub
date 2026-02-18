@@ -263,6 +263,42 @@ export type Database = {
         }
         Relationships: []
       }
+      simulators: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string
+          display_order: number
+          id: number
+          title: string
+          type: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string
+          display_order?: number
+          id?: number
+          title: string
+          type: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string
+          display_order?: number
+          id?: number
+          title?: string
+          type?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
