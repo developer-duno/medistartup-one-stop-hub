@@ -8,7 +8,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import SearchInput from './SearchInput';
 import FilterBadges from './FilterBadges';
 import FilterPopoverContent from './FilterPopoverContent';
 import { regionOptions } from '@/utils/schema/regionSchema';
@@ -81,11 +80,6 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
 
   return (
     <div className="mb-6">
-      <SearchInput 
-        value={filters.search}
-        onChange={(value) => setFilters({...filters, search: value})}
-      />
-
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>

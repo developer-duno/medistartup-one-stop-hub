@@ -90,14 +90,6 @@ export function useExpertFiltering(expertsData: Expert[]) {
       );
     }
     
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
-      results = results.filter(expert => 
-        expert.name.toLowerCase().includes(searchLower) || 
-        expert.role.toLowerCase().includes(searchLower) || 
-        expert.specialty.toLowerCase().includes(searchLower)
-      );
-    }
     
     if (filters.regions.length > 0) {
       results = results.filter(expert => {
