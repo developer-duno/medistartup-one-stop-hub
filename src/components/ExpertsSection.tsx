@@ -21,7 +21,7 @@ const ExpertsSection = () => {
     <section id="experts" className="py-10 md:py-24">
       <div className="container mx-auto px-3 md:px-4">
         <div className="text-center mb-8 md:mb-16">
-          <h2 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-2 md:mb-4">
+          <h2 className="font-pretendard font-bold text-xl md:text-3xl text-neutral-900 mb-2 md:mb-4">
             <span className="text-primary">전문가</span> 프로필
           </h2>
           <p className="font-noto text-neutral-600 max-w-2xl mx-auto text-xs md:text-base">

@@ -8,7 +8,7 @@ const HeroHeading = () => {
         2025년 병원창업 트렌드 업데이트
       </div>
       
-      <h1 className="font-pretendard font-bold text-2xl md:text-5xl lg:text-6xl text-neutral-900 leading-tight">
+      <h1 className="font-pretendard font-bold text-2xl md:text-4xl lg:text-5xl text-neutral-900 leading-tight">
         병원창업 <span className="text-primary">원스탑</span> 컨설팅<br />
         <span className="relative">
           데이터 기반 의사결정
@@ -18,7 +18,7 @@ const HeroHeading = () => {
         </span>
       </h1>
       
-      <p className="font-noto text-xs md:text-lg text-neutral-600 max-w-xl mx-auto lg:mx-0">
+      <p className="font-noto text-xs md:text-base text-neutral-600 max-w-xl mx-auto lg:mx-0">
         의원급 개원부터 종합병원 설립까지, 지역 특화 네트워크와 데이터 분석을 활용한 맞춤형 컨설팅 서비스를 제공합니다.
       </p>
     </>

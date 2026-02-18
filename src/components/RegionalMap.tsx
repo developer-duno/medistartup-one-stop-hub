@@ -62,7 +62,7 @@ const RegionalMap = () => {
     <section id="regions" className="py-16 md:py-24 bg-neutral-50">
       <div className="container mx-auto px-3 md:px-4">
         <div className="text-center mb-8 md:mb-16">
-          <h2 className="font-pretendard font-bold text-2xl md:text-4xl text-neutral-900 mb-2 md:mb-4">
+          <h2 className="font-pretendard font-bold text-xl md:text-3xl text-neutral-900 mb-2 md:mb-4">
             지역별 <span className="text-primary">전문가 네트워크</span>
           </h2>
           <p className="font-noto text-neutral-600 text-xs md:text-base max-w-2xl mx-auto">
