@@ -50,7 +50,7 @@ const SuccessStories = () => {
                   )}
                 </div>
                 <div className="p-3 md:p-5">
-                  <h3 className="font-pretendard font-bold text-sm md:text-lg mb-1 md:mb-2">
+                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2">
                     {story.title}
                   </h3>
                   <div className="flex items-center mb-2 md:mb-3 text-[10px] md:text-sm text-neutral-500">
@@ -58,7 +58,7 @@ const SuccessStories = () => {
                     <span className="mx-1 md:mx-2">•</span>
                     <span>{story.location}</span>
                   </div>
-                  <p className="text-neutral-600 text-[10px] md:text-sm mb-2 md:mb-4">
+                  <p className="text-neutral-600 text-xs md:text-sm mb-2 md:mb-4">
                     {story.summary}
                   </p>
                   <div className="flex flex-wrap gap-1 mb-3">
