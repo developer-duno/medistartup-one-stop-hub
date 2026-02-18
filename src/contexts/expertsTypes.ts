@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 export interface ExpertsContextType {
   experts: Expert[];
+  loading: boolean;
   addExpert: (expert: NewExpert) => void;
   updateExpert: (expert: Expert) => void;
   deleteExpert: (id: number) => void;

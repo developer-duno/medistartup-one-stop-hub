@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 // Create the context with default values
 const ExpertsContext = createContext<ExpertsContextType>({
   experts: [],
+  loading: true,
   addExpert: () => {},
   updateExpert: () => {},
   deleteExpert: () => {},
@@ -285,6 +286,7 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
 
   const contextValue: ExpertsContextType = {
     experts,
+    loading,
     addExpert,
     updateExpert,
     deleteExpert,

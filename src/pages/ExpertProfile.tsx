@@ -21,7 +21,7 @@ import { generateExpertSchema } from '@/utils/schemaUtils';
 
 const ExpertProfile = () => {
   const { id } = useParams();
-  const { getExpertById } = useExperts();
+  const { getExpertById, loading: expertsLoading } = useExperts();
   const navigate = useNavigate();
   const { toast: uiToast } = useToast();
   const [expert, setExpert] = useState<any>(null);
@@ -29,6 +29,8 @@ const ExpertProfile = () => {
   const { selectedExperts, selectExpert } = useConsultation();
   
   useEffect(() => {
+    if (expertsLoading) return; // Wait for experts to load
+    
     setIsLoading(true);
     console.log("Loading expert profile for ID:", id);
     
@@ -58,7 +60,7 @@ const ExpertProfile = () => {
     }
     
     setIsLoading(false);
-  }, [id, getExpertById, navigate, uiToast]);
+  }, [id, getExpertById, navigate, uiToast, expertsLoading]);
 
   const isExpertSelected = expert ? selectedExperts.includes(expert.id) : false;
 
