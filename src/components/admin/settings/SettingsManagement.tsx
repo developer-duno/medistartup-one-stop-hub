@@ -9,6 +9,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const SettingsManagement: React.FC = () => {
   const [notificationEmail, setNotificationEmail] = useState('');
+  const [senderEmail, setSenderEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
@@ -17,12 +18,14 @@ const SettingsManagement: React.FC = () => {
     const fetchSettings = async () => {
       const { data, error } = await supabase
         .from('admin_settings')
-        .select('value')
-        .eq('key', 'notification_email')
-        .maybeSingle();
+        .select('key, value')
+        .in('key', ['notification_email', 'sender_email']);
 
       if (!error && data) {
-        setNotificationEmail(data.value);
+        data.forEach((item) => {
+          if (item.key === 'notification_email') setNotificationEmail(item.value);
+          if (item.key === 'sender_email') setSenderEmail(item.value);
+        });
       }
       setLoading(false);
     };
@@ -31,15 +34,17 @@ const SettingsManagement: React.FC = () => {
 
   const handleSave = async () => {
     setSaving(true);
-    const { error } = await supabase
-      .from('admin_settings')
-      .update({ value: notificationEmail })
-      .eq('key', 'notification_email');
+    const updates = [
+      supabase.from('admin_settings').update({ value: notificationEmail }).eq('key', 'notification_email'),
+      supabase.from('admin_settings').update({ value: senderEmail }).eq('key', 'sender_email'),
+    ];
+    const results = await Promise.all(updates);
+    const hasError = results.find((r) => r.error);
 
-    if (error) {
-      toast({ title: '저장 실패', description: error.message, variant: 'destructive' });
+    if (hasError) {
+      toast({ title: '저장 실패', description: hasError.error!.message, variant: 'destructive' });
     } else {
-      toast({ title: '설정 저장 완료', description: '알림 수신 이메일이 변경되었습니다.' });
+      toast({ title: '설정 저장 완료', description: '설정이 변경되었습니다.' });
     }
     setSaving(false);
   };
@@ -77,7 +82,20 @@ const SettingsManagement: React.FC = () => {
               새로운 상담 신청이 접수되면 이 이메일로 알림이 발송됩니다.
             </p>
           </div>
-          <Button onClick={handleSave} disabled={saving || !notificationEmail}>
+          <div className="space-y-2">
+            <Label htmlFor="sender-email">발신자 이메일 주소</Label>
+            <Input
+              id="sender-email"
+              type="email"
+              value={senderEmail}
+              onChange={(e) => setSenderEmail(e.target.value)}
+              placeholder="noreply@medistartup.kr"
+            />
+            <p className="text-xs text-muted-foreground">
+              알림 이메일의 발신자(From) 주소입니다. SendGrid에서 인증된 도메인의 이메일만 사용 가능합니다.
+            </p>
+          </div>
+          <Button onClick={handleSave} disabled={saving || !notificationEmail || !senderEmail}>
             {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
             저장
           </Button>
