@@ -93,56 +93,56 @@ const RegionalExperts = () => {
     <div className="theme-regions min-h-screen bg-white">
       <Navbar />
       
-      <div className="pt-28 pb-16 theme-page-header">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+      <div className="pt-20 md:pt-28 pb-8 md:pb-16 theme-page-header">
+        <div className="container mx-auto px-3 md:px-4">
+          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-4 md:mb-6 text-xs md:text-sm">
+            <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
             홈으로 돌아가기
           </Link>
           
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-foreground mb-4">
+            <h1 className="font-pretendard font-bold text-xl md:text-3xl lg:text-5xl text-foreground mb-2 md:mb-4">
               지역별 <span className="theme-text">전문가 네트워크</span>
             </h1>
-            <p className="font-noto text-muted-foreground mb-8">
+            <p className="font-noto text-muted-foreground mb-4 md:mb-8 text-xs md:text-base">
               각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="container mx-auto px-3 md:px-4 py-4 md:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-8">
           <div className="w-full lg:w-3/5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-4">
               {regionGroups.map((group: RegionGroup) => (
                 <Card key={group.name} className="overflow-hidden">
-                  <div className="bg-muted px-4 py-2 cursor-pointer hover:bg-muted/80 transition-colors" onClick={() => handleGroupClick(group)}>
-                    <h2 className={`font-bold text-sm ${activeGroup === group.name ? 'text-primary' : ''}`}>{group.name}</h2>
+                  <div className="bg-muted px-2 md:px-4 py-1.5 md:py-2 cursor-pointer hover:bg-muted/80 transition-colors" onClick={() => handleGroupClick(group)}>
+                    <h2 className={`font-bold text-xs md:text-sm ${activeGroup === group.name ? 'text-primary' : ''}`}>{group.name}</h2>
                   </div>
-                  <CardContent className="p-3 space-y-1.5">
+                  <CardContent className="p-1.5 md:p-3 space-y-0.5 md:space-y-1.5">
                     {group.regions.map((regionName) => {
                       const manager = getManagerForRegion(regionName);
                       const count = getExpertCountForRegion(regionName);
                       return (
                         <div 
                           key={regionName}
-                          className={`flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted/50 transition-colors ${activeRegion === regionName ? 'bg-primary/10 ring-1 ring-primary/30' : ''}`}
+                          className={`flex items-center justify-between p-1.5 md:p-2 rounded-md cursor-pointer hover:bg-muted/50 transition-colors ${activeRegion === regionName ? 'bg-primary/10 ring-1 ring-primary/30' : ''}`}
                           onClick={() => handleRegionClick(regionName)}
                         >
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-3.5 w-3.5 text-primary" />
-                            <span className="text-sm font-medium">{regionName}</span>
+                          <div className="flex items-center gap-1 md:gap-2">
+                            <MapPin className="h-3 w-3 md:h-3.5 md:w-3.5 text-primary" />
+                            <span className="text-[11px] md:text-sm font-medium">{regionName}</span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1 md:gap-2">
                             {manager && (
-                              <Badge variant="secondary" className="text-xs hidden sm:flex items-center gap-1">
-                                <User className="h-3 w-3" />
+                              <Badge variant="secondary" className="text-[9px] md:text-xs hidden sm:flex items-center gap-1">
+                                <User className="h-2.5 w-2.5 md:h-3 md:w-3" />
                                 {manager.name}
                               </Badge>
                             )}
-                            <Badge variant="outline" className="text-xs">
-                              <Users className="h-3 w-3 mr-1" />
+                            <Badge variant="outline" className="text-[9px] md:text-xs px-1 md:px-2">
+                              <Users className="h-2.5 w-2.5 md:h-3 md:w-3 mr-0.5 md:mr-1" />
                               {count}명
                             </Badge>
                           </div>
@@ -156,48 +156,48 @@ const RegionalExperts = () => {
           </div>
 
           <div className="w-full lg:w-2/5">
-            <Card className="sticky top-24">
-              <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-4 rounded-t-lg">
-                <h3 className="font-bold text-lg flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
+            <Card className="sticky top-20 md:top-24">
+              <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-3 md:p-4 rounded-t-lg">
+                <h3 className="font-bold text-sm md:text-lg flex items-center gap-1.5 md:gap-2">
+                  <MapPin className="h-4 w-4 md:h-5 md:w-5" />
                   {panelTitle} 전문가
                 </h3>
-                <p className="text-sm opacity-90 mt-1">{regionExperts.length}명의 전문가</p>
+                <p className="text-[11px] md:text-sm opacity-90 mt-0.5 md:mt-1">{regionExperts.length}명의 전문가</p>
               </div>
-              <CardContent className="p-3 max-h-[60vh] overflow-y-auto">
+              <CardContent className="p-2 md:p-3 max-h-[50vh] md:max-h-[60vh] overflow-y-auto">
                 {regionExperts.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <Users className="h-10 w-10 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">해당 지역에 등록된 전문가가 없습니다.</p>
+                  <div className="text-center py-6 md:py-8 text-muted-foreground">
+                    <Users className="h-8 w-8 md:h-10 md:w-10 mx-auto mb-2 opacity-50" />
+                    <p className="text-xs md:text-sm">해당 지역에 등록된 전문가가 없습니다.</p>
                   </div>
                 ) : (
-                  <div className="space-y-2">
+                  <div className="space-y-1 md:space-y-2">
                     {regionExperts.map(expert => (
                       <Link 
                         key={expert.id} 
                         to={`/experts/${expert.id}`}
-                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
+                        className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
                       >
-                        <Avatar className="h-10 w-10 shrink-0">
+                        <Avatar className="h-8 w-8 md:h-10 md:w-10 shrink-0">
                           <AvatarImage src={expert.image} alt={expert.name} />
-                          <AvatarFallback>{expert.name.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="text-xs md:text-sm">{expert.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-medium text-sm truncate">{expert.name}</span>
+                          <div className="flex items-center gap-1 md:gap-1.5">
+                            <span className="font-medium text-xs md:text-sm truncate">{expert.name}</span>
                             {expert.isRegionalManager && (
-                              <Badge variant="default" className="text-[10px] px-1.5 py-0">총괄</Badge>
+                              <Badge variant="default" className="text-[9px] md:text-[10px] px-1 md:px-1.5 py-0">총괄</Badge>
                             )}
                           </div>
-                          <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
+                          <p className="text-[10px] md:text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                          <div className="flex flex-wrap gap-0.5 md:gap-1 mt-0.5 md:mt-1">
                             {expert.services.slice(0, 2).map((s, i) => (
-                              <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">
+                              <Badge key={i} variant="secondary" className="text-[9px] md:text-[10px] px-1 md:px-1.5 py-0">
                                 {s}
                               </Badge>
                             ))}
                             {expert.services.length > 2 && (
-                              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                              <Badge variant="secondary" className="text-[9px] md:text-[10px] px-1 md:px-1.5 py-0">
                                 +{expert.services.length - 2}
                               </Badge>
                             )}
