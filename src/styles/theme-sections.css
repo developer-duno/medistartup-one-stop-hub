@@ -47,9 +47,9 @@
 
 /* Add standardized theme page header heights */
 .theme-page-header {
-  min-height: 220px;
-  padding-top: 6rem;
-  padding-bottom: 4rem;
+  min-height: auto;
+  padding-top: 4.5rem;
+  padding-bottom: 1.5rem;
   background: var(--theme-bg-gradient);
 }
 
