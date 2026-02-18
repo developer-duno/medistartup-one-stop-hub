@@ -1,8 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MapPin } from 'lucide-react';
-import { RunwareService } from '../services/RunwareService';
-import { toast } from 'sonner';
 import HeroHeading from './hero/HeroHeading';
 import RegionSelector from './hero/RegionSelector';
 import StatsDisplay from './hero/StatsDisplay';
@@ -12,7 +10,6 @@ import { useRegionSelection } from '../domains/region/useRegionSelection';
 // Domain-driven layout component
 const HeroSection = () => {
   // Application state
-  const [hospitalImage, setHospitalImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
   // Use domain hook for region selection functionality
@@ -20,27 +17,6 @@ const HeroSection = () => {
   
   // Sample consultation video URL - replace with your actual hospital consulting video
   const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
-
-  // Side effect for hospital image generation
-  useEffect(() => {
-    const generateHospitalImage = async () => {
-      try {
-        const runwareService = new RunwareService('6PtVhh4UUUKazd3Uv8K0l7njZsxeaOxQ');
-        const result = await runwareService.generateImage({
-          positivePrompt: "Modern hospital interior, clean and professional medical clinic, soft lighting, medical equipment, white walls, healthcare design",
-          width: 1024,
-          height: 1024,
-          numberResults: 1
-        });
-        setHospitalImage(result.imageURL);
-      } catch (error) {
-        console.error('Failed to generate hospital image:', error);
-        setHospitalImage('https://images.unsplash.com/photo-1666214280168-a461f9398c35?q=80&w=3270&auto=format&fit=crop');
-      }
-    };
-
-    generateHospitalImage();
-  }, []);
 
   // Domain action - handle feasibility analysis request
   const handleFeasibilityAnalysis = () => {
