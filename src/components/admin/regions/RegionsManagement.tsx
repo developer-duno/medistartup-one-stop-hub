@@ -110,10 +110,10 @@ const RegionsManagement: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="font-pretendard font-bold text-2xl">지역 관리</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h2 className="font-pretendard font-bold text-xl md:text-2xl">지역 관리</h2>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             권역(상위 지역)과 하위 지역을 추가/수정/삭제할 수 있습니다. 변경 사항은 프론트엔드에 즉시 반영됩니다.
           </p>
         </div>

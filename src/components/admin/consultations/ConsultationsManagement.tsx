@@ -115,21 +115,21 @@ const ConsultationsManagement: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
         <div>
-          <h2 className="font-pretendard font-bold text-2xl">상담 신청 관리</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h2 className="font-pretendard font-bold text-xl md:text-2xl">상담 신청 관리</h2>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             총 {counts.all}건 · 대기 {counts.pending}건 · 진행 중 {counts.in_progress}건 · 완료 {counts.completed}건
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchConsultations}>
-          <RefreshCw className="h-4 w-4 mr-2" />
-          새로고침
+          <RefreshCw className="h-4 w-4 mr-1 md:mr-2" />
+          <span className="text-xs md:text-sm">새로고침</span>
         </Button>
       </div>
 
       {/* Status filter */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4">
         {[
           { key: 'all', label: '전체' },
           { key: 'pending', label: '대기 중' },
@@ -164,7 +164,7 @@ const ConsultationsManagement: React.FC = () => {
             return (
               <Card key={consultation.id} className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-semibold">{consultation.name}</span>
@@ -186,12 +186,12 @@ const ConsultationsManagement: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 ml-4">
+                    <div className="flex items-center gap-2 ml-2 sm:ml-4 shrink-0">
                       <Select
                         value={consultation.status || 'pending'}
                         onValueChange={(value) => updateStatus(consultation.id, value)}
                       >
-                        <SelectTrigger className="w-[120px] h-8 text-xs">
+                        <SelectTrigger className="w-[100px] sm:w-[120px] h-8 text-xs">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
