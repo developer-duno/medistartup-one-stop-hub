@@ -80,15 +80,7 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
           };
           
           const handleSubRegionCheck = (region: string, checked: boolean) => {
-            if (allSelected) {
-              // Was group-selected: deselect all, then select only this one
-              group.regions.forEach(r => {
-                if (r !== region) onRegionChange(r, false);
-              });
-              if (!checked) onRegionChange(region, false);
-            } else {
-              onRegionChange(region, checked);
-            }
+            onRegionChange(region, checked);
           };
           
           return (
