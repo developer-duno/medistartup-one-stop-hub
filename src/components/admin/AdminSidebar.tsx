@@ -44,11 +44,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
       icon: <BarChart3 className="h-5 w-5" /> 
     },
     { 
-      id: 'regions', 
-      label: '지역별 데스크', 
-      icon: <MapPin className="h-5 w-5" /> 
-    },
-    { 
       id: 'success', 
       label: '성공사례 관리', 
       icon: <Trophy className="h-5 w-5" /> 
