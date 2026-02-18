@@ -15,9 +15,9 @@ const ExpertCategoryBar: React.FC<ExpertCategoryBarProps> = ({
 }) => {
   return (
     <div className="pb-2">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         <button
-          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors flex items-center gap-1 ${
+          className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-colors flex items-center gap-1 ${
             activeCategory === "all"
               ? "bg-primary text-primary-foreground border-primary"
               : "bg-background text-muted-foreground border-border hover:bg-muted"
@@ -31,7 +31,7 @@ const ExpertCategoryBar: React.FC<ExpertCategoryBarProps> = ({
         {serviceCategories.map((category) => (
           <button
             key={category}
-            className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors flex items-center gap-1 ${
+            className={`px-2.5 py-1 text-xs font-medium rounded-full border transition-colors flex items-center gap-1 ${
               activeCategory === category
                 ? "bg-primary text-primary-foreground border-primary"
                 : "bg-background text-muted-foreground border-border hover:bg-muted"
