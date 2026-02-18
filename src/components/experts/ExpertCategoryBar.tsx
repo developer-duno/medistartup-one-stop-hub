@@ -14,31 +14,31 @@ const ExpertCategoryBar: React.FC<ExpertCategoryBarProps> = ({
   serviceCategories 
 }) => {
   return (
-    <div className="overflow-x-auto scrollbar-none pb-2">
-      <div className="flex border-b border-neutral-200 min-w-max">
+    <div className="pb-2">
+      <div className="flex flex-wrap gap-2">
         <button
-          className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex items-center gap-1 ${
+          className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors flex items-center gap-1 ${
             activeCategory === "all"
-              ? "border-primary text-primary"
-              : "border-transparent text-neutral-500 hover:text-neutral-800"
+              ? "bg-primary text-primary-foreground border-primary"
+              : "bg-background text-muted-foreground border-border hover:bg-muted"
           }`}
           onClick={() => setActiveCategory("all")}
         >
-          {activeCategory === "all" && <CheckCircle className="h-4 w-4" />}
+          {activeCategory === "all" && <CheckCircle className="h-3.5 w-3.5" />}
           전체 보기
         </button>
         
         {serviceCategories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 text-sm font-medium whitespace-nowrap border-b-2 transition-colors flex items-center gap-1 ${
+            className={`px-3 py-1.5 text-sm font-medium rounded-full border transition-colors flex items-center gap-1 ${
               activeCategory === category
-                ? "border-primary text-primary"
-                : "border-transparent text-neutral-500 hover:text-neutral-800"
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-background text-muted-foreground border-border hover:bg-muted"
             }`}
             onClick={() => setActiveCategory(category)}
           >
-            {activeCategory === category && <CheckCircle className="h-4 w-4" />}
+            {activeCategory === category && <CheckCircle className="h-3.5 w-3.5" />}
             {category}
           </button>
         ))}
