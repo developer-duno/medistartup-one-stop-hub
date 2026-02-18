@@ -17,7 +17,7 @@ const SuccessStoriesSection = () => {
       <div className="container mx-auto px-3 md:px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10">
           <div>
-            <h2 className="font-pretendard text-xl md:text-4xl font-bold mb-2 md:mb-3">
+            <h2 className="font-pretendard text-xl md:text-3xl font-bold mb-2 md:mb-3">
               성공<span className="text-green-600">스토리</span>
             </h2>
             <p className="text-neutral-600 max-w-xl text-xs md:text-base">
