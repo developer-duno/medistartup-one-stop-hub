@@ -17,7 +17,7 @@ const ExpertPageLayout: React.FC<ExpertPageLayoutProps> = ({ children }) => {
     <div className="theme-experts min-h-screen">
       <Navbar />
       
-      <div className="pt-20 md:pt-28 pb-10 md:pb-20 theme-page-header">
+      <div className="theme-page-header">
         <div className="container mx-auto px-4">
           <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-4 md:mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
