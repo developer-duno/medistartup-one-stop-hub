@@ -9,13 +9,13 @@ interface CategorySelectorProps {
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ categories }) => {
   return (
-    <div className="mb-8 overflow-x-auto">
-      <TabsList className="w-full flex justify-start md:justify-center p-1 bg-neutral-100 rounded-lg">
+    <div className="mb-8">
+      <TabsList className="w-full flex flex-wrap justify-center gap-1 p-1 bg-neutral-100 rounded-lg h-auto">
         {categories.map((category) => (
           <TabsTrigger
             key={category.id}
             value={category.id}
-            className="px-4 py-2 text-sm md:text-base whitespace-nowrap"
+            className="px-3 py-1.5 text-xs md:text-base md:px-4 md:py-2"
           >
             {category.name}
           </TabsTrigger>
