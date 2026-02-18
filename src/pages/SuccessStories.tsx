@@ -5,9 +5,10 @@ import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { LoadingState } from '@/components/ui/loading-state';
 
 const SuccessStories = () => {
-  const { getVisibleStories } = useSuccessStories();
+  const { getVisibleStories, loading } = useSuccessStories();
   const visibleStories = getVisibleStories();
   
   return (
@@ -33,7 +34,9 @@ const SuccessStories = () => {
       </div>
 
       <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
-        {visibleStories.length > 0 ? (
+        {loading ? (
+          <LoadingState className="py-12" />
+        ) : visibleStories.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {visibleStories.map((story) => (
               <div key={story.id} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
@@ -82,7 +85,7 @@ const SuccessStories = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-neutral-500">등록된 성공 사례가 없습니다.</p>
+            <p className="text-muted-foreground">등록된 성공 사례가 없습니다.</p>
           </div>
         )}
       </div>
