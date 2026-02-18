@@ -3,7 +3,7 @@
 // 2024-2025년 실제 업계 데이터 기반 (국세청 TASIS, 건강보험심사평가원, 업계 평균치 참고)
 import { FinancialResult, RevenueResult, StaffingResult, StaffMember, STANDARDIZED_REGIONS } from '../admin/simulator/types';
 
-export const simulateFinancialCosts = (params: { specialty: string; size: number; location: string }): FinancialResult => {
+export const simulateFinancialCosts = (params: { specialty: string; size: number; location: string; services?: string[] }): FinancialResult => {
   // 진료과목별 기본 개원 비용 (백만원 단위, 30평 기준)
   // 출처: 2024년 업계 평균 개원 컨설팅 데이터 기반
   const baseCosts: Record<string, { interior: number; equipment: number; license: number; misc: number }> = {
@@ -17,43 +17,66 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
     '안과': { interior: 120, equipment: 400, license: 25, misc: 60 },
     '한의원': { interior: 60, equipment: 40, license: 10, misc: 25 },
     '종합병원': { interior: 800, equipment: 1500, license: 100, misc: 300 },
-    '성형외과': { interior: 200, equipment: 350, license: 25, misc: 70 },    // 총 ~6.5억 (고급 인테리어+수술장비)
-    '재활의학과': { interior: 100, equipment: 250, license: 20, misc: 50 },  // 총 ~4.2억 (재활치료 장비)
-    '비뇨기과': { interior: 90, equipment: 180, license: 20, misc: 40 },     // 총 ~3.3억
-    '이비인후과': { interior: 85, equipment: 150, license: 18, misc: 38 },   // 총 ~2.9억
-    '신경외과': { interior: 130, equipment: 450, license: 30, misc: 65 },    // 총 ~6.8억 (고가 장비)
-    '정신건강의학과': { interior: 70, equipment: 30, license: 15, misc: 30 }, // 총 ~1.5억 (장비 최소)
-    '가정의학과': { interior: 75, equipment: 100, license: 15, misc: 30 },   // 총 ~2.2억
+    '성형외과': { interior: 200, equipment: 350, license: 25, misc: 70 },
+    '재활의학과': { interior: 100, equipment: 250, license: 20, misc: 50 },
+    '비뇨기과': { interior: 90, equipment: 180, license: 20, misc: 40 },
+    '이비인후과': { interior: 85, equipment: 150, license: 18, misc: 38 },
+    '신경외과': { interior: 130, equipment: 450, license: 30, misc: 65 },
+    '정신건강의학과': { interior: 70, equipment: 30, license: 15, misc: 30 },
+    '가정의학과': { interior: 75, equipment: 100, license: 15, misc: 30 },
   };
   
-  // 평당 인테리어 단가 보정 (기본 30평 기준에서 면적 비례 조정)
-  const baseSize = 30; // 기준 면적(평)
+  // 추가 서비스별 초기 투자 비용 (백만원)
+  // 수술: 수술실 구축(인테리어) + 수술장비 + 인허가
+  // 입원: 병동 인테리어 + 병상/모니터링 장비 + 입원 허가
+  // 검진: 검진센터 인테리어 + 검진장비(내시경, 초음파 등)
+  // 미용: 시술실 인테리어 + 레이저/미용장비
+  // 검사: 검사실 구축 + 영상장비(X-ray, CT 등)
+  const serviceCosts: Record<string, { interior: number; equipment: number; license: number; misc: number }> = {
+    '수술': { interior: 80, equipment: 150, license: 10, misc: 30 },
+    '입원': { interior: 120, equipment: 80, license: 15, misc: 40 },
+    '검진': { interior: 40, equipment: 100, license: 5, misc: 15 },
+    '미용': { interior: 50, equipment: 120, license: 5, misc: 20 },
+    '검사': { interior: 30, equipment: 200, license: 5, misc: 15 },
+  };
+  
+  const baseSize = 30;
   const sizeRatio = params.size / baseSize;
   
-  // 인테리어는 면적에 비례, 장비는 면적 영향 적음, 인허가/기타는 소폭 증가
   const interiorSizeMultiplier = sizeRatio;
-  const equipmentSizeMultiplier = 1 + (sizeRatio - 1) * 0.3; // 면적 증가 시 30%만 반영
+  const equipmentSizeMultiplier = 1 + (sizeRatio - 1) * 0.3;
   const licenseSizeMultiplier = 1 + (sizeRatio - 1) * 0.15;
   const miscSizeMultiplier = 1 + (sizeRatio - 1) * 0.4;
   
-  // 입지별 보정 계수 (주로 보증금/권리금/인테리어에 영향)
   const locationModifiers: Record<string, { interior: number; misc: number }> = {
     '중형상가': { interior: 1.0, misc: 1.0 },
-    '대형상가': { interior: 1.2, misc: 1.5 },    // 대형상가는 보증금/권리금 높음
-    '주택가': { interior: 0.85, misc: 0.7 },       // 주택가는 상대적으로 저렴
-    '오피스밀집지역': { interior: 1.15, misc: 1.3 }, // 오피스 지역 임대료 높음
+    '대형상가': { interior: 1.2, misc: 1.5 },
+    '주택가': { interior: 0.85, misc: 0.7 },
+    '오피스밀집지역': { interior: 1.15, misc: 1.3 },
   };
   
   const costs = baseCosts[params.specialty] || baseCosts['내과'];
   const locMod = locationModifiers[params.location] || locationModifiers['중형상가'];
   
-  const interiorCost = Math.round(costs.interior * interiorSizeMultiplier * locMod.interior);
-  const equipmentCost = Math.round(costs.equipment * equipmentSizeMultiplier);
-  const licenseCost = Math.round(costs.license * licenseSizeMultiplier);
-  const miscCost = Math.round(costs.misc * miscSizeMultiplier * locMod.misc);
+  let interiorCost = Math.round(costs.interior * interiorSizeMultiplier * locMod.interior);
+  let equipmentCost = Math.round(costs.equipment * equipmentSizeMultiplier);
+  let licenseCost = Math.round(costs.license * licenseSizeMultiplier);
+  let miscCost = Math.round(costs.misc * miscSizeMultiplier * locMod.misc);
+  
+  // 추가 서비스 비용 반영 (일반진료는 기본이므로 추가 비용 없음)
+  const services = params.services || [];
+  services.forEach(service => {
+    const sc = serviceCosts[service];
+    if (sc) {
+      interiorCost += Math.round(sc.interior * locMod.interior);
+      equipmentCost += sc.equipment;
+      licenseCost += sc.license;
+      miscCost += Math.round(sc.misc * locMod.misc);
+    }
+  });
+  
   const totalCost = interiorCost + equipmentCost + licenseCost + miscCost;
   
-  // 백만원 단위를 만원 단위로 변환하여 표시
   const formatCost = (valueMillion: number) => {
     const valueManwon = valueMillion * 100;
     if (valueManwon >= 10000) {
@@ -80,10 +103,8 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
   };
 };
 
-export const simulateRevenue = (params: { specialty: string; patients: number; region: string }): RevenueResult => {
+export const simulateRevenue = (params: { specialty: string; patients: number; region: string; services?: string[] }): RevenueResult => {
   // 진료과목별 환자 1인당 평균 진료비 (원)
-  // 출처: 2023년 국세청 TASIS 100대 생활업종 + 건강보험심사평가원 데이터 기반 추정
-  // 급여 + 비급여 포함 평균 단가
   const perPatientRevenue: Record<string, number> = {
     '내과': 35000,
     '소아과': 30000,
@@ -95,34 +116,82 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
     '안과': 85000,
     '한의원': 45000,
     '종합병원': 120000,
-    '성형외과': 150000,      // 비급여 시술/수술 비중 매우 높음
-    '재활의학과': 40000,     // 물리치료 위주, 단가 낮지만 환자수 많음
-    '비뇨기과': 50000,       // 검사/시술 포함
-    '이비인후과': 35000,     // 감기/중이염 등 일반 진료 위주
-    '신경외과': 90000,       // 수술/시술 단가 높음
-    '정신건강의학과': 60000, // 상담료+약물치료, 비급여 상담 높음
-    '가정의학과': 30000,     // 건강검진+일반진료
+    '성형외과': 150000,
+    '재활의학과': 40000,
+    '비뇨기과': 50000,
+    '이비인후과': 35000,
+    '신경외과': 90000,
+    '정신건강의학과': 60000,
+    '가정의학과': 30000,
   };
   
-  // 지역별 매출 보정 계수 (수도권 대비)
-  // 출처: 국세청 지역별 의원 매출 통계 기반
   const regionMultipliers: Record<string, number> = {
-    '서울/경기': 1.15,    // 수도권: 환자 수 많고 비급여 비중 높음
-    '부산/경남': 0.95,    // 부산권: 전국 평균 근접
-    '대전/충남': 0.88,    // 대전권: 중위권
-    '대구/경북': 0.85,    // 대구권: 중위권
-    '광주/전라': 0.80,    // 광주권: 비수도권 하위
-    '제주': 0.75,         // 제주: 인구 대비 의원 수 높아 경쟁
+    '서울/경기': 1.15,
+    '부산/경남': 0.95,
+    '대전/충남': 0.88,
+    '대구/경북': 0.85,
+    '광주/전라': 0.80,
+    '제주': 0.75,
   };
   
-  const dailyRevenue = (perPatientRevenue[params.specialty] || 40000) * params.patients;
+  const basePerPatient = perPatientRevenue[params.specialty] || 40000;
   const regionMultiplier = regionMultipliers[params.region] || 1;
+  
+  // 추가 서비스별 매출/비용 영향
+  // 각 서비스는 환자당 단가 증가 또는 추가 월 매출을 발생시킴
+  const services = params.services || [];
+  
+  // 추가 서비스로 인한 환자당 단가 증가율
+  let revenueMultiplier = 1.0;
+  // 추가 서비스로 인한 월 고정 추가 매출 (원)
+  let additionalMonthlyRevenue = 0;
+  // 추가 서비스로 인한 월 고정 추가 비용 (원)
+  let additionalMonthlyExpense = 0;
+  
+  if (services.includes('수술')) {
+    // 수술 제공 시: 환자당 단가 25% 증가 (수술 환자 비중 반영)
+    // 추가 비용: 수술 소모품, 마취약제 등 월 500만원
+    revenueMultiplier += 0.25;
+    additionalMonthlyExpense += 5000000;
+  }
+  
+  if (services.includes('입원')) {
+    // 입원실 운영: 월 고정 매출 약 1,500만원 (10병상 기준, 가동률 70%)
+    // 추가 비용: 식비, 세탁, 공과금, 소모품 등 월 800만원
+    additionalMonthlyRevenue += 15000000;
+    additionalMonthlyExpense += 8000000;
+  }
+  
+  if (services.includes('검진')) {
+    // 건강검진: 월 고정 매출 약 800만원 (1일 4건 × 25일 × 8만원)
+    // 추가 비용: 검사 키트, 시약, 외주검사비 등 월 300만원
+    additionalMonthlyRevenue += 8000000;
+    additionalMonthlyExpense += 3000000;
+  }
+  
+  if (services.includes('미용')) {
+    // 미용 시술: 환자당 단가 30% 증가 (비급여 시술 비중 반영)
+    // 추가 비용: 시술 소모품, 약제비 등 월 400만원
+    revenueMultiplier += 0.30;
+    additionalMonthlyExpense += 4000000;
+  }
+  
+  if (services.includes('검사')) {
+    // 영상검사(X-ray, 초음파 등): 환자당 단가 15% 증가
+    // 추가 비용: 필름, 장비 유지보수, 방사선 관리 등 월 200만원
+    revenueMultiplier += 0.15;
+    additionalMonthlyExpense += 2000000;
+  }
+  
+  const adjustedPerPatient = basePerPatient * revenueMultiplier;
+  const dailyRevenue = adjustedPerPatient * params.patients;
   const adjustedDailyRevenue = dailyRevenue * regionMultiplier;
   
-  // 월 영업일 25일 기준 (토요일 반일 포함)
-  const monthlyRevenue = adjustedDailyRevenue * 25;
+  // 월 영업일 25일 기준
+  const baseMonthlyRevenue = adjustedDailyRevenue * 25;
+  const monthlyRevenue = baseMonthlyRevenue + additionalMonthlyRevenue;
   
-  // 진료과목별 비용 비율 (인건비+임대료+재료비+관리비 등)
+  // 진료과목별 기본 비용 비율
   const expenseRatios: Record<string, number> = {
     '내과': 0.65,
     '소아과': 0.68,
@@ -134,24 +203,24 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
     '안과': 0.52,
     '한의원': 0.60,
     '종합병원': 0.75,
-    '성형외과': 0.48,       // 비급여 비중 매우 높아 마진율 최고
-    '재활의학과': 0.67,     // 인건비(치료사) 비중 높음
+    '성형외과': 0.48,
+    '재활의학과': 0.67,
     '비뇨기과': 0.60,
     '이비인후과': 0.63,
-    '신경외과': 0.55,       // 수술 마진율 높음
-    '정신건강의학과': 0.50, // 장비/재료비 낮아 마진 좋음
+    '신경외과': 0.55,
+    '정신건강의학과': 0.50,
     '가정의학과': 0.65,
   };
   
   const expenseRatio = expenseRatios[params.specialty] || 0.62;
-  const monthlyExpenses = monthlyRevenue * expenseRatio;
+  const baseMonthlyExpenses = baseMonthlyRevenue * expenseRatio;
+  const monthlyExpenses = baseMonthlyExpenses + additionalMonthlyExpense;
   const monthlyProfit = monthlyRevenue - monthlyExpenses;
   
   const revenue = Math.round(monthlyRevenue / 10000).toLocaleString() + '만원';
   const expenses = Math.round(monthlyExpenses / 10000).toLocaleString() + '만원';
   const profit = Math.round(monthlyProfit / 10000).toLocaleString() + '만원';
   
-  // 지역 대비 지수 (전국 평균 = 100%)
   const regionComparison = Math.round(regionMultiplier * 100);
   
   return {
