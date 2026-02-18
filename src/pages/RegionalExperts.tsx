@@ -1,13 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MapPin, Users, User } from 'lucide-react';
+import { ArrowLeft, MapPin, Users, User, Briefcase } from 'lucide-react';
 import { useRegions } from '@/contexts/RegionsContext';
 import { useExperts } from '@/contexts/ExpertsContext';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import RegionCard from '@/components/map/RegionCard';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { regionGroups, RegionGroup } from '@/utils/schema/regionSchema';
@@ -60,6 +61,12 @@ const RegionalExperts = () => {
       expert.regions.includes(regionName)
     ).length;
   };
+
+  // Experts filtered by active region
+  const regionExperts = useMemo(() => {
+    if (!activeRegion) return [];
+    return experts.filter(expert => expert.regions.includes(activeRegion));
+  }, [activeRegion, experts]);
 
   return (
     <div className="theme-regions min-h-screen bg-white">
@@ -128,12 +135,68 @@ const RegionalExperts = () => {
           </div>
 
           <div className="w-full lg:w-2/5">
-            {activeRegionInfo && (
-              <RegionCard 
-                activeRegion={activeRegionInfo} 
-                getFilteredUrl={getFilteredUrl} 
-              />
-            )}
+            <Card className="sticky top-24">
+              <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-4 rounded-t-lg">
+                <h3 className="font-bold text-lg flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  {activeRegion} 전문가
+                </h3>
+                <p className="text-sm opacity-90 mt-1">{regionExperts.length}명의 전문가</p>
+              </div>
+              <CardContent className="p-3 max-h-[60vh] overflow-y-auto">
+                {regionExperts.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Users className="h-10 w-10 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">해당 지역에 등록된 전문가가 없습니다.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {regionExperts.map(expert => (
+                      <Link 
+                        key={expert.id} 
+                        to={`/experts/${expert.id}`}
+                        className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors border border-transparent hover:border-border"
+                      >
+                        <Avatar className="h-10 w-10 shrink-0">
+                          <AvatarImage src={expert.image} alt={expert.name} />
+                          <AvatarFallback>{expert.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-medium text-sm truncate">{expert.name}</span>
+                            {expert.isRegionalManager && (
+                              <Badge variant="default" className="text-[10px] px-1.5 py-0">총괄</Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {expert.services.slice(0, 2).map((s, i) => (
+                              <Badge key={i} variant="secondary" className="text-[10px] px-1.5 py-0">
+                                {s}
+                              </Badge>
+                            ))}
+                            {expert.services.length > 2 && (
+                              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                +{expert.services.length - 2}
+                              </Badge>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {regionExperts.length > 0 && (
+                  <div className="mt-3 pt-3 border-t">
+                    <Button asChild variant="outline" className="w-full" size="sm">
+                      <Link to={`/experts?region=${encodeURIComponent(activeRegion)}`}>
+                        전체 전문가 보기
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
