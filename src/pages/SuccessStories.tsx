@@ -34,7 +34,7 @@ const SuccessStories = () => {
 
       <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
         {visibleStories.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {visibleStories.map((story) => (
               <div key={story.id} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
                 <div className="aspect-video bg-neutral-100 relative">
