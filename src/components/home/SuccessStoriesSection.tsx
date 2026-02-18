@@ -15,23 +15,16 @@ const SuccessStoriesSection = () => {
   return (
     <section className="py-10 md:py-20 bg-white">
       <div className="container mx-auto px-3 md:px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 md:mb-10">
+        <div className="text-center mb-6 md:mb-10">
           <div>
             <h2 className="font-pretendard text-xl md:text-3xl font-bold mb-2 md:mb-3">
               성공<span className="text-green-600">스토리</span>
             </h2>
-            <p className="text-neutral-600 max-w-xl text-xs md:text-base">
+            <p className="text-neutral-600 max-w-xl mx-auto text-xs md:text-base">
               MediStartup과 함께한 의료기관들의 성공 사례를 확인하세요. 
               다양한 전문가와 함께 최적의 솔루션을 찾아드립니다.
             </p>
           </div>
-          <Link 
-            to="/success-stories" 
-            className="hidden md:inline-flex items-center mt-4 md:mt-0 text-green-600 hover:text-green-700 font-medium"
-          >
-            모든 사례 보기
-            <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
         </div>
         
         {/* 수정된 부분: 반응형 그리드 설정 */}
