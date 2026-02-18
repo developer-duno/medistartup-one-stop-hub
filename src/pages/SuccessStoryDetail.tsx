@@ -2,8 +2,9 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Calendar, MapPin, Tag } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Tag, User } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { useExperts } from '@/contexts/ExpertsContext';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -13,6 +14,7 @@ import { generateSuccessStorySchema } from '@/utils/schemaUtils';
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { successStories } = useSuccessStories();
+  const { experts } = useExperts();
   const navigate = useNavigate();
   
   const story = successStories.find(s => s.id === Number(id) && s.visible);
@@ -122,6 +124,42 @@ const SuccessStoryDetail = () => {
             </div>
           </div>
           
+          {/* 관련 전문가 섹션 */}
+          {(() => {
+            const relatedExperts = experts.filter(e => 
+              e.isApproved !== false && 
+              e.services?.some(s => story.services.includes(s))
+            ).slice(0, 4);
+            if (relatedExperts.length === 0) return null;
+            return (
+              <div className="mt-8 md:mt-12 border-t border-neutral-200 pt-4 md:pt-8">
+                <h3 className="font-pretendard font-bold text-base md:text-xl mb-4 md:mb-6 flex items-center gap-2">
+                  <User className="h-5 w-5 text-primary" />
+                  관련 전문가
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                  {relatedExperts.map(expert => (
+                    <Link
+                      key={expert.id}
+                      to={`/experts/${expert.id}`}
+                      className="block group text-center"
+                    >
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden mx-auto mb-2 border-2 border-neutral-100 group-hover:border-primary transition-colors">
+                        <img
+                          src={expert.image || '/placeholder.svg'}
+                          alt={expert.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <p className="font-medium text-sm text-neutral-900 group-hover:text-primary transition-colors">{expert.name}</p>
+                      <p className="text-xs text-neutral-500">{expert.specialty}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="mt-8 md:mt-12 border-t border-neutral-200 pt-4 md:pt-8">
             <h3 className="font-pretendard font-bold text-base md:text-xl mb-4 md:mb-6">다른 성공 사례 보기</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
@@ -141,7 +179,7 @@ const SuccessStoryDetail = () => {
                         className="w-full h-full object-cover transition-transform group-hover:scale-105" 
                       />
                     </div>
-                    <h4 className="font-medium text-neutral-900 group-hover:theme-text transition-colors">
+                    <h4 className="font-medium text-neutral-900 group-hover:text-primary transition-colors">
                       {relatedStory.title}
                     </h4>
                   </Link>

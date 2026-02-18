@@ -8,7 +8,7 @@ interface ExpertOverviewProps {
 }
 
 const ExpertOverview: React.FC<ExpertOverviewProps> = ({ expert }) => {
-  const keyAchievements = expert.keyAchievements || [];
+  const keyAchievements = (expert.keyAchievements || []).filter(a => a && a.trim() !== '');
 
   return (
     <section className="animate-fade-in">
