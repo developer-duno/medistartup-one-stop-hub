@@ -23,13 +23,13 @@ const ExpertsSection = () => {
     });
 
   return (
-    <section id="experts" className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
+    <section id="experts" className="py-10 md:py-24">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="font-pretendard font-bold text-xl md:text-4xl text-neutral-900 mb-2 md:mb-4">
             <span className="text-primary">전문가</span> 프로필
           </h2>
-          <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
+          <p className="font-noto text-neutral-600 max-w-2xl mx-auto text-xs md:text-base">
             병원창업 각 분야 최고의 전문가들이 여러분의 성공적인 창업을 함께합니다.
             풍부한 경험과 전문성으로 최적의 솔루션을 제공합니다.
           </p>
@@ -44,15 +44,15 @@ const ExpertsSection = () => {
               <div key={expert.id} className={`bg-white rounded-xl shadow-md overflow-hidden group ${
                 isSelected ? 'ring-2 ring-primary border-primary' : ''
               }`}>
-                <div className="relative h-52 sm:h-60 overflow-hidden">
-                  <img 
+                <div className="relative h-40 sm:h-60 overflow-hidden">
+                  <img
                     src={expert.image || "/placeholder.svg"} 
                     alt={expert.name} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <p className="font-noto text-sm text-white/80">
+                    <p className="font-noto text-[10px] md:text-sm text-white/80">
                       {expert.specialty}
                     </p>
                   </div>
@@ -66,35 +66,35 @@ const ExpertsSection = () => {
                   )}
                 </div>
                 
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+                <div className="p-3 md:p-6">
+                  <div className="flex justify-between items-start mb-2 md:mb-4">
                     <div>
-                      <h3 className="font-pretendard font-bold text-xl text-neutral-900">
+                      <h3 className="font-pretendard font-bold text-sm md:text-xl text-neutral-900">
                         {expert.name}
                       </h3>
-                      <p className="font-noto text-neutral-600">
+                      <p className="font-noto text-neutral-600 text-xs md:text-base">
                         {expert.role}
                       </p>
                     </div>
-                    <Award className="h-5 w-5 text-secondary" />
+                    <Award className="h-4 w-4 md:h-5 md:w-5 text-secondary" />
                   </div>
                   
-                  <div className="flex gap-4 mb-4">
-                    <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
-                      <span className="font-pretendard font-bold text-primary text-lg">
+                  <div className="flex gap-2 md:gap-4 mb-2 md:mb-4">
+                    <div className="bg-primary-50 rounded-lg px-2 md:px-3 py-1 md:py-2 flex flex-col items-center">
+                      <span className="font-pretendard font-bold text-primary text-xs md:text-lg">
                         {expert.experience}
                       </span>
-                      <span className="font-noto text-xs text-neutral-500">경력</span>
+                      <span className="font-noto text-[9px] md:text-xs text-neutral-500">경력</span>
                     </div>
-                    <div className="bg-primary-50 rounded-lg px-3 py-2 flex flex-col items-center">
-                      <span className="font-pretendard font-bold text-primary text-lg">
+                    <div className="bg-primary-50 rounded-lg px-2 md:px-3 py-1 md:py-2 flex flex-col items-center">
+                      <span className="font-pretendard font-bold text-primary text-xs md:text-lg">
                         {expert.projects}
                       </span>
-                      <span className="font-noto text-xs text-neutral-500">프로젝트</span>
+                      <span className="font-noto text-[9px] md:text-xs text-neutral-500">프로젝트</span>
                     </div>
                   </div>
                   
-                  <p className="font-noto text-sm text-neutral-600 mb-6 line-clamp-3">
+                  <p className="font-noto text-[10px] md:text-sm text-neutral-600 mb-3 md:mb-6 line-clamp-2 md:line-clamp-3">
                     {expert.description}
                   </p>
                   
