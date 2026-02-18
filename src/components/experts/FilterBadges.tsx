@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { X, MapPin, Tag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { regionGroups } from '@/utils/schema/regionSchema';
 
 interface FilterBadgesProps {
   filters: {
@@ -18,23 +19,48 @@ const FilterBadges: React.FC<FilterBadgesProps> = ({
   handleRemoveFilter,
   handleClearFilters,
 }) => {
+  const displayRegions = useMemo(() => {
+    const result: { label: string; isGroup: boolean; regions: string[] }[] = [];
+    const consumed = new Set<string>();
+
+    for (const group of regionGroups) {
+      const allSelected = group.regions.every(r => filters.regions.includes(r));
+      if (allSelected) {
+        result.push({ label: group.name, isGroup: true, regions: group.regions });
+        group.regions.forEach(r => consumed.add(r));
+      }
+    }
+
+    for (const region of filters.regions) {
+      if (!consumed.has(region)) {
+        result.push({ label: region, isGroup: false, regions: [region] });
+      }
+    }
+
+    return result;
+  }, [filters.regions]);
+
   if (filters.regions.length === 0 && filters.services.length === 0) {
     return null;
   }
 
+  const handleRemoveRegionBadge = (item: { isGroup: boolean; regions: string[] }) => {
+    item.regions.forEach(r => handleRemoveFilter('regions', r));
+  };
+
   return (
     <div className="flex flex-wrap gap-2 ml-2">
-      {filters.regions.map((region) => (
+      {displayRegions.map((item) => (
         <Badge 
-          key={region} 
+          key={item.label} 
           variant="outline"
           className="flex items-center gap-1 bg-neutral-50"
         >
           <MapPin className="h-3 w-3" />
-          {region}
+          {item.label}
           <X 
             className="h-3 w-3 ml-1 cursor-pointer" 
-            onClick={() => handleRemoveFilter('regions', region)}
+            onClick={() => handleRemoveRegionBadge(item)}
           />
         </Badge>
       ))}
