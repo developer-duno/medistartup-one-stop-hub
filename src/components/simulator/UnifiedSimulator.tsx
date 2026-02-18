@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Sparkles, Calculator, TrendingUp, Users, RotateCcw } from 'lucide-react';
+import { Sparkles, Calculator, TrendingUp, Users, RotateCcw, ChevronDown } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MEDICAL_SPECIALTIES, LOCATION_TYPES, STANDARDIZED_REGIONS, SERVICE_TYPES, FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
 import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './SimulatorUtils';
@@ -43,6 +43,7 @@ const UnifiedSimulator: React.FC = () => {
   });
 
   const [results, setResults] = useState<UnifiedResults | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const handleSimulate = () => {
     const financial = simulateFinancialCosts({
@@ -73,134 +74,228 @@ const UnifiedSimulator: React.FC = () => {
     setResults(null);
   };
 
+  // Mobile compact inputs
+  const renderMobileInputs = () => (
+    <div className="space-y-3">
+      {/* Row 1: 진료과목 + 위치 */}
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-xs font-medium mb-1 text-muted-foreground">진료과목</label>
+          <select
+            className="w-full p-1.5 text-sm border rounded-md bg-background"
+            value={inputs.specialty}
+            onChange={(e) => setInputs({ ...inputs, specialty: e.target.value })}
+          >
+            {MEDICAL_SPECIALTIES.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-xs font-medium mb-1 text-muted-foreground">위치 유형</label>
+          <select
+            className="w-full p-1.5 text-sm border rounded-md bg-background"
+            value={inputs.location}
+            onChange={(e) => setInputs({ ...inputs, location: e.target.value })}
+          >
+            {LOCATION_TYPES.map(l => (
+              <option key={l} value={l}>{l}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Row 2: 규모 + 지역 */}
+      <div className="grid grid-cols-2 gap-2">
+        <div>
+          <label className="block text-xs font-medium mb-1 text-muted-foreground">규모</label>
+          <div className="flex items-center gap-2">
+            <Slider
+              value={inputs.size}
+              min={30} max={300} step={10}
+              onValueChange={(value) => setInputs({ ...inputs, size: value })}
+              className="flex-grow"
+            />
+            <span className="text-xs font-medium w-10 text-right shrink-0">{inputs.size}평</span>
+          </div>
+        </div>
+        <div>
+          <label className="block text-xs font-medium mb-1 text-muted-foreground">지역</label>
+          <select
+            className="w-full p-1.5 text-sm border rounded-md bg-background"
+            value={inputs.region}
+            onChange={(e) => setInputs({ ...inputs, region: e.target.value })}
+          >
+            {STANDARDIZED_REGIONS.map(r => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Row 3: 환자수 */}
+      <div>
+        <label className="block text-xs font-medium mb-1 text-muted-foreground">일평균 환자수</label>
+        <div className="flex items-center gap-2">
+          <Slider
+            value={inputs.patients}
+            min={10} max={100} step={5}
+            onValueChange={(value) => setInputs({ ...inputs, patients: value })}
+            className="flex-grow"
+          />
+          <span className="text-xs font-medium w-10 text-right shrink-0">{inputs.patients}명</span>
+        </div>
+      </div>
+
+      {/* Collapsible: 추가 서비스 */}
+      <button
+        type="button"
+        onClick={() => setShowAdvanced(!showAdvanced)}
+        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
+      >
+        <ChevronDown className={`h-3 w-3 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+        추가 서비스 설정 {inputs.services.length > 0 && `(${inputs.services.length}개 선택)`}
+      </button>
+      <AnimatePresence>
+        {showAdvanced && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {SERVICE_TYPES.map((service) => {
+                const selected = inputs.services.includes(service);
+                return (
+                  <button
+                    key={service}
+                    type="button"
+                    onClick={() => {
+                      if (selected) {
+                        setInputs({ ...inputs, services: inputs.services.filter(s => s !== service) });
+                      } else {
+                        setInputs({ ...inputs, services: [...inputs.services, service] });
+                      }
+                    }}
+                    className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                      selected
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background text-muted-foreground border-border hover:border-primary/50'
+                    }`}
+                  >
+                    {service}
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+
+  // Desktop inputs (original)
+  const renderDesktopInputs = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="space-y-4">
+        <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
+          <Calculator className="h-4 w-4" /> 기본 설정
+        </h4>
+        <div>
+          <label className="block text-sm font-medium mb-1">진료과목</label>
+          <select className="w-full p-2 border rounded-md bg-background" value={inputs.specialty}
+            onChange={(e) => setInputs({ ...inputs, specialty: e.target.value })}>
+            {MEDICAL_SPECIALTIES.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">규모 (평수)</label>
+          <div className="flex items-center gap-3">
+            <Slider value={inputs.size} min={30} max={300} step={10}
+              onValueChange={(value) => setInputs({ ...inputs, size: value })} className="flex-grow" />
+            <span className="text-sm font-medium w-14 text-right">{inputs.size}평</span>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">위치 유형</label>
+          <select className="w-full p-2 border rounded-md bg-background" value={inputs.location}
+            onChange={(e) => setInputs({ ...inputs, location: e.target.value })}>
+            {LOCATION_TYPES.map(l => <option key={l} value={l}>{l}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
+          <TrendingUp className="h-4 w-4" /> 수익성 설정
+        </h4>
+        <div>
+          <label className="block text-sm font-medium mb-1">일평균 환자수</label>
+          <div className="flex items-center gap-3">
+            <Slider value={inputs.patients} min={10} max={100} step={5}
+              onValueChange={(value) => setInputs({ ...inputs, patients: value })} className="flex-grow" />
+            <span className="text-sm font-medium w-14 text-right">{inputs.patients}명</span>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">지역</label>
+          <select className="w-full p-2 border rounded-md bg-background" value={inputs.region}
+            onChange={(e) => setInputs({ ...inputs, region: e.target.value })}>
+            {STANDARDIZED_REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
+          <Users className="h-4 w-4" /> 추가 서비스
+        </h4>
+        <div>
+          <label className="block text-sm font-medium mb-1">제공 서비스</label>
+          <div className="space-y-1.5">
+            {SERVICE_TYPES.map((service) => (
+              <label key={service} className="flex items-center cursor-pointer">
+                <input type="checkbox" checked={inputs.services.includes(service)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setInputs({ ...inputs, services: [...inputs.services, service] });
+                    } else {
+                      setInputs({ ...inputs, services: inputs.services.filter(s => s !== service) });
+                    }
+                  }}
+                  className="mr-2 accent-primary" />
+                <span className="text-sm">{service}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <Card className="w-full border-primary/20 shadow-lg">
-      <CardHeader className="pb-4">
+      <CardHeader className={isMobile ? 'pb-2 px-4' : 'pb-4'}>
         <div className="flex gap-3 items-center">
-          <div className="bg-primary/10 p-3 rounded-full">
-            <Calculator className="h-6 w-6 text-primary" />
+          <div className={`bg-primary/10 rounded-full ${isMobile ? 'p-2' : 'p-3'}`}>
+            <Calculator className={isMobile ? 'h-5 w-5 text-primary' : 'h-6 w-6 text-primary'} />
           </div>
           <div>
-            <CardTitle className="text-xl">병원 창업 종합 시뮬레이터</CardTitle>
-            <CardDescription>
-              진료과목과 조건을 설정하면 개원비용, 예상수익, 필요인력을 한번에 분석합니다.
-            </CardDescription>
+            <CardTitle className={isMobile ? 'text-base' : 'text-xl'}>병원 창업 종합 시뮬레이터</CardTitle>
+            {!isMobile && (
+              <CardDescription>
+                진료과목과 조건을 설정하면 개원비용, 예상수익, 필요인력을 한번에 분석합니다.
+              </CardDescription>
+            )}
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
-        {/* Inputs Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* 기본 설정 */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
-              <Calculator className="h-4 w-4" /> 기본 설정
-            </h4>
-            <div>
-              <label className="block text-sm font-medium mb-1">진료과목</label>
-              <select
-                className="w-full p-2 border rounded-md bg-background"
-                value={inputs.specialty}
-                onChange={(e) => setInputs({ ...inputs, specialty: e.target.value })}
-              >
-                {MEDICAL_SPECIALTIES.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">규모 (평수)</label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={inputs.size}
-                  min={30}
-                  max={300}
-                  step={10}
-                  onValueChange={(value) => setInputs({ ...inputs, size: value })}
-                  className="flex-grow"
-                />
-                <span className="text-sm font-medium w-14 text-right">{inputs.size}평</span>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">위치 유형</label>
-              <select
-                className="w-full p-2 border rounded-md bg-background"
-                value={inputs.location}
-                onChange={(e) => setInputs({ ...inputs, location: e.target.value })}
-              >
-                {LOCATION_TYPES.map(l => (
-                  <option key={l} value={l}>{l}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+      <CardContent className={isMobile ? 'space-y-3 px-4' : 'space-y-6'}>
+        {isMobile ? renderMobileInputs() : renderDesktopInputs()}
 
-          {/* 수익성 설정 */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" /> 수익성 설정
-            </h4>
-            <div>
-              <label className="block text-sm font-medium mb-1">일평균 환자수</label>
-              <div className="flex items-center gap-3">
-                <Slider
-                  value={inputs.patients}
-                  min={10}
-                  max={100}
-                  step={5}
-                  onValueChange={(value) => setInputs({ ...inputs, patients: value })}
-                  className="flex-grow"
-                />
-                <span className="text-sm font-medium w-14 text-right">{inputs.patients}명</span>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">지역</label>
-              <select
-                className="w-full p-2 border rounded-md bg-background"
-                value={inputs.region}
-                onChange={(e) => setInputs({ ...inputs, region: e.target.value })}
-              >
-                {STANDARDIZED_REGIONS.map(r => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* 인력 설정 */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-sm text-muted-foreground flex items-center gap-2">
-              <Users className="h-4 w-4" /> 추가 서비스
-            </h4>
-            <div>
-              <label className="block text-sm font-medium mb-1">제공 서비스</label>
-              <div className="space-y-1.5">
-                {SERVICE_TYPES.map((service) => (
-                  <label key={service} className="flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={inputs.services.includes(service)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setInputs({ ...inputs, services: [...inputs.services, service] });
-                        } else {
-                          setInputs({ ...inputs, services: inputs.services.filter(s => s !== service) });
-                        }
-                      }}
-                      className="mr-2 accent-primary"
-                    />
-                    <span className="text-sm">{service}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Results Section */}
         <AnimatePresence>
           {results && (
             <motion.div
@@ -208,13 +303,13 @@ const UnifiedSimulator: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="space-y-6 pt-6 border-t border-border"
+              className={`space-y-4 pt-4 border-t border-border ${isMobile ? '' : 'space-y-6 pt-6'}`}
             >
               <motion.h3
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.4 }}
-                className="font-bold text-lg text-center text-foreground"
+                className={`font-bold text-center text-foreground ${isMobile ? 'text-base' : 'text-lg'}`}
               >
                 📊 종합 시뮬레이션 결과
               </motion.h3>
@@ -227,25 +322,16 @@ const UnifiedSimulator: React.FC = () => {
                 />
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
-                  >
+                  <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}>
                     <FinancialResultView result={results.financial} />
                   </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
-                  >
+                  <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}>
                     <RevenueResultView result={results.revenue} />
                   </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}
-                  >
+                  <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}>
                     <StaffingResultView result={results.staffing} />
                   </motion.div>
                 </div>
@@ -255,14 +341,14 @@ const UnifiedSimulator: React.FC = () => {
         </AnimatePresence>
       </CardContent>
 
-      <CardFooter className="flex justify-between border-t pt-4">
+      <CardFooter className={`flex justify-between border-t ${isMobile ? 'pt-3 px-4' : 'pt-4'}`}>
         {!results ? (
-          <Button onClick={handleSimulate} className="w-full" size="lg">
+          <Button onClick={handleSimulate} className="w-full" size={isMobile ? 'default' : 'lg'}>
             <Sparkles className="h-4 w-4 mr-2" />
-            {isMobile ? '종합 시뮬레이션' : '종합 시뮬레이션 실행'}
+            {isMobile ? '시뮬레이션 실행' : '종합 시뮬레이션 실행'}
           </Button>
         ) : (
-          <Button variant="outline" onClick={handleReset} className="w-full" size="lg">
+          <Button variant="outline" onClick={handleReset} className="w-full" size={isMobile ? 'default' : 'lg'}>
             <RotateCcw className="h-4 w-4 mr-2" />
             {isMobile ? '다시 실행' : '조건 변경 후 다시 실행'}
           </Button>
