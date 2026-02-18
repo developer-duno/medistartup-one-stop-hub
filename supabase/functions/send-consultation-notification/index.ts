@@ -33,6 +33,15 @@ Deno.serve(async (req) => {
     }
 
     const adminEmail = settingsData.value;
+
+    // Get sender email from admin_settings
+    const { data: senderData } = await supabase
+      .from("admin_settings")
+      .select("value")
+      .eq("key", "sender_email")
+      .single();
+
+    const senderEmail = senderData?.value || "noreply@medistartup.kr";
     const { name, phone, email, region, specialty, message } = await req.json();
 
     const emailContent = `
@@ -56,7 +65,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         personalizations: [{ to: [{ email: adminEmail }] }],
-        from: { email: "noreply@medistartup.kr", name: "메디스타트업" },
+        from: { email: senderEmail, name: "메디스타트업" },
         subject: `[메디스타트업] 새 상담 신청 - ${name} (${specialty})`,
         content: [{ type: "text/html", value: emailContent }],
       }),
