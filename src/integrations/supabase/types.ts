@@ -358,6 +358,54 @@ export type Database = {
         }
         Relationships: []
       }
+      success_stories: {
+        Row: {
+          content: string
+          created_at: string
+          date: string
+          featured: boolean
+          hospital: string
+          id: number
+          image_url: string
+          location: string
+          services: string[]
+          summary: string
+          title: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          date?: string
+          featured?: boolean
+          hospital?: string
+          id?: number
+          image_url?: string
+          location?: string
+          services?: string[]
+          summary?: string
+          title: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          date?: string
+          featured?: boolean
+          hospital?: string
+          id?: number
+          image_url?: string
+          location?: string
+          services?: string[]
+          summary?: string
+          title?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

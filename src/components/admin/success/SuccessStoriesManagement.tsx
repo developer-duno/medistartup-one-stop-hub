@@ -97,17 +97,17 @@ const SuccessStoriesManagement = () => {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    deleteSuccessStory(id);
+  const handleDelete = async (id: number) => {
+    await deleteSuccessStory(id);
     toast({
       title: "성공 사례 삭제됨",
       description: "성공 사례가 성공적으로 삭제되었습니다.",
     });
   };
 
-  const handleToggleVisibility = (id: number) => {
-    toggleVisibility(id);
+  const handleToggleVisibility = async (id: number) => {
     const story = successStories.find(s => s.id === id);
+    await toggleVisibility(id);
     toast({
       title: story?.visible ? "성공 사례 숨겨짐" : "성공 사례 공개됨",
       description: story?.visible 
@@ -116,18 +116,18 @@ const SuccessStoriesManagement = () => {
     });
   };
 
-  const handleToggleFeatured = (id: number) => {
-    toggleFeatured(id);
+  const handleToggleFeatured = async (id: number) => {
     const story = successStories.find(s => s.id === id);
+    await toggleFeatured(id);
     toast({
-      title: story?.featured ? "메인 노출 설정됨" : "일반 노출로 변경됨",
-      description: story?.featured 
+      title: !story?.featured ? "메인 노출 설정됨" : "일반 노출로 변경됨",
+      description: !story?.featured 
         ? "이 성공 사례는 메인 페이지에 노출됩니다." 
         : "이 성공 사례는 메인 페이지에 노출되지 않습니다.",
     });
   };
 
-  const onSubmit = (data: SuccessStoryFormData) => {
+  const onSubmit = async (data: SuccessStoryFormData) => {
     const formattedData = {
       ...data,
       services: typeof data.services === 'string' 
@@ -135,20 +135,28 @@ const SuccessStoriesManagement = () => {
         : Array.isArray(data.services) ? data.services : []
     };
 
-    if (currentStory) {
-      updateSuccessStory({ ...formattedData, id: currentStory.id });
+    try {
+      if (currentStory) {
+        await updateSuccessStory({ ...formattedData, id: currentStory.id });
+        toast({
+          title: "성공 사례 업데이트됨",
+          description: "성공 사례가 성공적으로 업데이트되었습니다.",
+        });
+      } else {
+        await addSuccessStory(formattedData);
+        toast({
+          title: "성공 사례 추가됨",
+          description: "새로운 성공 사례가 추가되었습니다.",
+        });
+      }
+      setIsDialogOpen(false);
+    } catch (err) {
       toast({
-        title: "성공 사례 업데이트됨",
-        description: "성공 사례가 성공적으로 업데이트되었습니다.",
-      });
-    } else {
-      addSuccessStory(formattedData);
-      toast({
-        title: "성공 사례 추가됨",
-        description: "새로운 성공 사례가 추가되었습니다.",
+        title: "오류 발생",
+        description: "저장 중 오류가 발생했습니다. 관리자 로그인 상태를 확인해주세요.",
+        variant: "destructive",
       });
     }
-    setIsDialogOpen(false);
   };
 
   const formatServices = (services: string[]) => {
