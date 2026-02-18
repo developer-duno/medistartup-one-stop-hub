@@ -12,7 +12,7 @@ const ServicesHeader = () => {
           홈으로 돌아가기
         </Link>
         
-        <div className="text-center mb-6 md:mb-12">
+        <div className="text-center">
           <h1 className="font-pretendard font-bold text-xl md:text-5xl text-neutral-900 mb-2 md:mb-4">
             병원창업 <span className="theme-text">서비스</span>
           </h1>
