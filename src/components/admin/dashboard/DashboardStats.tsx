@@ -25,7 +25,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ stats, setActiveSection
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat, index) => (
         <Card 
           key={index} 
@@ -41,9 +41,7 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ stats, setActiveSection
           <CardContent>
             <div className="text-2xl font-bold">{stat.value}</div>
             <p className="text-xs text-muted-foreground mt-1">
-              <span className={stat.change.includes('+') ? 'text-green-500' : 'text-red-500'}>
-                {stat.change}
-              </span> 전월 대비
+              {stat.change}
             </p>
           </CardContent>
         </Card>
