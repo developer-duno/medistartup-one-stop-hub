@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { RevenueResult } from '../../../admin/simulator/types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
@@ -31,7 +32,13 @@ const RevenueResultView: React.FC<RevenueResultViewProps> = ({ result }) => {
     <div className="space-y-4 bg-primary/5 p-5 rounded-lg">
       <h3 className="text-lg font-semibold text-foreground">예상 월 수익 분석</h3>
       
-      <div className="h-[200px] w-full">
+      <motion.div
+        initial={{ opacity: 0, scaleY: 0.3 }}
+        animate={{ opacity: 1, scaleY: 1 }}
+        transition={{ delay: 0.2, duration: 0.6, ease: 'easeOut' }}
+        style={{ transformOrigin: 'bottom' }}
+        className="h-[200px] w-full"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} barSize={48}>
             <XAxis dataKey="name" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
@@ -43,31 +50,44 @@ const RevenueResultView: React.FC<RevenueResultViewProps> = ({ result }) => {
               width={60}
             />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(0,0%,90%,0.3)' }} />
-            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+            <Bar dataKey="value" radius={[6, 6, 0, 0]} animationBegin={300} animationDuration={800}>
               {chartData.map((entry, index) => (
                 <Cell key={index} fill={entry.color} />
               ))}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-3 gap-3 text-center">
         {chartData.map((item, i) => (
-          <div key={i} className="bg-background/60 rounded-lg p-3">
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 + i * 0.15, duration: 0.4 }}
+            className="bg-background/60 rounded-lg p-3"
+          >
             <p className="text-xs text-muted-foreground">{item.name}</p>
             <p className="font-bold text-sm mt-1" style={{ color: item.color }}>{item.formatted}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      <div className="pt-3 border-t border-border">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.4 }}
+        className="pt-3 border-t border-border"
+      >
         <p className="text-sm font-medium mb-2">지역 평균 대비</p>
         <div className="relative h-3 w-full bg-muted rounded-full overflow-hidden">
-          <div
-            className="absolute top-0 left-0 h-full rounded-full transition-all duration-500"
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(result.regionComparison, 150) / 1.5}%` }}
+            transition={{ delay: 1.4, duration: 0.8, ease: 'easeOut' }}
+            className="absolute top-0 left-0 h-full rounded-full"
             style={{
-              width: `${Math.min(result.regionComparison, 150) / 1.5}%`,
               background: 'linear-gradient(90deg, hsl(210, 70%, 50%), hsl(160, 60%, 45%))',
             }}
           />
@@ -75,7 +95,7 @@ const RevenueResultView: React.FC<RevenueResultViewProps> = ({ result }) => {
         <p className="text-right text-xs text-muted-foreground mt-1">
           지역 평균 대비 <span className="font-semibold text-foreground">{result.regionComparison}%</span>
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 };

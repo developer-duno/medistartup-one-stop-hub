@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -199,18 +200,49 @@ const UnifiedSimulator: React.FC = () => {
         </div>
 
         {/* Results Section */}
-        {results && (
-          <div className="space-y-6 pt-6 border-t border-border">
-            <h3 className="font-bold text-lg text-center text-foreground">
-              📊 종합 시뮬레이션 결과
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <FinancialResultView result={results.financial} />
-              <RevenueResultView result={results.revenue} />
-              <StaffingResultView result={results.staffing} />
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {results && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+              className="space-y-6 pt-6 border-t border-border"
+            >
+              <motion.h3
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+                className="font-bold text-lg text-center text-foreground"
+              >
+                📊 종합 시뮬레이션 결과
+              </motion.h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
+                >
+                  <FinancialResultView result={results.financial} />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
+                >
+                  <RevenueResultView result={results.revenue} />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}
+                >
+                  <StaffingResultView result={results.staffing} />
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </CardContent>
 
       <CardFooter className="flex justify-between border-t pt-4">
