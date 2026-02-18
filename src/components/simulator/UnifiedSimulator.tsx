@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
-import { Sparkles, Calculator, TrendingUp, Users, RotateCcw, ChevronDown } from 'lucide-react';
+import { Sparkles, Calculator, TrendingUp, Users, RotateCcw } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { MEDICAL_SPECIALTIES, LOCATION_TYPES, STANDARDIZED_REGIONS, SERVICE_TYPES, FinancialResult, RevenueResult, StaffingResult } from '../admin/simulator/types';
 import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './SimulatorUtils';
@@ -44,7 +44,7 @@ const UnifiedSimulator: React.FC = () => {
   });
 
   const [results, setResults] = useState<UnifiedResults | null>(null);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  
 
   const handleSimulate = () => {
     const financial = simulateFinancialCosts({
@@ -148,52 +148,35 @@ const UnifiedSimulator: React.FC = () => {
         </div>
       </div>
 
-      {/* Collapsible: 추가 서비스 */}
-      <button
-        type="button"
-        onClick={() => setShowAdvanced(!showAdvanced)}
-        className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
-      >
-        <ChevronDown className={`h-3 w-3 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
-        추가 서비스 설정 {inputs.services.length > 0 && `(${inputs.services.length}개 선택)`}
-      </button>
-      <AnimatePresence>
-        {showAdvanced && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden"
-          >
-            <div className="flex flex-wrap gap-1.5 pt-1">
-              {SERVICE_TYPES.map((service) => {
-                const selected = inputs.services.includes(service);
-                return (
-                  <button
-                    key={service}
-                    type="button"
-                    onClick={() => {
-                      if (selected) {
-                        setInputs({ ...inputs, services: inputs.services.filter(s => s !== service) });
-                      } else {
-                        setInputs({ ...inputs, services: [...inputs.services, service] });
-                      }
-                    }}
-                    className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-                      selected
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'bg-background text-muted-foreground border-border hover:border-primary/50'
-                    }`}
-                  >
-                    {service}
-                  </button>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* 추가 서비스 - 항상 표시 */}
+      <div>
+        <label className="block text-xs font-medium mb-1.5 text-muted-foreground">추가 서비스</label>
+        <div className="flex flex-wrap gap-1.5">
+          {SERVICE_TYPES.map((service) => {
+            const selected = inputs.services.includes(service);
+            return (
+              <button
+                key={service}
+                type="button"
+                onClick={() => {
+                  if (selected) {
+                    setInputs({ ...inputs, services: inputs.services.filter(s => s !== service) });
+                  } else {
+                    setInputs({ ...inputs, services: [...inputs.services, service] });
+                  }
+                }}
+                className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                  selected
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-background text-muted-foreground border-border hover:border-primary/50'
+                }`}
+              >
+                {service}
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 
