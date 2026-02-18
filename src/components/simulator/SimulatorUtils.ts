@@ -412,23 +412,11 @@ export const simulateStaffing = (params: { specialty: string; size: number; serv
   };
 };
 
-// Helper function to track simulator usage (centralized) - DB 기반
+// Helper function to track simulator usage (centralized) - DB RPC 기반
 export const trackSimulatorUsage = async (simulatorId: number): Promise<void> => {
   try {
     const { supabase } = await import('@/integrations/supabase/client');
-    // RPC 없이 직접 views 증가 (anon 사용자도 가능하도록 RLS 설정 필요 시 별도 처리)
-    const { data } = await supabase
-      .from('simulators')
-      .select('views')
-      .eq('id', simulatorId)
-      .single();
-    
-    if (data) {
-      await supabase
-        .from('simulators')
-        .update({ views: (data.views || 0) + 1 })
-        .eq('id', simulatorId);
-    }
+    await supabase.rpc('increment_simulator_views', { simulator_id: simulatorId });
   } catch (error) {
     console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
   }
