@@ -71,13 +71,13 @@ const InsightsManagement: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="font-pretendard font-bold text-2xl">뉴스 & 인사이트 관리</h2>
+    <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
+        <h2 className="font-pretendard font-bold text-xl md:text-2xl">뉴스 & 인사이트 관리</h2>
         <div className="flex gap-2">
-          <Button onClick={handleCreateInsight}>
-            <Plus className="h-4 w-4 mr-2" />
-            인사이트 추가
+          <Button size="sm" onClick={handleCreateInsight}>
+            <Plus className="h-4 w-4 mr-1 md:mr-2" />
+            <span className="text-xs md:text-sm">인사이트 추가</span>
           </Button>
           <ApiIntegrationForm 
             isOpen={isApiDialogOpen}

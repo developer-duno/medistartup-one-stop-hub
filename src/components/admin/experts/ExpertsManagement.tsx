@@ -46,10 +46,10 @@ const ExpertsManagement: React.FC = () => {
   
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
         <div>
-          <h2 className="font-pretendard font-bold text-2xl">전문가 관리</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <h2 className="font-pretendard font-bold text-xl md:text-2xl">전문가 관리</h2>
+          <p className="text-xs md:text-sm text-gray-500 mt-1">
             총 {experts.length}명의 전문가, {experts.filter(e => e.showOnMain && e.isApproved).length}명 메인에 표시 중
             {pendingApplications.length > 0 && (
               <span className="ml-2">
@@ -60,9 +60,9 @@ const ExpertsManagement: React.FC = () => {
             )}
           </p>
         </div>
-        <Button onClick={() => setIsAddingExpert(true)}>
-          <UserPlus className="h-4 w-4 mr-2" />
-          전문가 추가
+        <Button size="sm" onClick={() => setIsAddingExpert(true)}>
+          <UserPlus className="h-4 w-4 mr-1 md:mr-2" />
+          <span className="text-xs md:text-sm">전문가 추가</span>
         </Button>
       </div>
       

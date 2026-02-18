@@ -101,13 +101,13 @@ const ExpertsTable: React.FC<ExpertsTableProps> = ({ experts, onEditExpert }) =>
   return (
     <>
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="p-4 border-b flex justify-between items-center">
-        <div className="text-sm text-gray-500">
+      <div className="p-4 border-b flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+        <div className="text-sm text-muted-foreground">
           {filter === 'all' ? '모든 전문가' : 
            filter === 'pending' ? '승인 대기 중' : 
            filter === 'approved' ? '승인된 전문가' : '반려된 지원'}
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button 
             variant={filter === 'all' ? "default" : "outline"} 
             size="sm"
