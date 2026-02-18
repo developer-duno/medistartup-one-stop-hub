@@ -55,9 +55,9 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   
   const handleRegionChange = (region: string, checked: boolean) => {
     if (checked) {
-      setFilters({...filters, regions: [...filters.regions, region]});
+      setFilters(prev => ({...prev, regions: [...prev.regions, region]}));
     } else {
-      setFilters({...filters, regions: filters.regions.filter(r => r !== region)});
+      setFilters(prev => ({...prev, regions: prev.regions.filter(r => r !== region)}));
     }
   };
   
