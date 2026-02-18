@@ -9,6 +9,7 @@ import AdminDashboard from '@/components/admin/dashboard/AdminDashboard';
 import RegionsManagement from '@/components/admin/regions/RegionsManagement';
 import SuccessStoriesManagement from '@/components/admin/success/SuccessStoriesManagement';
 import ConsultationsManagement from '@/components/admin/consultations/ConsultationsManagement';
+import SettingsManagement from '@/components/admin/settings/SettingsManagement';
 import { useToast } from '@/components/ui/use-toast';
 
 const Admin = () => {
@@ -33,6 +34,7 @@ const Admin = () => {
       {activeSection === "simulator" && <SimulatorManagement />}
       {activeSection === "regions" && <RegionsManagement />}
       {activeSection === "success" && <SuccessStoriesManagement />}
+      {activeSection === "settings" && <SettingsManagement />}
     </AdminLayout>
   );
 };
