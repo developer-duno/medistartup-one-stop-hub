@@ -1,10 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MapPin, Users } from 'lucide-react';
+import { ArrowLeft, MapPin } from 'lucide-react';
 import { useRegions } from '@/contexts/RegionsContext';
 
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import RegionCard from '@/components/map/RegionCard';
 import Navbar from '../components/Navbar';
@@ -50,15 +49,7 @@ const RegionalExperts = () => {
   const activeRegionInfo = getActiveRegionInfo();
   
 
-  // Group regions by category for display
-  const groupedRegions = regionGroups.map(group => ({
-    ...group,
-    regions: displayRegions.filter(r => 
-      group.regions.some(groupRegion => 
-        r.name === groupRegion || r.includesRegions.includes(groupRegion)
-      )
-    )
-  })).filter(group => group.regions.length > 0);
+  // Use regionGroups directly to match filter categories
 
   return (
     <div className="theme-regions min-h-screen bg-white">
@@ -85,69 +76,27 @@ const RegionalExperts = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-3/5">
-            {groupedRegions.map(group => (
+            {regionGroups.map((group: RegionGroup) => (
               <div key={group.name} className="mb-6">
                 <h2 className="font-bold text-lg mb-3 border-b pb-2">{group.name}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {group.regions.map((region) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {group.regions.map((regionName) => (
                     <Card 
-                      key={region.id} 
-                      className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === region.name ? 'ring-2 theme-border' : ''}`}
-                      onClick={() => setActiveRegion(region.name)}
+                      key={regionName} 
+                      className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === regionName ? 'ring-2 theme-border' : ''}`}
+                      onClick={() => setActiveRegion(regionName)}
                     >
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-bold flex items-center gap-2">
-                            <MapPin className="h-4 w-4 theme-text" />
-                            {region.name}
-                          </h3>
-                          <Badge variant="outline" className="theme-bg-light theme-text">
-                            <Users className="h-3 w-3 mr-1" />
-                            {region.expertCount || 0}명
-                          </Badge>
-                        </div>
-                        
-                        <div className="mt-2">
-                          <p className="text-sm text-muted-foreground">주요 도시:</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {region.mainCities && region.mainCities.length > 0 ? (
-                              <>
-                                {region.mainCities.slice(0, 3).map((city, i) => (
-                                  <Badge key={i} variant="secondary" className="text-xs">
-                                    {city}
-                                  </Badge>
-                                ))}
-                                {region.mainCities.length > 3 && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    +{region.mainCities.length - 3}
-                                  </Badge>
-                                )}
-                              </>
-                            ) : (
-                              region.includesRegions.slice(0, 3).map((city, i) => (
-                                <Badge key={i} variant="secondary" className="text-xs">
-                                  {city}
-                                </Badge>
-                              ))
-                            )}
-                          </div>
-                        </div>
+                      <CardContent className="p-3">
+                        <h3 className="font-bold flex items-center gap-2 text-sm">
+                          <MapPin className="h-4 w-4 theme-text" />
+                          {regionName}
+                        </h3>
                       </CardContent>
                     </Card>
                   ))}
                 </div>
               </div>
             ))}
-            
-            {displayRegions.length === 0 && (
-              <div className="col-span-2 text-center py-12">
-                <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-medium text-xl mb-2">검색 결과 없음</h3>
-                <p className="text-muted-foreground">
-                  다른 지역 이름이나 도시를 검색해보세요.
-                </p>
-              </div>
-            )}
           </div>
 
           <div className="w-full lg:w-2/5">
