@@ -70,7 +70,14 @@ export const MEDICAL_SPECIALTIES = [
   '정형외과',
   '안과',
   '한의원',
-  '종합병원'
+  '종합병원',
+  '성형외과',
+  '재활의학과',
+  '비뇨기과',
+  '이비인후과',
+  '신경외과',
+  '정신건강의학과',
+  '가정의학과',
 ];
 
 export const STANDARDIZED_REGIONS = [

@@ -7,16 +7,23 @@ export const simulateFinancialCosts = (params: { specialty: string; size: number
   // 진료과목별 기본 개원 비용 (백만원 단위, 30평 기준)
   // 출처: 2024년 업계 평균 개원 컨설팅 데이터 기반
   const baseCosts: Record<string, { interior: number; equipment: number; license: number; misc: number }> = {
-    '내과': { interior: 80, equipment: 120, license: 15, misc: 35 },       // 총 ~2.5억
-    '소아과': { interior: 70, equipment: 80, license: 15, misc: 30 },      // 총 ~2억
-    '외과': { interior: 100, equipment: 200, license: 20, misc: 50 },      // 총 ~3.7억
-    '산부인과': { interior: 120, equipment: 280, license: 25, misc: 60 },  // 총 ~4.8억
-    '피부과': { interior: 150, equipment: 200, license: 20, misc: 50 },    // 총 ~4.2억 (인테리어 비중 높음)
-    '치과': { interior: 100, equipment: 250, license: 20, misc: 40 },      // 총 ~4.1억
-    '정형외과': { interior: 110, equipment: 300, license: 25, misc: 55 },  // 총 ~4.9억
-    '안과': { interior: 120, equipment: 400, license: 25, misc: 60 },      // 총 ~6억 (장비비 높음)
-    '한의원': { interior: 60, equipment: 40, license: 10, misc: 25 },      // 총 ~1.35억
-    '종합병원': { interior: 800, equipment: 1500, license: 100, misc: 300 }, // 총 ~27억
+    '내과': { interior: 80, equipment: 120, license: 15, misc: 35 },
+    '소아과': { interior: 70, equipment: 80, license: 15, misc: 30 },
+    '외과': { interior: 100, equipment: 200, license: 20, misc: 50 },
+    '산부인과': { interior: 120, equipment: 280, license: 25, misc: 60 },
+    '피부과': { interior: 150, equipment: 200, license: 20, misc: 50 },
+    '치과': { interior: 100, equipment: 250, license: 20, misc: 40 },
+    '정형외과': { interior: 110, equipment: 300, license: 25, misc: 55 },
+    '안과': { interior: 120, equipment: 400, license: 25, misc: 60 },
+    '한의원': { interior: 60, equipment: 40, license: 10, misc: 25 },
+    '종합병원': { interior: 800, equipment: 1500, license: 100, misc: 300 },
+    '성형외과': { interior: 200, equipment: 350, license: 25, misc: 70 },    // 총 ~6.5억 (고급 인테리어+수술장비)
+    '재활의학과': { interior: 100, equipment: 250, license: 20, misc: 50 },  // 총 ~4.2억 (재활치료 장비)
+    '비뇨기과': { interior: 90, equipment: 180, license: 20, misc: 40 },     // 총 ~3.3억
+    '이비인후과': { interior: 85, equipment: 150, license: 18, misc: 38 },   // 총 ~2.9억
+    '신경외과': { interior: 130, equipment: 450, license: 30, misc: 65 },    // 총 ~6.8억 (고가 장비)
+    '정신건강의학과': { interior: 70, equipment: 30, license: 15, misc: 30 }, // 총 ~1.5억 (장비 최소)
+    '가정의학과': { interior: 75, equipment: 100, license: 15, misc: 30 },   // 총 ~2.2억
   };
   
   // 평당 인테리어 단가 보정 (기본 30평 기준에서 면적 비례 조정)
@@ -78,16 +85,23 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
   // 출처: 2023년 국세청 TASIS 100대 생활업종 + 건강보험심사평가원 데이터 기반 추정
   // 급여 + 비급여 포함 평균 단가
   const perPatientRevenue: Record<string, number> = {
-    '내과': 35000,       // 내과: 연매출 ~9.6억, 일평균 환자 ~40명 기준
-    '소아과': 30000,     // 소아과: 환자당 단가 상대적으로 낮음
-    '외과': 55000,       // 외과: 수술 포함 시 높은 단가
-    '산부인과': 65000,   // 산부인과: 연매출 ~12.5억, 검사/시술 비중 높음
-    '피부과': 70000,     // 피부과: 연매출 ~12.7억, 비급여(미용) 비중 높음
-    '치과': 80000,       // 치과: 연매출 ~7.8억이나 환자수 적고 단가 높음
-    '정형외과': 50000,   // 정형외과: 물리치료 포함
-    '안과': 85000,       // 안과: 연매출 ~17.3억, 수술/시술 단가 높음
-    '한의원': 45000,     // 한의원: 침/한약 등
-    '종합병원': 120000,  // 종합병원: 입원/검사 포함 높은 단가
+    '내과': 35000,
+    '소아과': 30000,
+    '외과': 55000,
+    '산부인과': 65000,
+    '피부과': 70000,
+    '치과': 80000,
+    '정형외과': 50000,
+    '안과': 85000,
+    '한의원': 45000,
+    '종합병원': 120000,
+    '성형외과': 150000,      // 비급여 시술/수술 비중 매우 높음
+    '재활의학과': 40000,     // 물리치료 위주, 단가 낮지만 환자수 많음
+    '비뇨기과': 50000,       // 검사/시술 포함
+    '이비인후과': 35000,     // 감기/중이염 등 일반 진료 위주
+    '신경외과': 90000,       // 수술/시술 단가 높음
+    '정신건강의학과': 60000, // 상담료+약물치료, 비급여 상담 높음
+    '가정의학과': 30000,     // 건강검진+일반진료
   };
   
   // 지역별 매출 보정 계수 (수도권 대비)
@@ -110,16 +124,23 @@ export const simulateRevenue = (params: { specialty: string; patients: number; r
   
   // 진료과목별 비용 비율 (인건비+임대료+재료비+관리비 등)
   const expenseRatios: Record<string, number> = {
-    '내과': 0.65,       // 인건비 비중 높음
-    '소아과': 0.68,     // 인건비 비중 높음
-    '외과': 0.60,       // 수술 수익률 높음
+    '내과': 0.65,
+    '소아과': 0.68,
+    '외과': 0.60,
     '산부인과': 0.62,
-    '피부과': 0.55,     // 비급여 비중 높아 마진율 높음
-    '치과': 0.58,       // 재료비 높지만 비급여 마진 좋음
+    '피부과': 0.55,
+    '치과': 0.58,
     '정형외과': 0.63,
-    '안과': 0.52,       // 시술/수술 마진율 높음
-    '한의원': 0.60,     // 약재비 포함
-    '종합병원': 0.75,   // 인건비+시설 유지비 높음
+    '안과': 0.52,
+    '한의원': 0.60,
+    '종합병원': 0.75,
+    '성형외과': 0.48,       // 비급여 비중 매우 높아 마진율 최고
+    '재활의학과': 0.67,     // 인건비(치료사) 비중 높음
+    '비뇨기과': 0.60,
+    '이비인후과': 0.63,
+    '신경외과': 0.55,       // 수술 마진율 높음
+    '정신건강의학과': 0.50, // 장비/재료비 낮아 마진 좋음
+    '가정의학과': 0.65,
   };
   
   const expenseRatio = expenseRatios[params.specialty] || 0.62;
@@ -213,6 +234,53 @@ export const simulateStaffing = (params: { specialty: string; size: number; serv
       { role: '원무/행정', count: 3, salary: 250 },
       { role: '의료기사', count: 3, salary: 300 },
       { role: '관리직', count: 2, salary: 400 },
+    ],
+    '성형외과': [
+      { role: '전문의', count: 1, salary: 1800 },
+      { role: '간호사', count: 2, salary: 340 },
+      { role: '상담실장', count: 1, salary: 400 },
+      { role: '피부관리사', count: 1, salary: 260 },
+      { role: '마취간호사', count: 1, salary: 400 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '재활의학과': [
+      { role: '전문의', count: 1, salary: 1300 },
+      { role: '물리치료사', count: 3, salary: 280 },
+      { role: '작업치료사', count: 1, salary: 270 },
+      { role: '간호사', count: 1, salary: 340 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '비뇨기과': [
+      { role: '전문의', count: 1, salary: 1400 },
+      { role: '간호사', count: 1, salary: 340 },
+      { role: '간호조무사', count: 1, salary: 230 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '이비인후과': [
+      { role: '전문의', count: 1, salary: 1200 },
+      { role: '간호사', count: 1, salary: 340 },
+      { role: '간호조무사', count: 1, salary: 230 },
+      { role: '청각사', count: 1, salary: 280 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '신경외과': [
+      { role: '전문의', count: 1, salary: 1800 },
+      { role: '간호사', count: 2, salary: 340 },
+      { role: '방사선사', count: 1, salary: 310 },
+      { role: '간호조무사', count: 1, salary: 230 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '정신건강의학과': [
+      { role: '전문의', count: 1, salary: 1300 },
+      { role: '임상심리사', count: 1, salary: 300 },
+      { role: '간호사', count: 1, salary: 340 },
+      { role: '원무/행정', count: 1, salary: 250 },
+    ],
+    '가정의학과': [
+      { role: '전문의', count: 1, salary: 1100 },
+      { role: '간호사', count: 1, salary: 340 },
+      { role: '간호조무사', count: 1, salary: 230 },
+      { role: '원무/행정', count: 1, salary: 250 },
     ],
   };
   
