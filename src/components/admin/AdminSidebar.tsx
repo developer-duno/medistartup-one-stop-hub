@@ -60,7 +60,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
     },
   ];
   return (
-    <aside className="md:w-64 bg-white rounded-lg shadow-md p-4">
+    <aside className="w-full md:w-64 bg-white rounded-lg shadow-md p-4 h-full">
       <div className="mb-6">
         <h2 className="font-pretendard font-bold text-lg text-primary mb-2">메디스타트업</h2>
         <p className="text-xs text-gray-500">관리자 시스템</p>
