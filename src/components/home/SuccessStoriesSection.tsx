@@ -13,7 +13,7 @@ const SuccessStoriesSection = () => {
   }
   
   return (
-    <section className="py-10 md:py-20 bg-white">
+    <section className="py-12 md:py-24 bg-white">
       <div className="container mx-auto px-3 md:px-4">
         <div className="text-center mb-6 md:mb-10">
           <div>
@@ -44,10 +44,10 @@ const SuccessStoriesSection = () => {
                   />
                 </div>
                 <div className="p-3 md:p-5">
-                  <h3 className="font-pretendard font-bold text-sm md:text-lg mb-1 md:mb-2 group-hover:text-green-600 transition-colors">
+                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-green-600 transition-colors">
                     {story.title}
                   </h3>
-                  <p className="text-neutral-600 text-[10px] md:text-sm mb-2 md:mb-3 line-clamp-2">
+                  <p className="text-neutral-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2">
                     {story.summary}
                   </p>
                   <div className="flex justify-end">
