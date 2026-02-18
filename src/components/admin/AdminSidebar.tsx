@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy, LogOut, ClipboardList } from 'lucide-react';
+import { Users, Settings, FileText, BarChart3, Home, MapPin, Trophy, LogOut, ClipboardList, Cog } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,6 +52,11 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
       id: 'success', 
       label: '성공사례 관리', 
       icon: <Trophy className="h-5 w-5" /> 
+    },
+    { 
+      id: 'settings', 
+      label: '시스템 설정', 
+      icon: <Cog className="h-5 w-5" /> 
     },
   ];
 
