@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Filter, ChevronDown } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +40,8 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   activeCategory,
   setActiveCategory
 }) => {
+  const [popoverOpen, setPopoverOpen] = useState(false);
+
   const handleRemoveFilter = (type: 'regions' | 'services', value: string) => {
     setFilters(prev => ({
       ...prev,
@@ -68,8 +70,12 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
     }
   };
 
+  const handleApplyFilters = () => {
+    setPopoverOpen(false);
+    setShowFilters(false);
+  };
+
   const handleFilterButtonClick = () => {
-    // Reset the active category to "all" when the filter button is clicked
     setActiveCategory("all");
   };
 
@@ -82,7 +88,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <Popover>
+          <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <PopoverTrigger asChild>
               <Button 
                 variant="outline" 
@@ -108,7 +114,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
                 onRegionChange={handleRegionChange}
                 onServiceChange={handleServiceChange}
                 onClearFilters={handleClearFilters}
-                onApplyFilters={() => setShowFilters(false)}
+                onApplyFilters={handleApplyFilters}
               />
             </PopoverContent>
           </Popover>
