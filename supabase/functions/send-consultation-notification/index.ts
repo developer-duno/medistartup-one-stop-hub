@@ -166,9 +166,10 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
+    // Log detailed error server-side only
     console.error("Error sending notification:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return new Response(JSON.stringify({ success: false, error: errorMessage }), {
+    // Return generic error to client — never expose internal details
+    return new Response(JSON.stringify({ success: false, error: "알림 전송에 실패했습니다. 잠시 후 다시 시도해주세요." }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
