@@ -51,11 +51,13 @@ const UnifiedSimulator: React.FC = () => {
       specialty: inputs.specialty,
       size: inputs.size[0],
       location: inputs.location,
+      services: inputs.services,
     });
     const revenue = simulateRevenue({
       specialty: inputs.specialty,
       patients: inputs.patients[0],
       region: inputs.region,
+      services: inputs.services,
     });
     const staffing = simulateStaffing({
       specialty: inputs.specialty,
