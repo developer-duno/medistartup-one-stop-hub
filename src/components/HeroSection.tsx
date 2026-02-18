@@ -1,19 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { MapPin } from 'lucide-react';
 import HeroHeading from './hero/HeroHeading';
-import RegionSelector from './hero/RegionSelector';
 import StatsDisplay from './hero/StatsDisplay';
 import HeroVideo from './hero/HeroVideo';
-import { useRegionSelection } from '../domains/region/useRegionSelection';
 
 // Domain-driven layout component
 const HeroSection = () => {
-  // Application state
-  const [isLoading, setIsLoading] = useState(false);
-  
-  // Use domain hook for region selection functionality
-  const { selectedRegion, setSelectedRegion, regions } = useRegionSelection();
   
   // Sample consultation video URL - replace with your actual hospital consulting video
   const videoUrl = "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4";
@@ -42,13 +35,15 @@ const HeroSection = () => {
           <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
             <HeroHeading />
             
-            <RegionSelector 
-              selectedRegion={selectedRegion} 
-              setSelectedRegion={setSelectedRegion} 
-              regions={regions}
-              isLoading={isLoading}
-              onAnalysisClick={handleFeasibilityAnalysis}
-            />
+            <button
+              onClick={handleFeasibilityAnalysis}
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 font-pretendard font-semibold text-base md:text-lg"
+            >
+              <span>내 병원의 예상 수익성 무료 분석</span>
+              <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </button>
             
             <StatsDisplay />
           </div>
