@@ -57,20 +57,20 @@ const ServicesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
           {services.map((service, index) => (
             <div 
               key={service.id} 
               className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
             >
-              <div className={`p-6 bg-gradient-to-br ${getColorClassName(index)}`}>
-                <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center shadow-sm mb-4">
+              <div className={`p-3 md:p-6 bg-gradient-to-br ${getColorClassName(index)}`}>
+                <div className="bg-white rounded-full w-10 h-10 md:w-16 md:h-16 flex items-center justify-center shadow-sm mb-2 md:mb-4">
                   {getIconComponent(service.icon, true)}
                 </div>
-                <h3 className="font-pretendard font-bold text-xl text-neutral-900 mb-2">
+                <h3 className="font-pretendard font-bold text-sm md:text-xl text-neutral-900 mb-1 md:mb-2">
                   {service.title}
                 </h3>
-                <p className="font-noto text-neutral-600">
+                <p className="font-noto text-neutral-600 text-xs md:text-base line-clamp-2 md:line-clamp-none">
                   {service.description}
                 </p>
               </div>
