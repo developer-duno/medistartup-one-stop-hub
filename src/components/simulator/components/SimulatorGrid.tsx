@@ -26,7 +26,7 @@ const SimulatorGrid: React.FC<SimulatorGridProps> = ({ simulators }) => {
 
   // 시뮬레이터 실행 함수
   const handleSimulation = (simulatorId: number, type: string, params: any) => {
-    // Use centralized tracking function
+    // Track usage asynchronously (fire and forget)
     trackSimulatorUsage(simulatorId);
     
     if (type === 'financial') {

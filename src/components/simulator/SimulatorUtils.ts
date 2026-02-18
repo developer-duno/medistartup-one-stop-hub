@@ -412,26 +412,24 @@ export const simulateStaffing = (params: { specialty: string; size: number; serv
   };
 };
 
-// Helper function to track simulator usage (centralized)
-export const trackSimulatorUsage = (simulatorId: number): void => {
-  const storedSimulators = localStorage.getItem('simulators');
-  if (storedSimulators) {
-    try {
-      const parsedSimulators = JSON.parse(storedSimulators);
-      const updatedSimulators = parsedSimulators.map((sim: any) => {
-        if (sim.id === simulatorId) {
-          return {...sim, views: (sim.views || 0) + 1};
-        }
-        return sim;
-      });
-      
-      localStorage.setItem('simulators', JSON.stringify(updatedSimulators));
-      
-      window.dispatchEvent(new CustomEvent('simulatorUpdate', { 
-        detail: { action: 'viewIncrement', simulatorId } 
-      }));
-    } catch (error) {
-      console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
+// Helper function to track simulator usage (centralized) - DB 기반
+export const trackSimulatorUsage = async (simulatorId: number): Promise<void> => {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    // RPC 없이 직접 views 증가 (anon 사용자도 가능하도록 RLS 설정 필요 시 별도 처리)
+    const { data } = await supabase
+      .from('simulators')
+      .select('views')
+      .eq('id', simulatorId)
+      .single();
+    
+    if (data) {
+      await supabase
+        .from('simulators')
+        .update({ views: (data.views || 0) + 1 })
+        .eq('id', simulatorId);
     }
+  } catch (error) {
+    console.error('시뮬레이터 사용 기록 업데이트 중 오류:', error);
   }
 };

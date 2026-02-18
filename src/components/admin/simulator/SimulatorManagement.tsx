@@ -5,7 +5,6 @@ import { Simulator } from './types';
 import { useSimulators } from './hooks/useSimulators';
 import SimulatorHeader from './components/SimulatorHeader';
 import SimulatorTabs from './components/SimulatorTabs';
-import { useSimulatorsContext } from '@/contexts/SimulatorsContext';
 
 const SimulatorManagement: React.FC = () => {
   const [editingSimulator, setEditingSimulator] = useState<Simulator | null>(null);
@@ -13,10 +12,6 @@ const SimulatorManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('list');
   const { toast } = useToast();
   
-  // 시뮬레이터 콘텍스트를 통한 초기화 확인
-  const { initialized, initializeSimulators } = useSimulatorsContext();
-  
-  // 시뮬레이터 데이터 불러오기
   const { 
     simulators, 
     usageData, 
@@ -25,13 +20,6 @@ const SimulatorManagement: React.FC = () => {
     deleteSimulator, 
     toggleSimulatorActive 
   } = useSimulators();
-
-  // 시뮬레이터 초기화 확인
-  useEffect(() => {
-    if (!initialized) {
-      initializeSimulators();
-    }
-  }, [initialized, initializeSimulators]);
   
   // 시뮬레이터가 비어있는 경우 경고
   useEffect(() => {
@@ -75,79 +63,59 @@ const SimulatorManagement: React.FC = () => {
     }
   };
 
-  const handleSaveSimulator = () => {
+  const handleSaveSimulator = async () => {
     if (!editingSimulator) return;
     
-    if (editingSimulator.id && simulators.some(s => s.id === editingSimulator.id)) {
-      updateSimulator(editingSimulator);
-      toast({
-        title: "시뮬레이터 업데이트됨",
-        description: "시뮬레이터가 성공적으로 업데이트되었습니다.",
-      });
+    if (simulators.some(s => s.id === editingSimulator.id)) {
+      const success = await updateSimulator(editingSimulator);
+      if (success) {
+        toast({ title: "시뮬레이터 업데이트됨", description: "시뮬레이터가 성공적으로 업데이트되었습니다." });
+      } else {
+        toast({ title: "업데이트 실패", description: "시뮬레이터 업데이트에 실패했습니다.", variant: "destructive" });
+        return;
+      }
     } else {
-      addSimulator(editingSimulator);
-      toast({
-        title: "시뮬레이터 추가됨",
-        description: "새로운 시뮬레이터가 성공적으로 추가되었습니다.",
-      });
+      const success = await addSimulator(editingSimulator);
+      if (success) {
+        toast({ title: "시뮬레이터 추가됨", description: "새로운 시뮬레이터가 성공적으로 추가되었습니다." });
+      } else {
+        toast({ title: "추가 실패", description: "시뮬레이터 추가에 실패했습니다.", variant: "destructive" });
+        return;
+      }
     }
     
     setEditingSimulator(null);
     setActiveTab('list');
-    
-    // 저장 후 시뮬레이터 업데이트 이벤트 발생
-    window.dispatchEvent(new CustomEvent('simulatorUpdate'));
   };
 
-  const handleDeleteSimulator = (id: number) => {
-    // 삭제 후 남은 시뮬레이터 수 확인
+  const handleDeleteSimulator = async (id: number) => {
     const remainingCount = simulators.filter(s => s.id !== id).length;
     
-    // 마지막 시뮬레이터를 삭제하려는 경우 경고
     if (remainingCount === 0) {
-      toast({
-        title: "마지막 시뮬레이터 삭제 불가",
-        description: "최소한 하나의 시뮬레이터가 필요합니다. 새 시뮬레이터를 먼저 추가하세요.",
-        variant: "destructive",
-      });
+      toast({ title: "마지막 시뮬레이터 삭제 불가", description: "최소한 하나의 시뮬레이터가 필요합니다.", variant: "destructive" });
       return;
     }
     
-    deleteSimulator(id);
-    
-    toast({
-      title: "시뮬레이터 삭제됨",
-      description: "시뮬레이터가 성공적으로 삭제되었습니다.",
-    });
-    
-    // 삭제 후 시뮬레이터 업데이트 이벤트 발생
-    window.dispatchEvent(new CustomEvent('simulatorUpdate'));
+    const success = await deleteSimulator(id);
+    if (success) {
+      toast({ title: "시뮬레이터 삭제됨", description: "시뮬레이터가 성공적으로 삭제되었습니다." });
+    }
   };
 
-  const handleToggleActive = (id: number) => {
-    // 활성화된 시뮬레이터 수 확인
+  const handleToggleActive = async (id: number) => {
     const activeCount = simulators.filter(s => s.active && s.id !== id).length;
     
-    // 마지막 활성화된 시뮬레이터를 비활성화하려는 경우
     if (activeCount === 0 && simulators.find(s => s.id === id)?.active) {
-      toast({
-        title: "비활성화 불가",
-        description: "최소한 하나의 활성화된 시뮬레이터가 필요합니다.",
-        variant: "destructive",
-      });
+      toast({ title: "비활성화 불가", description: "최소한 하나의 활성화된 시뮬레이터가 필요합니다.", variant: "destructive" });
       return;
     }
     
-    const newStatus = toggleSimulatorActive(id);
-    
+    const newStatus = await toggleSimulatorActive(id);
     toast({
       title: `시뮬레이터 ${newStatus ? '활성화' : '비활성화'}됨`,
       description: `시뮬레이터가 성공적으로 ${newStatus ? '활성화' : '비활성화'}되었습니다.`,
       variant: newStatus ? "default" : "destructive",
     });
-    
-    // 상태 변경 후 시뮬레이터 업데이트 이벤트 발생
-    window.dispatchEvent(new CustomEvent('simulatorUpdate'));
   };
 
   const handleCancelEdit = () => {
