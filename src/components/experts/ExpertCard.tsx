@@ -27,7 +27,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
       }`}
     >
       <div className="relative">
-        <div className="h-48 overflow-hidden">
+        <div className="h-32 md:h-48 overflow-hidden">
           <img 
             src={expert.image} 
             alt={expert.name} 
@@ -55,58 +55,64 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
         </div>
       </div>
       
-      <div className="p-4 md:p-5">
-        <div className="flex justify-between items-start mb-2">
+      <div className="p-3 md:p-5">
+        <div className="flex justify-between items-start mb-1 md:mb-2">
           <div>
-            <h3 className="font-pretendard font-bold text-lg text-neutral-900">
+            <h3 className="font-pretendard font-bold text-sm md:text-lg text-neutral-900">
               {expert.name}
             </h3>
-            <p className="font-noto text-neutral-600 text-sm">
+            <p className="font-noto text-neutral-600 text-xs md:text-sm">
               {expert.role}
             </p>
           </div>
-          <Badge className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20">
+          <Badge className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 text-[10px] md:text-xs px-1.5 md:px-2">
             {expert.services[0]}
           </Badge>
         </div>
         
-        <p className="font-noto text-neutral-700 text-sm mb-4 line-clamp-2">
+        <p className="font-noto text-neutral-700 text-xs md:text-sm mb-2 md:mb-4 line-clamp-2 hidden md:block">
           {expert.specialty}
         </p>
         
-        <div className="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-5">
+        <div className="hidden md:flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-5">
           <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
             <Award className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
             <span className="truncate">{expert.experience}</span>
           </div>
-          
           <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
             <Clock className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
             <span className="truncate">{expert.projects}</span>
           </div>
-          
           <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
             <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
             <span className="truncate">{expert.regions.join(', ')}</span>
           </div>
         </div>
+
+        {/* Mobile: compact info */}
+        <div className="flex md:hidden items-center gap-1 text-[10px] text-neutral-500 mb-2">
+          <MapPin className="h-3 w-3 shrink-0" />
+          <span className="truncate">{expert.regions.join(', ')}</span>
+        </div>
         
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-1.5 md:gap-2">
           <CustomButton 
             variant={isSelected ? "secondary" : "outline"}
             size="sm"
             onClick={() => selectExpert(expert.id)}
+            className="text-[10px] md:text-sm px-1 md:px-3"
           >
-            {isSelected ? '선택 취소' : '전문가 선택'}
+            {isSelected ? '취소' : '선택'}
           </CustomButton>
           
           <CustomButton 
             variant="primary" 
             size="sm"
             asChild
+            className="text-[10px] md:text-sm px-1 md:px-3"
           >
             <Link to={`/experts/${expert.id}`}>
-              상세 프로필
+              프로필
             </Link>
           </CustomButton>
         </div>
