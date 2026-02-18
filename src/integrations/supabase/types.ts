@@ -286,7 +286,99 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      experts_public: {
+        Row: {
+          application_date: string | null
+          application_status: string | null
+          approval_date: string | null
+          career_timeline: Json | null
+          certifications: string[] | null
+          cover_image: string | null
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          education_history: Json | null
+          experience: string | null
+          id: number | null
+          image: string | null
+          is_approved: boolean | null
+          is_regional_manager: boolean | null
+          key_achievements: string[] | null
+          managed_regions: string[] | null
+          name: string | null
+          projects: string | null
+          regions: string[] | null
+          rejection_reason: string | null
+          role: string | null
+          services: string[] | null
+          show_on_main: boolean | null
+          specialty: string | null
+          success_cases: Json | null
+          testimonials: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          application_date?: string | null
+          application_status?: string | null
+          approval_date?: string | null
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          education_history?: Json | null
+          experience?: string | null
+          id?: number | null
+          image?: string | null
+          is_approved?: boolean | null
+          is_regional_manager?: boolean | null
+          key_achievements?: string[] | null
+          managed_regions?: string[] | null
+          name?: string | null
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role?: string | null
+          services?: string[] | null
+          show_on_main?: boolean | null
+          specialty?: string | null
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          application_date?: string | null
+          application_status?: string | null
+          approval_date?: string | null
+          career_timeline?: Json | null
+          certifications?: string[] | null
+          cover_image?: string | null
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          education_history?: Json | null
+          experience?: string | null
+          id?: number | null
+          image?: string | null
+          is_approved?: boolean | null
+          is_regional_manager?: boolean | null
+          key_achievements?: string[] | null
+          managed_regions?: string[] | null
+          name?: string | null
+          projects?: string | null
+          regions?: string[] | null
+          rejection_reason?: string | null
+          role?: string | null
+          services?: string[] | null
+          show_on_main?: boolean | null
+          specialty?: string | null
+          success_cases?: Json | null
+          testimonials?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       has_role: {

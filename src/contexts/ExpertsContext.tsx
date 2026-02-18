@@ -31,7 +31,7 @@ export const ExpertsProvider: React.FC<ExpertsProviderProps> = ({ children }) =>
   const fetchExperts = useCallback(async () => {
     try {
       const { data, error } = await supabase
-        .from('experts')
+        .from('experts_public' as any)
         .select('*')
         .order('display_order', { ascending: true });
 
