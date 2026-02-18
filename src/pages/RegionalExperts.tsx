@@ -11,7 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { regionGroups, RegionGroup } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 const RegionalExperts = () => {
   const { 
@@ -25,7 +25,7 @@ const RegionalExperts = () => {
     adminRegions
   } = useRegions();
   const { experts } = useExperts();
-  
+  const { regionGroupsCompat, loading: regionsLoading } = useRegionGroups();
   const [searchParams] = useSearchParams();
   const [displayRegions, setDisplayRegions] = useState(regions);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
@@ -75,7 +75,7 @@ const RegionalExperts = () => {
     return experts.filter(expert => expert.regions.includes(activeRegion));
   }, [activeRegion, activeGroup, activeGroupRegions, experts]);
 
-  const handleGroupClick = (group: RegionGroup) => {
+  const handleGroupClick = (group: { name: string; regions: string[] }) => {
     setActiveGroup(group.name);
     setActiveGroupRegions(group.regions);
     setActiveRegion('');
@@ -115,7 +115,7 @@ const RegionalExperts = () => {
         <div className="flex flex-col lg:flex-row gap-4 md:gap-8">
           <div className="w-full lg:w-3/5">
             <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-4">
-              {regionGroups.map((group: RegionGroup) => (
+              {regionGroupsCompat.map((group) => (
                 <Card key={group.name} className="overflow-hidden">
                   <div className="bg-muted px-2 md:px-4 py-1.5 md:py-2 cursor-pointer hover:bg-muted/80 transition-colors" onClick={() => handleGroupClick(group)}>
                     <h2 className={`font-bold text-xs md:text-sm ${activeGroup === group.name ? 'text-primary' : ''}`}>{group.name}</h2>

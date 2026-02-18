@@ -8,15 +8,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { regionGroups, RegionGroup } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 const RegionalMap = () => {
   const { 
-    regions, 
     activeRegion, 
     setActiveRegion, 
   } = useRegions();
   const { experts } = useExperts();
+  const { regionGroupsCompat, loading } = useRegionGroups();
   
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [activeGroupRegions, setActiveGroupRegions] = useState<string[]>([]);
@@ -44,7 +44,7 @@ const RegionalMap = () => {
     return experts.filter(expert => expert.regions.includes(activeRegion));
   }, [activeRegion, activeGroup, activeGroupRegions, experts]);
 
-  const handleGroupClick = (group: RegionGroup) => {
+  const handleGroupClick = (group: { name: string; regions: string[] }) => {
     setActiveGroup(group.name);
     setActiveGroupRegions(group.regions);
     setActiveRegion('');
@@ -57,6 +57,8 @@ const RegionalMap = () => {
   };
 
   const panelTitle = activeGroup || activeRegion || '지역 선택';
+
+  if (loading) return null;
 
   return (
     <section id="regions" className="py-12 md:py-24 bg-neutral-50">
@@ -73,7 +75,7 @@ const RegionalMap = () => {
         <div className="flex flex-col lg:flex-row gap-4 md:gap-8">
           <div className="w-full lg:w-3/5">
             <div className="grid grid-cols-2 md:grid-cols-2 gap-2 md:gap-4">
-              {regionGroups.map((group: RegionGroup) => (
+              {regionGroupsCompat.map((group) => (
                 <Card key={group.name} className="overflow-hidden">
                   <div className="bg-muted px-2 md:px-4 py-1.5 md:py-2 cursor-pointer hover:bg-muted/80 transition-colors" onClick={() => handleGroupClick(group)}>
                     <h3 className={`font-bold text-xs md:text-sm ${activeGroup === group.name ? 'text-primary' : ''}`}>{group.name}</h3>

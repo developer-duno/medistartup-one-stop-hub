@@ -49,12 +49,16 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeSection, setActiveSec
       icon: <Trophy className="h-5 w-5" /> 
     },
     { 
+      id: 'regions', 
+      label: '지역 관리', 
+      icon: <MapPin className="h-5 w-5" /> 
+    },
+    { 
       id: 'settings', 
       label: '시스템 설정', 
       icon: <Cog className="h-5 w-5" /> 
     },
   ];
-
   return (
     <aside className="md:w-64 bg-white rounded-lg shadow-md p-4">
       <div className="mb-6">

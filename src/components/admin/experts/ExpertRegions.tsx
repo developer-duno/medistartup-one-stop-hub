@@ -4,7 +4,7 @@ import { FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { regionOptions } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 interface ExpertRegionsProps {
   selectedRegions: string[];
@@ -19,6 +19,7 @@ const ExpertRegions: React.FC<ExpertRegionsProps> = ({
   isRegionalManager = false,
   setIsRegionalManager
 }) => {
+  const { regionOptions } = useRegionGroups();
   const handleRegionToggle = (region: string) => {
     // Create a new array instead of using a callback function
     if (selectedRegions.includes(region)) {

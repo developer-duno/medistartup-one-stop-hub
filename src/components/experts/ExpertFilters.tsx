@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/popover";
 import FilterBadges from './FilterBadges';
 import FilterPopoverContent from './FilterPopoverContent';
-import { regionOptions } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 interface ExpertFiltersProps {
   filters: {
@@ -39,6 +39,7 @@ const ExpertFilters: React.FC<ExpertFiltersProps> = ({
   activeCategory,
   setActiveCategory
 }) => {
+  const { regionOptions } = useRegionGroups();
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const handleRemoveFilter = (type: 'regions' | 'services', value: string) => {
