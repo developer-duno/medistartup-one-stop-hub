@@ -61,7 +61,7 @@ const SuccessStoryDetail = () => {
       </Helmet>
       <Navbar />
       
-      <div className="pt-20 md:pt-28 pb-8 md:pb-16 theme-page-header">
+      <div className="theme-page-header">
         <div className="container mx-auto px-3 md:px-4">
           <Link to="/success-stories" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-4 md:mb-6 text-xs md:text-sm">
             <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
