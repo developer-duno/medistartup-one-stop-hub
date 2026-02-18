@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MapPin } from 'lucide-react';
+import { ArrowLeft, MapPin, Users, User } from 'lucide-react';
 import { useRegions } from '@/contexts/RegionsContext';
+import { useExperts } from '@/contexts/ExpertsContext';
 
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import RegionCard from '@/components/map/RegionCard';
 import Navbar from '../components/Navbar';
@@ -17,39 +19,47 @@ const RegionalExperts = () => {
     setActiveRegion, 
     getActiveRegionInfo, 
     getFilteredUrl,
+    getRegionalManager,
+    getRegionalExpertCount,
     adminRegions
   } = useRegions();
+  const { experts } = useExperts();
   
   const [searchParams] = useSearchParams();
   const [displayRegions, setDisplayRegions] = useState(regions);
   const navigate = useNavigate();
   
-  // Get region from query params if available and update display regions whenever regions change
   useEffect(() => {
-    // Only show active regions
     const activeRegions = regions.filter(region => region.active !== false);
     setDisplayRegions(activeRegions);
     
     const regionParam = searchParams.get('region');
     if (regionParam) {
-      // Check if the region exists and is active
       const regionExists = activeRegions.some(r => r.name === regionParam);
       if (regionExists) {
         setActiveRegion(regionParam);
-      } else {
-        // If region doesn't exist or is inactive, set the first active region
-        if (activeRegions.length > 0) {
-          setActiveRegion(activeRegions[0].name);
-        }
+      } else if (activeRegions.length > 0) {
+        setActiveRegion(activeRegions[0].name);
       }
     }
   }, [searchParams, setActiveRegion, regions]);
   
-  // Get active region information
   const activeRegionInfo = getActiveRegionInfo();
-  
 
-  // Use regionGroups directly to match filter categories
+  // Get manager for a region by checking experts
+  const getManagerForRegion = (regionName: string) => {
+    return experts.find(expert => 
+      expert.isRegionalManager && 
+      expert.regions.includes(regionName)
+    );
+  };
+
+  // Get expert count for individual region
+  const getExpertCountForRegion = (regionName: string) => {
+    return experts.filter(expert => 
+      expert.regions.includes(regionName)
+    ).length;
+  };
 
   return (
     <div className="theme-regions min-h-screen bg-white">
@@ -57,46 +67,64 @@ const RegionalExperts = () => {
       
       <div className="pt-28 pb-16 theme-page-header">
         <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-6">
+          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">
             <ArrowLeft className="h-4 w-4 mr-2" />
             홈으로 돌아가기
           </Link>
           
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-neutral-900 mb-4">
+            <h1 className="font-pretendard font-bold text-3xl md:text-5xl text-foreground mb-4">
               지역별 <span className="theme-text">전문가 네트워크</span>
             </h1>
-            <p className="font-noto text-neutral-600 mb-8">
-              각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다. 지역에 특화된 전문지식을 바탕으로 보다 효과적인 병원창업을 도와드립니다.
+            <p className="font-noto text-muted-foreground mb-8">
+              각 지역 특성과 의료 환경을 고려한 맞춤형 전문가 네트워크를 구축했습니다.
             </p>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-10">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           <div className="w-full lg:w-3/5">
-            {regionGroups.map((group: RegionGroup) => (
-              <div key={group.name} className="mb-6">
-                <h2 className="font-bold text-lg mb-3 border-b pb-2">{group.name}</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {group.regions.map((regionName) => (
-                    <Card 
-                      key={regionName} 
-                      className={`cursor-pointer hover:shadow-md transition-shadow ${activeRegion === regionName ? 'ring-2 theme-border' : ''}`}
-                      onClick={() => setActiveRegion(regionName)}
-                    >
-                      <CardContent className="p-3">
-                        <h3 className="font-bold flex items-center gap-2 text-sm">
-                          <MapPin className="h-4 w-4 theme-text" />
-                          {regionName}
-                        </h3>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {regionGroups.map((group: RegionGroup) => (
+                <Card key={group.name} className="overflow-hidden">
+                  <div className="bg-muted px-4 py-2">
+                    <h2 className="font-bold text-sm">{group.name}</h2>
+                  </div>
+                  <CardContent className="p-3 space-y-1.5">
+                    {group.regions.map((regionName) => {
+                      const manager = getManagerForRegion(regionName);
+                      const count = getExpertCountForRegion(regionName);
+                      return (
+                        <div 
+                          key={regionName}
+                          className={`flex items-center justify-between p-2 rounded-md cursor-pointer hover:bg-muted/50 transition-colors ${activeRegion === regionName ? 'bg-primary/10 ring-1 ring-primary/30' : ''}`}
+                          onClick={() => setActiveRegion(regionName)}
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-3.5 w-3.5 text-primary" />
+                            <span className="text-sm font-medium">{regionName}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {manager && (
+                              <Badge variant="secondary" className="text-xs hidden sm:flex items-center gap-1">
+                                <User className="h-3 w-3" />
+                                {manager.name}
+                              </Badge>
+                            )}
+                            <Badge variant="outline" className="text-xs">
+                              <Users className="h-3 w-3 mr-1" />
+                              {count}명
+                            </Badge>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
 
           <div className="w-full lg:w-2/5">
