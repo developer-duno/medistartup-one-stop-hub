@@ -11,6 +11,7 @@ import { simulateFinancialCosts, simulateRevenue, simulateStaffing } from './Sim
 import FinancialResultView from './components/results/FinancialResultView';
 import RevenueResultView from './components/results/RevenueResultView';
 import StaffingResultView from './components/results/StaffingResultView';
+import MobileSummaryView from './components/results/MobileSummaryView';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface UnifiedInputs {
@@ -217,29 +218,38 @@ const UnifiedSimulator: React.FC = () => {
               >
                 📊 종합 시뮬레이션 결과
               </motion.h3>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
-                >
-                  <FinancialResultView result={results.financial} />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
-                >
-                  <RevenueResultView result={results.revenue} />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}
-                >
-                  <StaffingResultView result={results.staffing} />
-                </motion.div>
-              </div>
+
+              {isMobile ? (
+                <MobileSummaryView
+                  financial={results.financial}
+                  revenue={results.revenue}
+                  staffing={results.staffing}
+                />
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <FinancialResultView result={results.financial} />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <RevenueResultView result={results.revenue} />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.5, ease: 'easeOut' }}
+                  >
+                    <StaffingResultView result={results.staffing} />
+                  </motion.div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
