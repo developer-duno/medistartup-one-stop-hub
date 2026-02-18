@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { regionGroups, regionOptions, RegionGroup } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 interface RegionFilterProps {
   regions: string[];
@@ -19,8 +19,9 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
   selectedRegions,
   onRegionChange,
 }) => {
+  const { regionGroupsCompat, regionOptions, loading } = useRegionGroups();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(
-    regionGroups.reduce((acc, group) => ({...acc, [group.name]: true}), {})
+    regionGroupsCompat.reduce((acc, group) => ({...acc, [group.name]: true}), {})
   );
   
   const toggleGroup = (groupName: string) => {
@@ -30,7 +31,7 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
     }));
   };
   
-  if (regionOptions.length === 0) {
+  if (loading || regionOptions.length === 0) {
     return (
       <Collapsible className="w-full">
         <CollapsibleTrigger className="flex items-center justify-between w-full p-2 hover:bg-neutral-50 rounded-md">
@@ -57,30 +58,24 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
         <ChevronsUpDown className="h-4 w-4 text-neutral-500" />
       </CollapsibleTrigger>
       <CollapsibleContent className="mt-2 space-y-2">
-        {regionGroups.map((group: RegionGroup) => {
+        {regionGroupsCompat.map((group) => {
           const allSelected = group.regions.every(r => selectedRegions.includes(r));
           const someSelected = group.regions.some(r => selectedRegions.includes(r));
           
           const handleGroupCheck = (checked: boolean) => {
             if (checked) {
-              // Select all regions in this group
               group.regions.forEach(r => {
                 if (!selectedRegions.includes(r)) {
                   onRegionChange(r, true);
                 }
               });
             } else {
-              // Deselect all regions in this group
               group.regions.forEach(r => {
                 if (selectedRegions.includes(r)) {
                   onRegionChange(r, false);
                 }
               });
             }
-          };
-          
-          const handleSubRegionCheck = (region: string, checked: boolean) => {
-            onRegionChange(region, checked);
           };
           
           return (
@@ -113,7 +108,7 @@ const RegionFilter: React.FC<RegionFilterProps> = ({
                       <Checkbox 
                         checked={selectedRegions.includes(region)}
                         onCheckedChange={(checked) => {
-                          handleSubRegionCheck(region, !!checked);
+                          onRegionChange(region, !!checked);
                         }}
                       />
                       <span className="text-sm">{region}</span>

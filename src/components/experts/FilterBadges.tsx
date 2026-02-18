@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { X, MapPin, Tag } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { regionGroups } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 interface FilterBadgesProps {
   filters: {
@@ -19,11 +19,12 @@ const FilterBadges: React.FC<FilterBadgesProps> = ({
   handleRemoveFilter,
   handleClearFilters,
 }) => {
+  const { regionGroupsCompat } = useRegionGroups();
   const displayRegions = useMemo(() => {
     const result: { label: string; isGroup: boolean; regions: string[] }[] = [];
     const consumed = new Set<string>();
 
-    for (const group of regionGroups) {
+    for (const group of regionGroupsCompat) {
       const allSelected = group.regions.every(r => filters.regions.includes(r));
       if (allSelected) {
         result.push({ label: group.name, isGroup: true, regions: group.regions });
@@ -38,7 +39,7 @@ const FilterBadges: React.FC<FilterBadgesProps> = ({
     }
 
     return result;
-  }, [filters.regions]);
+  }, [filters.regions, regionGroupsCompat]);
 
   if (filters.regions.length === 0 && filters.services.length === 0) {
     return null;

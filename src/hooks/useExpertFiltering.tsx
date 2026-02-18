@@ -4,13 +4,14 @@ import { Expert } from '@/types/expert';
 import { useSearchParams } from 'react-router-dom';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useRegions } from '@/contexts/RegionsContext';
-import { regionGroups } from '@/utils/schema/regionSchema';
+import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 export function useExpertFiltering(expertsData: Expert[]) {
   const [searchParams] = useSearchParams();
-  const [viewMode, setViewMode] = useState("grid"); // grid or compare
+  const [viewMode, setViewMode] = useState("grid");
   const { selectedExperts } = useConsultation();
   const { adminRegions } = useRegions();
+  const { regionGroupsCompat } = useRegionGroups();
   const [filters, setFilters] = useState({
     search: "",
     regions: [] as string[],
@@ -20,14 +21,12 @@ export function useExpertFiltering(expertsData: Expert[]) {
   const [showFilters, setShowFilters] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   
-  // Get service and region from URL params
   useEffect(() => {
     const serviceParam = searchParams.get('service');
     const regionParam = searchParams.get('region');
     
     const newFilters = { ...filters };
     
-    // Handle service filtering
     if (serviceParam) {
       const serviceMap: Record<string, string> = {
         'location-analysis': '입지 분석',
@@ -46,41 +45,34 @@ export function useExpertFiltering(expertsData: Expert[]) {
       }
     }
     
-    // Handle region filtering
     if (regionParam) {
-      // First check if it's a main region group
-      const regionGroup = regionGroups.find(group => group.name === regionParam);
+      const regionGroup = regionGroupsCompat.find(group => group.name === regionParam);
       if (regionGroup) {
-        // Add all regions from this group
         const regionsToAdd = regionGroup.regions.filter(r => !newFilters.regions.includes(r));
         if (regionsToAdd.length > 0) {
           newFilters.regions = [...newFilters.regions, ...regionsToAdd];
         }
       } else {
-        // Check if it's an individual region
-        const allRegions = regionGroups.flatMap(group => group.regions);
+        const allRegions = regionGroupsCompat.flatMap(group => group.regions);
         if (allRegions.includes(regionParam) && !newFilters.regions.includes(regionParam)) {
           newFilters.regions = [...newFilters.regions, regionParam];
         }
       }
     }
     
-    // Set the new filters if they're different from current ones
     if (
       newFilters.services.length !== filters.services.length || 
       newFilters.regions.length !== filters.regions.length
     ) {
       setFilters(newFilters);
     }
-  }, [searchParams, adminRegions]);
+  }, [searchParams, adminRegions, regionGroupsCompat]);
   
-  // Get all subregions for a given region name
   const getRegionGroup = (regionName: string): string[] => {
-    const group = regionGroups.find(g => g.regions.includes(regionName));
+    const group = regionGroupsCompat.find(g => g.regions.includes(regionName));
     return group ? group.regions : [regionName];
   };
   
-  // Filter experts based on active category and filters
   useEffect(() => {
     let results = [...expertsData];
     
@@ -90,17 +82,10 @@ export function useExpertFiltering(expertsData: Expert[]) {
       );
     }
     
-    
     if (filters.regions.length > 0) {
       results = results.filter(expert => {
-        // For each selected filter region
         return filters.regions.some(filterRegion => {
-          // Direct match
-          if (expert.regions.includes(filterRegion)) {
-            return true;
-          }
-          
-          // Check if expert has any region in the same group
+          if (expert.regions.includes(filterRegion)) return true;
           const relatedRegions = getRegionGroup(filterRegion);
           return expert.regions.some(expertRegion => 
             relatedRegions.includes(expertRegion)
@@ -118,7 +103,6 @@ export function useExpertFiltering(expertsData: Expert[]) {
     setFilteredExperts(results);
   }, [filters, activeCategory, expertsData]);
 
-  // Reset all filters
   const resetFilters = () => {
     setFilters({search: "", regions: [], services: []});
     setActiveCategory("all");
