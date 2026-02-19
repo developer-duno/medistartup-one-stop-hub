@@ -138,7 +138,7 @@ const ExpertProfile = () => {
   console.log("Expert has testimonials:", expert.testimonials ? expert.testimonials.length : "none");
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 pb-20 lg:pb-0">
       <Helmet {...seoData}>
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
