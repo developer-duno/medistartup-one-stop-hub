@@ -309,7 +309,7 @@ const ConsultationDialog: React.FC = () => {
                 fullWidth
                 disabled={isSubmitting}
               >
-                {isSubmitting ? '접수 중...' : '무료 상담하기'}
+                {isSubmitting ? '접수 중...' : '무료 상담'}
               </CustomButton>
             </form>
           </div>

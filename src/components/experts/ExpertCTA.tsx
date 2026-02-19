@@ -22,7 +22,7 @@ const ExpertCTA: React.FC = () => {
             size="lg"
             onClick={openConsultation}
           >
-            무료 상담하기
+            무료 상담
           </CustomButton>
         </div>
       </div>

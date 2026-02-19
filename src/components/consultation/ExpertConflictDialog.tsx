@@ -97,11 +97,11 @@ const ExpertConflictDialog: React.FC<ExpertConflictDialogProps> = ({
           </AlertDialogCancel>
           <CustomButton variant="secondary" size="sm" className="w-full sm:flex-1 text-xs sm:text-sm" onClick={onKeepBoth}>
             <Plus className="h-3.5 w-3.5 mr-1" />
-            중복 선택하기
+            중복 선택
           </CustomButton>
           <CustomButton variant="primary" size="sm" className="w-full sm:flex-1 text-xs sm:text-sm" onClick={onReplace}>
             <ArrowRightLeft className="h-3.5 w-3.5 mr-1" />
-            교체하기
+            교체
           </CustomButton>
         </AlertDialogFooter>
       </AlertDialogContent>

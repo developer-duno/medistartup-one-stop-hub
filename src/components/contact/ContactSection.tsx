@@ -24,7 +24,7 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-pretendard font-bold text-3xl md:text-4xl text-neutral-900 mb-4">
-            <span className="text-primary">무료 상담</span>하기
+            <span className="text-primary">무료 상담</span>
           </h2>
           <p className="font-noto text-neutral-600 max-w-2xl mx-auto">
             병원창업에 관한 어떤 질문이든 전문가가 답변해 드립니다.

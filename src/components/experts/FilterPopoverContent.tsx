@@ -60,7 +60,7 @@ const FilterPopoverContent: React.FC<FilterPopoverContentProps> = ({
         className="w-full"
         onClick={onApplyFilters}
       >
-        필터 적용하기
+        필터 적용
       </Button>
     </div>
   );
