@@ -101,6 +101,7 @@ const ExpertStats: React.FC<{expert: Expert}> = ({ expert }) => (
       label="활동 지역" 
       value={expert.regions ? expert.regions.join(', ') : '전국'} 
     />
+    <ExpertStatItem label="프로필 조회" value={`${expert.profileViews ?? 0}회`} />
   </div>
 );
 

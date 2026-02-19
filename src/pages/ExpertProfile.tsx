@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '../components/Navbar';
@@ -18,6 +18,7 @@ import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
 import { generateSeoData } from '@/utils/seoUtils';
 import { generateExpertSchema } from '@/utils/schemaUtils';
+import { supabase } from '@/integrations/supabase/client';
 
 const ExpertProfile = () => {
   const { id } = useParams();
@@ -26,6 +27,7 @@ const ExpertProfile = () => {
   const { toast: uiToast } = useToast();
   const [expert, setExpert] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const viewTracked = useRef(false);
   const { selectedExperts, selectExpert } = useConsultation();
   
   useEffect(() => {
@@ -61,6 +63,15 @@ const ExpertProfile = () => {
     
     setIsLoading(false);
   }, [id, getExpertById, navigate, uiToast, expertsLoading]);
+
+  // Track profile view
+  useEffect(() => {
+    if (!expert || viewTracked.current) return;
+    viewTracked.current = true;
+    supabase.rpc('increment_expert_views', { expert_id: expert.id }).then(({ error }) => {
+      if (error) console.error('Error tracking view:', error);
+    });
+  }, [expert]);
 
   const isExpertSelected = expert ? selectedExperts.includes(expert.id) : false;
 

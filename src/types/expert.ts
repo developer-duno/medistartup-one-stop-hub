@@ -50,6 +50,7 @@ export interface Expert {
     image?: string;
     video?: string;
   }>;
+  profileViews?: number;
 }
 
 export interface NewExpert extends Omit<Expert, 'id'> {}

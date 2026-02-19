@@ -30,6 +30,7 @@ export interface ExpertRow {
   career_timeline: any[] | null;
   success_cases: any[] | null;
   testimonials: any[] | null;
+  profile_views: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -63,6 +64,7 @@ export const mapRowToExpert = (row: ExpertRow): Expert => ({
   careerTimeline: (row.career_timeline as any[]) || [],
   successCases: (row.success_cases as any[]) || [],
   testimonials: (row.testimonials as any[]) || [],
+  profileViews: row.profile_views ?? 0,
 });
 
 export const mapExpertToRow = (expert: Expert | Omit<Expert, 'id'>) => ({
