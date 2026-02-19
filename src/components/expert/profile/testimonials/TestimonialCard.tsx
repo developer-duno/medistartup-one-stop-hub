@@ -14,7 +14,7 @@ interface TestimonialCardProps {
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 flex flex-col">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 flex flex-col touch-manipulation select-none transition-all duration-150 active:scale-[0.98] active:shadow-inner">
       <div className="mb-4">
         <Quote className="h-8 w-8 text-primary opacity-40" />
       </div>

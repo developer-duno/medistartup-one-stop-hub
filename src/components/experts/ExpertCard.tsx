@@ -20,7 +20,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
 
   return (
     <div 
-      className={`bg-white rounded-xl shadow-sm border overflow-hidden group ${
+      className={`bg-white rounded-xl shadow-sm border overflow-hidden group touch-manipulation select-none transition-all duration-150 active:scale-[0.98] active:shadow-inner ${
         isSelected 
           ? 'border-primary ring-2 ring-primary-300' 
           : 'border-neutral-200 hover:shadow-md'
@@ -104,7 +104,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
             variant={isSelected ? "secondary" : "outline"}
             size="sm"
             onClick={() => selectExpert(expert.id)}
-            className="text-[10px] md:text-sm px-1 md:px-3"
+            className="text-[10px] md:text-sm px-1 md:px-3 touch-manipulation select-none active:scale-95 transition-transform duration-150"
           >
             {isSelected ? '취소' : '선택'}
           </CustomButton>
@@ -113,7 +113,7 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
             variant="primary" 
             size="sm"
             asChild
-            className="text-[10px] md:text-sm px-1 md:px-3"
+            className="text-[10px] md:text-sm px-1 md:px-3 touch-manipulation select-none active:scale-95 transition-transform duration-150"
           >
             <Link to={`/experts/${expert.id}`}>
               프로필

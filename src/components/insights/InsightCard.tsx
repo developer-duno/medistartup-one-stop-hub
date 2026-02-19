@@ -33,8 +33,8 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
   
   // Use theme styles if the prop is true
   const cardClass = useThemeStyles 
-    ? 'cursor-pointer transform transition-all hover:-translate-y-1 hover:shadow-md'
-    : 'cursor-pointer transform transition-all hover:-translate-y-1 hover:shadow-md';
+    ? 'cursor-pointer transform transition-all duration-150 hover:-translate-y-1 hover:shadow-md active:scale-[0.98] active:shadow-inner touch-manipulation select-none'
+    : 'cursor-pointer transform transition-all duration-150 hover:-translate-y-1 hover:shadow-md active:scale-[0.98] active:shadow-inner touch-manipulation select-none';
   
   const badgeClass = useThemeStyles
     ? 'theme-bg-light theme-text'
