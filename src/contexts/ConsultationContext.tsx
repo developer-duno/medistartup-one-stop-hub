@@ -102,6 +102,13 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
     setConflictInfo(null);
   }, [conflictInfo]);
 
+  const handleConflictKeepBoth = useCallback(() => {
+    if (!conflictInfo) return;
+    setSelectedExperts(prev => [...prev, conflictInfo.newExpertId]);
+    toast.info(`${conflictInfo.newExpertName} 전문가가 추가되었습니다. (중복 서비스 포함)`);
+    setConflictInfo(null);
+  }, [conflictInfo]);
+
   const handleConflictCancel = useCallback(() => {
     setConflictInfo(null);
   }, []);
@@ -143,6 +150,7 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
       <ExpertConflictDialog
         conflict={conflictInfo}
         onReplace={handleConflictReplace}
+        onKeepBoth={handleConflictKeepBoth}
         onCancel={handleConflictCancel}
       />
     </ConsultationContext.Provider>
