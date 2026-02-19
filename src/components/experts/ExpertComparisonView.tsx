@@ -199,32 +199,43 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
         </>
       )}
       
-      <div className={`flex justify-center gap-4 ${showMobile ? '' : 'mt-0'} ${isMobile ? 'flex-col' : ''}`}>
-        <CustomButton 
-          variant="outline"
-          onClick={clearSelectedExperts}
-          fullWidth={isMobile}
-        >
-          초기화
-        </CustomButton>
-        
-        <CustomButton 
-          variant="primary"
-          onClick={openConsultation}
-          fullWidth={isMobile}
-          className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
-        >
-          상담신청
-        </CustomButton>
-        
-        <CustomButton 
-          variant="secondary"
-          onClick={() => setViewMode("grid")}
-          fullWidth={isMobile}
-        >
-          그리드보기
-        </CustomButton>
-      </div>
+      {!isMobile && (
+        <div className="flex justify-center gap-4 mt-0">
+          <CustomButton 
+            variant="outline"
+            onClick={clearSelectedExperts}
+          >
+            초기화
+          </CustomButton>
+          
+          <CustomButton 
+            variant="primary"
+            onClick={openConsultation}
+            className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
+          >
+            상담신청
+          </CustomButton>
+          
+          <CustomButton 
+            variant="secondary"
+            onClick={() => setViewMode("grid")}
+          >
+            그리드보기
+          </CustomButton>
+        </div>
+      )}
+
+      {isMobile && (
+        <div className="flex justify-center mb-16">
+          <CustomButton 
+            variant="outline"
+            size="sm"
+            onClick={clearSelectedExperts}
+          >
+            초기화
+          </CustomButton>
+        </div>
+      )}
     </div>
   );
 };
