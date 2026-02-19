@@ -35,16 +35,16 @@ const SuccessStoriesSection = () => {
               to={`/success-stories/${story.id}`}
               className="group"
             >
-              <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-neutral-100 h-full">
+              <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-neutral-100 h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
                 <div className="aspect-video relative overflow-hidden">
                   <img 
                     src={story.imageUrl} 
                     alt={story.title}
-                    className="w-full h-full object-cover transition-transform group-hover:scale-105" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                   />
                 </div>
                 <div className="p-3 md:p-5">
-                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-green-600 transition-colors">
+                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-green-600 transition-colors duration-300">
                     {story.title}
                   </h3>
                   <p className="text-neutral-600 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2">
