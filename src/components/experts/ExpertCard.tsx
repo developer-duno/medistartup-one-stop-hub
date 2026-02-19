@@ -27,12 +27,13 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
       }`}
     >
       <div className="relative">
-        <div className="h-32 md:h-48 overflow-hidden">
+        <div className="h-32 md:h-48 overflow-hidden bg-primary/5">
           <img 
-            src={expert.image} 
+            src={expert.image || "/placeholder.svg"} 
             alt={expert.name} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
+            onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
           />
         </div>
         
