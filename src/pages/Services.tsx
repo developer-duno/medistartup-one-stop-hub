@@ -46,11 +46,7 @@ const Services = () => {
         >
           <CategorySelector categories={categories} />
 
-          <CategoryImage 
-            category={selectedCategory} 
-            categoryName={activeCategory.name}
-            categoryDescription={activeCategory.description}
-          />
+
 
           <ServiceGrid services={displayServices} />
         </Tabs>
