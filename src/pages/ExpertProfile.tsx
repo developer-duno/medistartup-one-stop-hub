@@ -148,7 +148,7 @@ const ExpertProfile = () => {
       <ErrorBoundary>
         <ExpertHero expert={expert} />
         
-        <main className="container mx-auto px-3 md:px-4 py-4 md:py-8">
+        <main className="container mx-auto px-3 md:px-4 py-4 md:py-8 pb-20 lg:pb-8">
           {/* Mobile: sidebar first, then content. Desktop: content left, sidebar right */}
           <div className="lg:hidden mb-4">
             <ErrorBoundary>
