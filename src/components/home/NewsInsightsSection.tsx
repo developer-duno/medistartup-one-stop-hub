@@ -107,6 +107,16 @@ const NewsInsightsSection = () => {
           >
             <ChevronRight className="h-5 w-5 text-neutral-700" />
           </button>
+          
+          {/* Mobile swipe hint */}
+          {latestInsights.length > 1 && (
+            <div className="flex md:hidden justify-center mt-2 gap-1.5">
+              {latestInsights.map((_, idx) => (
+                <div key={idx} className={`w-2 h-2 rounded-full transition-colors ${idx === 0 ? 'bg-primary' : 'bg-neutral-300'}`} />
+              ))}
+              <span className="text-[10px] text-muted-foreground ml-2">← 스와이프</span>
+            </div>
+          )}
         </div>
         
         <div className="flex justify-center mt-8">

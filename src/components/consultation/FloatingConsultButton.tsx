@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageCircle, CheckCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { useConsultation } from '@/contexts/ConsultationContext';
@@ -11,8 +11,26 @@ const FloatingConsultButton: React.FC = () => {
   const isExpertProfile = /^\/experts\/\d+/.test(location.pathname);
   const isExpertList = location.pathname === '/experts';
   
-  // Always show the button, but make it more prominent when experts are selected
   const hasSelectedExperts = selectedExperts.length > 0;
+  
+  // Hide on scroll down, show on scroll up
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
   
   return (
     <div 
@@ -20,7 +38,8 @@ const FloatingConsultButton: React.FC = () => {
         "fixed right-6 z-40 transition-all duration-300 transform",
         isExpertProfile ? "bottom-20 lg:bottom-6" : "bottom-6",
         isExpertList && hasSelectedExperts ? "hidden md:block" : "",
-        hasSelectedExperts ? "scale-110" : "scale-100"
+        hasSelectedExperts ? "scale-110" : "scale-100",
+        visible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
       )}
     >
       <button

@@ -37,9 +37,10 @@ const HeroSection = () => {
             
             <button
               onClick={handleFeasibilityAnalysis}
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 font-pretendard font-semibold text-base md:text-lg"
+              className="group inline-flex items-center gap-2 md:gap-3 px-5 md:px-8 py-3 md:py-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 font-pretendard font-semibold text-sm md:text-lg"
             >
-              <span>내 병원의 예상 수익성 무료 분석</span>
+              <span className="md:hidden">무료 수익성 분석</span>
+              <span className="hidden md:inline">내 병원의 예상 수익성 무료 분석</span>
               <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
