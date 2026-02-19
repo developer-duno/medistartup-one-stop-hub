@@ -1,8 +1,9 @@
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 import { Expert } from '@/types/expert';
 import { useExperts } from './ExpertsContext';
 import { toast } from 'sonner';
+import ExpertConflictDialog, { ConflictInfo } from '@/components/consultation/ExpertConflictDialog';
 
 interface ConsultationContextType {
   selectedExperts: number[];
@@ -21,6 +22,7 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
   const { experts } = useExperts();
   const [selectedExperts, setSelectedExperts] = useState<number[]>([]);
   const [isConsultationOpen, setIsConsultationOpen] = useState(false);
+  const [conflictInfo, setConflictInfo] = useState<ConflictInfo | null>(null);
 
   // Initialize from localStorage if available
   useEffect(() => {
@@ -42,65 +44,67 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
     localStorage.setItem('medistartup_selected_experts', JSON.stringify(selectedExperts));
   }, [selectedExperts]);
 
-  const selectExpert = (expertId: number) => {
-    setSelectedExperts(prev => {
-      // If already selected, remove this expert (deselect)
-      if (prev.includes(expertId)) {
-        return prev.filter(id => id !== expertId);
-      }
-      
-      // Get the expert's services
-      const expert = experts.find(e => e.id === expertId);
-      if (!expert) return prev;
-      
-      const expertServices = expert.services;
-      
-      // Check if any service from this expert is already represented by another expert
-      const conflictingExperts = prev.filter(selectedId => {
-        const selectedExpert = experts.find(e => e.id === selectedId);
-        if (!selectedExpert) return false;
-        
-        // Check if any service overlaps
-        return selectedExpert.services.some(service => 
+  const selectExpert = useCallback((expertId: number) => {
+    // If already selected, deselect
+    if (selectedExperts.includes(expertId)) {
+      setSelectedExperts(prev => prev.filter(id => id !== expertId));
+      return;
+    }
+
+    const expert = experts.find(e => e.id === expertId);
+    if (!expert) return;
+
+    const expertServices = expert.services;
+
+    // Check for conflicts
+    const conflictingExperts = selectedExperts.filter(selectedId => {
+      const selectedExpert = experts.find(e => e.id === selectedId);
+      if (!selectedExpert) return false;
+      return selectedExpert.services.some(service => expertServices.includes(service));
+    });
+
+    if (conflictingExperts.length > 0) {
+      // Build conflict info and show dialog
+      const conflicts = conflictingExperts.map(conflictId => {
+        const conflictExpert = experts.find(e => e.id === conflictId)!;
+        const overlappingServices = conflictExpert.services.filter(service =>
           expertServices.includes(service)
         );
+        return {
+          expertId: conflictId,
+          expertName: conflictExpert.name,
+          expertServices: conflictExpert.services,
+          overlappingServices,
+        };
       });
-      
-      if (conflictingExperts.length > 0) {
-        // Get names of conflicting services
-        const conflictingServices: string[] = [];
-        for (const conflictId of conflictingExperts) {
-          const conflictExpert = experts.find(e => e.id === conflictId);
-          if (conflictExpert) {
-            const overlappingServices = conflictExpert.services.filter(service => 
-              expertServices.includes(service)
-            );
-            conflictingServices.push(...overlappingServices);
-          }
-        }
-        
-        const uniqueConflictingServices = [...new Set(conflictingServices)];
-        
-        // Get names of conflicting experts
-        const conflictingExpertNames = conflictingExperts
-          .map(id => experts.find(e => e.id === id)?.name || "")
-          .filter(name => name !== "");
 
-        // Auto-replace: remove conflicting experts and add the new one
-        const newSelection = prev.filter(id => !conflictingExperts.includes(id));
-        
-        const replacedNames = conflictingExpertNames.join(', ');
-        toast.info(`${replacedNames} 전문가가 ${expert.name} 전문가로 교체되었습니다.`, {
-          description: `중복 카테고리: ${uniqueConflictingServices.join(', ')}`
-        });
-        
-        return [...newSelection, expertId];
-      }
-      
-      // Add this expert to selection
-      return [...prev, expertId];
+      setConflictInfo({
+        newExpertId: expertId,
+        newExpertName: expert.name,
+        conflicts,
+      });
+      return;
+    }
+
+    // No conflict, add directly
+    setSelectedExperts(prev => [...prev, expertId]);
+  }, [selectedExperts, experts]);
+
+  const handleConflictReplace = useCallback(() => {
+    if (!conflictInfo) return;
+    const conflictIds = conflictInfo.conflicts.map(c => c.expertId);
+    setSelectedExperts(prev => {
+      const filtered = prev.filter(id => !conflictIds.includes(id));
+      return [...filtered, conflictInfo.newExpertId];
     });
-  };
+    const replacedNames = conflictInfo.conflicts.map(c => c.expertName).join(', ');
+    toast.info(`${replacedNames} → ${conflictInfo.newExpertName} 전문가로 교체되었습니다.`);
+    setConflictInfo(null);
+  }, [conflictInfo]);
+
+  const handleConflictCancel = useCallback(() => {
+    setConflictInfo(null);
+  }, []);
 
   const deselectExpert = (expertId: number) => {
     setSelectedExperts(prev => prev.filter(id => id !== expertId));
@@ -136,6 +140,11 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
       }}
     >
       {children}
+      <ExpertConflictDialog
+        conflict={conflictInfo}
+        onReplace={handleConflictReplace}
+        onCancel={handleConflictCancel}
+      />
     </ConsultationContext.Provider>
   );
 };
