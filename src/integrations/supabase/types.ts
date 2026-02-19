@@ -186,6 +186,7 @@ export type Database = {
           key_achievements: string[] | null
           managed_regions: string[] | null
           name: string
+          profile_views: number
           projects: string | null
           regions: string[] | null
           rejection_reason: string | null
@@ -218,6 +219,7 @@ export type Database = {
           key_achievements?: string[] | null
           managed_regions?: string[] | null
           name: string
+          profile_views?: number
           projects?: string | null
           regions?: string[] | null
           rejection_reason?: string | null
@@ -250,6 +252,7 @@ export type Database = {
           key_achievements?: string[] | null
           managed_regions?: string[] | null
           name?: string
+          profile_views?: number
           projects?: string | null
           regions?: string[] | null
           rejection_reason?: string | null
@@ -449,6 +452,7 @@ export type Database = {
           key_achievements: string[] | null
           managed_regions: string[] | null
           name: string | null
+          profile_views: number | null
           projects: string | null
           regions: string[] | null
           rejection_reason: string | null
@@ -479,6 +483,7 @@ export type Database = {
           key_achievements?: string[] | null
           managed_regions?: string[] | null
           name?: string | null
+          profile_views?: number | null
           projects?: string | null
           regions?: string[] | null
           rejection_reason?: string | null
@@ -509,6 +514,7 @@ export type Database = {
           key_achievements?: string[] | null
           managed_regions?: string[] | null
           name?: string | null
+          profile_views?: number | null
           projects?: string | null
           regions?: string[] | null
           rejection_reason?: string | null
@@ -530,6 +536,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_expert_views: {
+        Args: { expert_id: number }
+        Returns: undefined
       }
       increment_simulator_views: {
         Args: { simulator_id: number }
