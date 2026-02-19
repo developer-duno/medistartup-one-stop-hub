@@ -209,19 +209,19 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
           </CustomButton>
           
           <CustomButton 
-            variant="primary"
-            onClick={openConsultation}
-            className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
-          >
-            상담신청
-          </CustomButton>
-          
-          <CustomButton 
             variant="outline"
             onClick={() => setViewMode("grid")}
             className="bg-white border-border text-foreground hover:bg-muted"
           >
             그리드보기
+          </CustomButton>
+
+          <CustomButton 
+            variant="primary"
+            onClick={openConsultation}
+            className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
+          >
+            상담신청
           </CustomButton>
         </div>
       )}
