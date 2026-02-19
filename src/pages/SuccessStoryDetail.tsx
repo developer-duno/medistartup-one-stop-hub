@@ -151,6 +151,21 @@ const SuccessStoryDetail = () => {
                   <button
                     onClick={() => {
                       const url = `https://medistartup.co.kr/success-stories/${story.id}`;
+                      window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(48,97%,52%)] text-[hsl(0,0%,15%)] hover:opacity-80 transition-opacity"
+                    aria-label="카카오톡 공유"
+                  >
+                    <span className="text-xs font-bold">K</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>카카오톡</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      const url = `https://medistartup.co.kr/success-stories/${story.id}`;
                       navigator.clipboard.writeText(url);
                       toast({ title: '링크가 복사되었습니다', description: url });
                     }}
