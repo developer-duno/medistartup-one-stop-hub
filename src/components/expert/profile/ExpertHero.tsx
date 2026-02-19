@@ -46,8 +46,9 @@ const HeroBackground: React.FC<{expert: Expert}> = ({ expert }) => {
     <div className="absolute inset-0 z-10">
       <img 
         src={expert.coverImage} 
-        alt={expert.name} 
+        alt="" 
         className="w-full h-full object-cover opacity-40"
+        onError={(e) => { e.currentTarget.style.display = 'none'; }}
       />
     </div>
   );
@@ -65,11 +66,12 @@ const BackLink: React.FC = () => (
 );
 
 const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) => (
-  <div className="w-20 h-20 md:w-32 md:h-32 rounded-xl overflow-hidden border-3 md:border-4 border-white shadow-lg shrink-0">
+  <div className="w-20 h-20 md:w-32 md:h-32 rounded-xl overflow-hidden border-3 md:border-4 border-white shadow-lg shrink-0 bg-primary-200">
     <img 
       src={image || "/placeholder.svg"} 
       alt={name} 
       className="w-full h-full object-cover"
+      onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
     />
   </div>
 );

@@ -68,7 +68,7 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
       
       if (conflictingExperts.length > 0) {
         // Get names of conflicting services
-        const conflictingServices = [];
+        const conflictingServices: string[] = [];
         for (const conflictId of conflictingExperts) {
           const conflictExpert = experts.find(e => e.id === conflictId);
           if (conflictExpert) {
@@ -85,16 +85,16 @@ export const ConsultationProvider: React.FC<{ children: ReactNode }> = ({ childr
         const conflictingExpertNames = conflictingExperts
           .map(id => experts.find(e => e.id === id)?.name || "")
           .filter(name => name !== "");
-          
-        const message = conflictingExpertNames.length === 1
-          ? `${conflictingExpertNames[0]} 전문가와 같은 서비스 카테고리를 가지고 있어 선택할 수 없습니다.`
-          : `다른 전문가와 같은 서비스 카테고리를 가지고 있어 선택할 수 없습니다.`;
 
-        toast.error(message, {
-          description: `중복된 카테고리: ${uniqueConflictingServices.join(', ')}`
+        // Auto-replace: remove conflicting experts and add the new one
+        const newSelection = prev.filter(id => !conflictingExperts.includes(id));
+        
+        const replacedNames = conflictingExpertNames.join(', ');
+        toast.info(`${replacedNames} 전문가가 ${expert.name} 전문가로 교체되었습니다.`, {
+          description: `중복 카테고리: ${uniqueConflictingServices.join(', ')}`
         });
         
-        return prev;
+        return [...newSelection, expertId];
       }
       
       // Add this expert to selection
