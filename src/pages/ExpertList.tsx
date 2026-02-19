@@ -6,6 +6,7 @@ import ExpertPageHeader from '@/components/experts/ExpertPageHeader';
 import MobileSelectionBar from '@/components/experts/MobileSelectionBar';
 import ExpertGridView from '@/components/experts/ExpertGridView';
 import ExpertComparisonView from '@/components/experts/ExpertComparisonView';
+import ExpertActionBar from '@/components/experts/ExpertActionBar';
 import ExpertCTA from '@/components/experts/ExpertCTA';
 import ExpertPageLayout from '@/components/experts/ExpertPageLayout';
 import ExpertCategoryBar from '@/components/experts/ExpertCategoryBar';
@@ -72,14 +73,28 @@ const ExpertList = () => {
       />
 
       {viewMode === "grid" ? (
-        <ExpertGridView 
-          filteredExperts={filteredExperts} 
-          resetFilters={resetFilters}
-        />
+        <>
+          <ExpertGridView 
+            filteredExperts={filteredExperts} 
+            resetFilters={resetFilters}
+          />
+          {selectedExperts.length >= 2 && (
+            <ExpertActionBar 
+              setViewMode={setViewMode} 
+              viewMode={viewMode}
+            />
+          )}
+        </>
       ) : (
-        <ExpertComparisonView 
-          setViewMode={setViewMode}
-        />
+        <>
+          <ExpertComparisonView 
+            setViewMode={setViewMode}
+          />
+          <ExpertActionBar 
+            setViewMode={setViewMode} 
+            viewMode={viewMode}
+          />
+        </>
       )}
       
       <ExpertCTA />
