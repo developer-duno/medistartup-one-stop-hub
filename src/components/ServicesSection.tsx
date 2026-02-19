@@ -74,16 +74,16 @@ const ServicesSection = () => {
                   {service.description}
                 </p>
               </div>
-              <div className="p-4 border-t border-neutral-100 flex justify-between items-center">
+              <div className="p-3 md:p-4 border-t border-neutral-100 flex justify-between items-center gap-2">
                 <Link 
                   to={service.path} 
-                  className="font-pretendard font-medium text-primary inline-flex items-center group-hover:underline"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors inline-flex items-center"
                 >
-                  자세히 알아보기
+                  더 알아보기
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
-                    width="16" 
-                    height="16" 
+                    width="14" 
+                    height="14" 
                     viewBox="0 0 24 24" 
                     fill="none" 
                     stroke="currentColor" 
@@ -97,9 +97,9 @@ const ServicesSection = () => {
                 </Link>
                 <Link 
                   to={`/experts?service=${getServiceUrlParam(service.title)}`}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-accent/10 text-accent-700 font-medium hover:bg-accent/20 transition-colors"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors"
                 >
-                  전문가 찾기
+                  전문가
                 </Link>
               </div>
             </div>
