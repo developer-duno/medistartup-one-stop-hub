@@ -1,11 +1,14 @@
 
 import React from 'react';
 import { MessageCircle, CheckCircle } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { cn } from '@/lib/utils';
 
 const FloatingConsultButton: React.FC = () => {
   const { selectedExperts, openConsultation } = useConsultation();
+  const location = useLocation();
+  const isExpertProfile = /^\/experts\/\d+/.test(location.pathname);
   
   // Always show the button, but make it more prominent when experts are selected
   const hasSelectedExperts = selectedExperts.length > 0;
@@ -13,7 +16,8 @@ const FloatingConsultButton: React.FC = () => {
   return (
     <div 
       className={cn(
-        "fixed bottom-6 right-6 z-40 transition-all duration-300 transform",
+        "fixed right-6 z-40 transition-all duration-300 transform",
+        isExpertProfile ? "bottom-20 lg:bottom-6" : "bottom-6",
         hasSelectedExperts ? "scale-110" : "scale-100"
       )}
     >
