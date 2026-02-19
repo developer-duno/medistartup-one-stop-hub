@@ -176,7 +176,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
         className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-neutral-200 bg-white text-sm font-medium text-foreground/70 active:scale-[0.98] transition-transform"
       >
         <Maximize2 className="w-4 h-4" />
-        자세히 비교하기 (PC 버전)
+        자세히 비교
       </button>
     </div>
   );
@@ -187,15 +187,15 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
         <MobileSummaryView />
       ) : (
         <>
+          <ComparisonTable />
           {isMobile && forceDesktop && (
             <button
               onClick={() => setForceDesktop(false)}
-              className="mb-3 text-sm text-muted-foreground underline"
+              className="w-full flex items-center justify-center gap-2 py-3 mb-4 rounded-lg border border-neutral-200 bg-white text-sm font-medium text-foreground/70 active:scale-[0.98] transition-transform"
             >
               ← 간단히 보기
             </button>
           )}
-          <ComparisonTable />
         </>
       )}
       
@@ -205,15 +205,16 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
           onClick={clearSelectedExperts}
           fullWidth={isMobile}
         >
-          선택 초기화
+          초기화
         </CustomButton>
         
         <CustomButton 
           variant="primary"
           onClick={openConsultation}
           fullWidth={isMobile}
+          className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
         >
-          선택한 전문가에게 상담 신청
+          상담신청
         </CustomButton>
         
         <CustomButton 
@@ -221,7 +222,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
           onClick={() => setViewMode("grid")}
           fullWidth={isMobile}
         >
-          그리드 보기로 돌아가기
+          그리드보기
         </CustomButton>
       </div>
     </div>

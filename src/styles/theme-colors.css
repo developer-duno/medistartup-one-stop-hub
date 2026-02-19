@@ -29,6 +29,9 @@
   --ring: 222.2 84% 4.9%;
 
   --radius: 0.5rem;
+
+  --cta: 24 95% 53%;
+  --cta-foreground: 0 0% 100%;
   
   /* Extended colors */
   --primary-50: 222.2 47.4% 97%;
