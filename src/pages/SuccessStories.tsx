@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
@@ -10,6 +10,18 @@ import { LoadingState } from '@/components/ui/loading-state';
 const SuccessStories = () => {
   const { getVisibleStories, loading } = useSuccessStories();
   const visibleStories = getVisibleStories();
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  const categories = useMemo(() => {
+    const serviceSet = new Set<string>();
+    visibleStories.forEach(story => story.services.forEach(s => serviceSet.add(s)));
+    return Array.from(serviceSet).sort();
+  }, [visibleStories]);
+
+  const filteredStories = useMemo(() => {
+    if (selectedCategory === 'all') return visibleStories;
+    return visibleStories.filter(story => story.services.includes(selectedCategory));
+  }, [visibleStories, selectedCategory]);
   
   return (
     <div className="theme-success min-h-screen bg-white">
@@ -34,11 +46,40 @@ const SuccessStories = () => {
       </div>
 
       <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
+        {/* 카테고리 필터 */}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-6 md:mb-8">
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${
+                selectedCategory === 'all'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-accent'
+              }`}
+            >
+              전체
+            </button>
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium transition-colors ${
+                  selectedCategory === cat
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted text-muted-foreground hover:bg-accent'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
         {loading ? (
           <LoadingState className="py-12" />
-        ) : visibleStories.length > 0 ? (
+        ) : filteredStories.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-            {visibleStories.map((story) => (
+            {filteredStories.map((story) => (
               <div key={story.id} className="group bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 <div className="aspect-video bg-neutral-100 relative overflow-hidden">
                   <img 
@@ -85,7 +126,9 @@ const SuccessStories = () => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">등록된 성공 사례가 없습니다.</p>
+            <p className="text-muted-foreground">
+              {selectedCategory === 'all' ? '등록된 성공 사례가 없습니다.' : `'${selectedCategory}' 카테고리의 성공 사례가 없습니다.`}
+            </p>
           </div>
         )}
       </div>
