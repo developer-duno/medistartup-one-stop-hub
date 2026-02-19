@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 import { useInsights } from '@/contexts/InsightsContext';
@@ -57,7 +58,7 @@ const NewsInsightsSection = () => {
                   >
                     <Link to={`/insights/${insight.id}`} className="block">
                       <div className="h-48 overflow-hidden">
-                        <img 
+                        <LazyImage 
                           src={insight.image || 'https://placehold.co/600x400?text=No+Image'} 
                           alt={insight.title}
                           className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"

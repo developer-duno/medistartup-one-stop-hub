@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Maximize2 } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
@@ -55,7 +56,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 <th key={expert.id} className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/5">
-                      <img 
+                      <LazyImage 
                         src={expert.image || "/placeholder.svg"} 
                         alt={expert.name}
                         className="w-full h-full object-cover"
@@ -133,7 +134,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
         {selectedExpertsData.map((expert) => expert && (
           <div key={expert.id} className="bg-white rounded-xl shadow-md p-4 text-center">
             <div className="w-16 h-16 rounded-full overflow-hidden bg-primary/5 mx-auto mb-2">
-              <img 
+              <LazyImage 
                 src={expert.image || "/placeholder.svg"} 
                 alt={expert.name}
                 className="w-full h-full object-cover"

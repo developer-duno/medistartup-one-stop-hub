@@ -1,5 +1,6 @@
 
 import React from 'react';
+import LazyImage from '@/components/LazyImage';
 import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
 import { InsightType } from '@/components/admin/insights/types';
@@ -39,7 +40,7 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
       
       <div className="p-2">
         <div className="aspect-video w-full relative overflow-hidden mb-6">
-          <img 
+          <LazyImage 
             src={insight.image || 'https://placehold.co/600x400?text=No+Image'} 
             alt={insight.title}
             className="w-full h-full object-cover rounded-lg"

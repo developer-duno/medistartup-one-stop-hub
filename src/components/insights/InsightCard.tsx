@@ -1,5 +1,6 @@
 
 import React from 'react';
+import LazyImage from '@/components/LazyImage';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar, Tag } from 'lucide-react';
@@ -44,7 +45,7 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
     <Card className={cardClass} onClick={onClick}>
       <CardContent className="p-0">
         <div className="aspect-video relative overflow-hidden">
-          <img 
+          <LazyImage 
             src={insight.imageUrl || insight.image || '/placeholder.svg'} 
             alt={insight.title}
             className="w-full h-full object-cover"

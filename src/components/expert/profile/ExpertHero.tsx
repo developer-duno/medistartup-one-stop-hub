@@ -1,5 +1,6 @@
 
 import React from 'react';
+import LazyImage from '@/components/LazyImage';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Briefcase, FolderOpen, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
@@ -45,7 +46,7 @@ const HeroBackground: React.FC<{expert: Expert}> = ({ expert }) => {
   
   return (
     <div className="absolute inset-0 z-10">
-      <img 
+      <LazyImage 
         src={expert.coverImage} 
         alt="" 
         className="w-full h-full object-cover opacity-40"
@@ -68,7 +69,7 @@ const BackLink: React.FC<{onBack: () => void}> = ({ onBack }) => (
 
 const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) => (
   <div className="w-20 h-20 md:w-32 md:h-32 rounded-xl overflow-hidden border-3 md:border-4 border-white shadow-lg shrink-0 bg-primary-200">
-    <img 
+    <LazyImage 
       src={image || "/placeholder.svg"} 
       alt={name} 
       className="w-full h-full object-cover"
