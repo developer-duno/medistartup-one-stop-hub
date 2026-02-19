@@ -25,7 +25,7 @@ const ServicesSection = () => {
   };
 
   const getColorClassName = (index: number) => {
-    const colors = ['from-primary-100 to-primary-50', 'from-secondary-100 to-secondary-50', 'from-accent-100 to-accent-50'];
+    const colors = ['from-primary-100/75 to-primary-50/75', 'from-secondary-100/75 to-secondary-50/75', 'from-accent-100/75 to-accent-50/75'];
     return colors[index % colors.length];
   };
 
@@ -77,13 +77,13 @@ const ServicesSection = () => {
               <div className="p-3 md:p-4 border-t border-neutral-100 flex justify-between items-center gap-2">
                 <Link 
                   to={service.path} 
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1 shadow-sm"
                 >
                   자세히
                 </Link>
                 <Link 
                   to={`/experts?service=${getServiceUrlParam(service.title)}`}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1 shadow-sm"
                 >
                   전문가
                 </Link>
