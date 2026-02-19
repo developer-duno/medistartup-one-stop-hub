@@ -50,11 +50,12 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
                 {selectedExpertsData.map((expert) => expert && (
                   <th key={expert.id} className="px-6 py-4 text-left text-sm font-medium text-neutral-500 uppercase tracking-wider">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/5">
                         <img 
-                          src={expert.image} 
+                          src={expert.image || "/placeholder.svg"} 
                           alt={expert.name}
                           className="w-full h-full object-cover"
+                          onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
                         />
                       </div>
                       <span>{expert.name}</span>
