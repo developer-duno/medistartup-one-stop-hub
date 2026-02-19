@@ -9,6 +9,7 @@ const FloatingConsultButton: React.FC = () => {
   const { selectedExperts, openConsultation } = useConsultation();
   const location = useLocation();
   const isExpertProfile = /^\/experts\/\d+/.test(location.pathname);
+  const isExpertList = location.pathname === '/experts';
   
   // Always show the button, but make it more prominent when experts are selected
   const hasSelectedExperts = selectedExperts.length > 0;
@@ -18,6 +19,7 @@ const FloatingConsultButton: React.FC = () => {
       className={cn(
         "fixed right-6 z-40 transition-all duration-300 transform",
         isExpertProfile ? "bottom-20 lg:bottom-6" : "bottom-6",
+        isExpertList && hasSelectedExperts ? "hidden md:block" : "",
         hasSelectedExperts ? "scale-110" : "scale-100"
       )}
     >
