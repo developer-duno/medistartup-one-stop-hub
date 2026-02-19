@@ -76,16 +76,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
           {service.description}
         </p>
         
-        <div className="flex justify-between items-center mt-auto pt-3 border-t border-neutral-100">
+        <div className="flex justify-between items-center mt-auto pt-3 border-t border-neutral-100 gap-2">
           <Link 
             to={service.path} 
-            className="text-sm font-medium text-primary inline-flex items-center hover:underline"
+            className="text-sm px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors inline-flex items-center"
           >
-            자세히 보기
+            더 알아보기
             <svg 
               xmlns="http://www.w3.org/2000/svg"
-              width="16" 
-              height="16" 
+              width="14" 
+              height="14" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 
@@ -100,9 +100,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
           
           <Link 
             to={`/experts?service=${getServiceParam(service.title)}`}
-            className="text-xs text-secondary-foreground hover:text-primary transition-colors"
+            className="text-sm px-3 py-1.5 rounded-full bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors"
           >
-            전문가 찾기
+            전문가
           </Link>
         </div>
       </div>
