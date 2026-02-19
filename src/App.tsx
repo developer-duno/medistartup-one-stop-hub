@@ -41,12 +41,14 @@ import MedicalEquipment from './pages/services/MedicalEquipment';
 // Consultation components
 import FloatingConsultButton from './components/consultation/FloatingConsultButton';
 import ConsultationDialog from './components/consultation/ConsultationDialog';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
         <AppProviders>
+          <ScrollToTop />
           <Toaster />
           <FloatingConsultButton />
           <ConsultationDialog />
