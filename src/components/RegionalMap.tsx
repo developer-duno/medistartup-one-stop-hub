@@ -199,9 +199,9 @@ const RegionalMap = () => {
                                 {manager.name}
                               </Badge>
                             )}
-                            <Badge variant="outline" className="text-[9px] md:text-xs px-1 md:px-2">
+                            <Badge variant="outline" className={`text-[9px] md:text-xs px-1 md:px-2 ${count === 0 ? 'text-muted-foreground bg-muted border-muted' : ''}`}>
                               <Users className="h-2.5 w-2.5 md:h-3 md:w-3 mr-0.5 md:mr-1" />
-                              {count}명
+                              {count === 0 ? '모집 중' : `${count}명`}
                             </Badge>
                           </div>
                         </div>

@@ -62,16 +62,21 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
             <h3 className="font-pretendard font-bold text-base md:text-lg text-neutral-900">
               {expert.name}
             </h3>
-            <p className="font-noto text-neutral-600 text-xs md:text-sm">
+            <p className="font-noto text-neutral-600 text-xs md:text-sm line-clamp-1">
               {expert.role}
             </p>
           </div>
           <div className="flex flex-wrap gap-1 justify-end ml-2 max-w-[55%]">
-            {expert.services.map((service, idx) => (
+            {expert.services.slice(0, 2).map((service, idx) => (
               <Badge key={idx} className="bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 text-[10px] md:text-xs px-1.5 md:px-2 whitespace-nowrap">
                 {service}
               </Badge>
             ))}
+            {expert.services.length > 2 && (
+              <Badge className="bg-muted text-muted-foreground text-[10px] md:text-xs px-1.5 md:px-2 whitespace-nowrap">
+                +{expert.services.length - 2}
+              </Badge>
+            )}
           </div>
         </div>
         
