@@ -33,6 +33,38 @@ const RegionalMap = () => {
   const [activeGroupRegions, setActiveGroupRegions] = useState<string[]>([]);
   const [showMobilePanel, setShowMobilePanel] = useState(false);
 
+  // Restore popup state from sessionStorage on mount (back navigation)
+  React.useEffect(() => {
+    const saved = sessionStorage.getItem('regionalmap_panel_state');
+    if (saved && isBelowLg) {
+      try {
+        const state = JSON.parse(saved);
+        if (state.group) {
+          const group = regionGroupsCompat.find(g => g.name === state.group);
+          if (group) {
+            setActiveGroup(group.name);
+            setActiveGroupRegions(group.regions);
+            setActiveRegion('');
+            setShowMobilePanel(true);
+          }
+        } else if (state.region) {
+          setActiveGroup(null);
+          setActiveGroupRegions([]);
+          setActiveRegion(state.region);
+          setShowMobilePanel(true);
+        }
+      } catch {}
+      sessionStorage.removeItem('regionalmap_panel_state');
+    }
+  }, [isBelowLg, regionGroupsCompat]);
+
+  const savePanelState = () => {
+    const state = activeGroup 
+      ? { group: activeGroup } 
+      : { region: activeRegion };
+    sessionStorage.setItem('regionalmap_panel_state', JSON.stringify(state));
+  };
+
   const getManagerForRegion = (regionName: string) => {
     return experts.find(expert => 
       expert.isRegionalManager && 
@@ -137,7 +169,7 @@ const RegionalMap = () => {
                       className="h-7 px-2 text-[10px] md:text-xs active:scale-95 transition-transform duration-150 touch-manipulation select-none"
                       asChild
                     >
-                      <Link to={`/experts/${expert.id}`}>프로필</Link>
+                      <Link to={`/experts/${expert.id}`} onClick={savePanelState}>프로필</Link>
                     </CustomButton>
                   </div>
                 </div>
