@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Briefcase, FolderOpen, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Expert } from '@/types/expert';
-import ExpertStatItem from './ExpertStatItem';
 
 interface ExpertHeroProps {
   expert: Expert;
@@ -12,22 +11,26 @@ interface ExpertHeroProps {
 
 const ExpertHero: React.FC<ExpertHeroProps> = ({ expert }) => {
   return (
-    <section className="relative h-[50vh] min-h-[300px] bg-gradient-to-r from-primary-700 to-primary-900 overflow-hidden">
+    <section className="relative bg-gradient-to-r from-primary-700 to-primary-900 overflow-hidden pt-20 md:pt-24 pb-8 md:pb-10">
       <HeroBackground expert={expert} />
       <HeroOverlay />
       
-      <div className="container mx-auto px-4 relative z-30 h-full flex flex-col justify-end pb-10">
+      <div className="container mx-auto px-4 relative z-30">
         <BackLink />
         
-        <div className="flex items-end gap-6">
+        <div className="flex items-end gap-4 md:gap-6">
           <ExpertImage image={expert.image} name={expert.name} />
           
-          <div>
+          <div className="flex-1 min-w-0">
             <ServiceTags services={expert.services} />
             <ExpertName name={expert.name} />
             <ExpertRole role={expert.role} specialty={expert.specialty} />
-            <ExpertStats expert={expert} />
           </div>
+        </div>
+        
+        {/* Stats grid below name on mobile for clarity */}
+        <div className="mt-4">
+          <ExpertStats expert={expert} />
         </div>
       </div>
     </section>
@@ -55,14 +58,14 @@ const HeroOverlay: React.FC = () => (
 );
 
 const BackLink: React.FC = () => (
-  <Link to="/experts" className="inline-flex items-center text-white/80 hover:text-white mb-8 transition-colors">
+  <Link to="/experts" className="inline-flex items-center text-white/80 hover:text-white mb-4 md:mb-8 transition-colors text-sm">
     <ChevronLeft className="h-4 w-4 mr-1" />
     모든 전문가 보기
   </Link>
 );
 
 const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) => (
-  <div className="hidden md:block relative w-32 h-32 rounded-xl overflow-hidden border-4 border-white shadow-lg">
+  <div className="w-20 h-20 md:w-32 md:h-32 rounded-xl overflow-hidden border-3 md:border-4 border-white shadow-lg shrink-0">
     <img 
       src={image || "/placeholder.svg"} 
       alt={name} 
@@ -72,9 +75,9 @@ const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) 
 );
 
 const ServiceTags: React.FC<{services?: string[]}> = ({ services = [] }) => (
-  <div className="flex flex-wrap gap-2 mb-3">
+  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-2 md:mb-3">
     {services.map((service: string, idx: number) => (
-      <Badge key={idx} variant="secondary" className="bg-white/20 hover:bg-white/30 text-white">
+      <Badge key={idx} variant="secondary" className="bg-white/20 hover:bg-white/30 text-white text-[10px] md:text-xs px-2 py-0.5">
         {service}
       </Badge>
     ))}
@@ -82,26 +85,35 @@ const ServiceTags: React.FC<{services?: string[]}> = ({ services = [] }) => (
 );
 
 const ExpertName: React.FC<{name: string}> = ({ name }) => (
-  <h1 className="font-pretendard font-bold text-3xl md:text-4xl text-white mb-1">
+  <h1 className="font-pretendard font-bold text-2xl md:text-4xl text-white mb-0.5 md:mb-1">
     {name}
   </h1>
 );
 
 const ExpertRole: React.FC<{role: string; specialty: string}> = ({ role, specialty }) => (
-  <p className="font-noto text-white/90 text-lg mb-4">
+  <p className="font-noto text-white/90 text-sm md:text-lg line-clamp-2">
     {role} · {specialty}
   </p>
 );
 
 const ExpertStats: React.FC<{expert: Expert}> = ({ expert }) => (
-  <div className="flex flex-wrap gap-3 md:gap-4">
-    <ExpertStatItem label="경력" value={expert.experience} />
-    <ExpertStatItem label="프로젝트" value={expert.projects} />
-    <ExpertStatItem 
-      label="활동 지역" 
-      value={expert.regions ? expert.regions.join(', ') : '전국'} 
-    />
-    <ExpertStatItem label="프로필 조회" value={`${expert.profileViews ?? 0}회`} />
+  <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 md:gap-4">
+    <StatCard icon={<Briefcase className="h-3.5 w-3.5" />} label="경력" value={expert.experience} />
+    <StatCard icon={<FolderOpen className="h-3.5 w-3.5" />} label="프로젝트" value={expert.projects} />
+    <StatCard icon={<MapPin className="h-3.5 w-3.5" />} label="활동 지역" value={expert.regions ? expert.regions.join(', ') : '전국'} />
+    <StatCard icon={<Eye className="h-3.5 w-3.5" />} label="프로필 조회" value={`${expert.profileViews ?? 0}회`} />
+  </div>
+);
+
+const StatCard: React.FC<{icon: React.ReactNode; label: string; value: string | number}> = ({ icon, label, value }) => (
+  <div className="bg-white/10 rounded-lg px-3 py-2 backdrop-blur-sm flex items-center gap-2 md:block">
+    <div className="flex items-center gap-1 text-white/70 text-[10px] md:text-xs md:mb-0.5">
+      {icon}
+      <span>{label}</span>
+    </div>
+    <span className="font-pretendard font-bold text-white text-sm md:text-base md:text-center md:block truncate">
+      {value}
+    </span>
   </div>
 );
 

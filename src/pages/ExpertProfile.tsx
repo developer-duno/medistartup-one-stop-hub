@@ -149,8 +149,19 @@ const ExpertProfile = () => {
         <ExpertHero expert={expert} />
         
         <main className="container mx-auto px-3 md:px-4 py-4 md:py-8">
+          {/* Mobile: sidebar first, then content. Desktop: content left, sidebar right */}
+          <div className="lg:hidden mb-4">
+            <ErrorBoundary>
+              <ExpertSidebar
+                expert={expert}
+                isExpertSelected={isExpertSelected}
+                onSelectExpert={handleSelectExpert}
+              />
+            </ErrorBoundary>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
-            <div className="lg:col-span-2 space-y-12">
+            <div className="lg:col-span-2 space-y-6 md:space-y-12">
               <ErrorBoundary>
                 <ExpertOverview expert={expert} />
               </ErrorBoundary>
@@ -170,7 +181,7 @@ const ExpertProfile = () => {
               </ErrorBoundary>
             </div>
             
-            <div>
+            <div className="hidden lg:block">
               <ErrorBoundary>
                 <ExpertSidebar
                   expert={expert}

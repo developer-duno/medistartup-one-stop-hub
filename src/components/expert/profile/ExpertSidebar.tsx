@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '@/components/ui/CustomButton';
@@ -18,55 +18,44 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
   onSelectExpert,
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 sticky top-24">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="md:hidden w-16 h-16 rounded-full overflow-hidden border-2 border-primary-50">
-          <img 
-            src={expert.image || "/placeholder.svg"} 
-            alt={expert.name} 
-            className="w-full h-full object-cover"
-          />
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 md:p-6 sticky top-24">
+      <div className="flex items-center gap-2 mb-4">
+        <div className="bg-primary/10 p-1.5 rounded-md">
+          <Info className="h-4 w-4 text-primary" />
         </div>
-        <div>
-          <h3 className="font-pretendard font-bold text-xl text-neutral-900 md:hidden">
-            {expert.name}
-          </h3>
-          <p className="text-neutral-500 md:text-lg">
-            전문가 정보
-          </p>
-        </div>
+        <p className="font-pretendard font-bold text-base md:text-lg">
+          전문가 정보
+        </p>
       </div>
       
-      <div className="space-y-4 mb-6">
-        {expert.regions && expert.regions.length > 0 && (
-          <div className="flex items-start gap-3">
-            <div className="bg-primary-50 p-2 rounded-md">
-              <MapPin className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <span className="font-medium block mb-1">활동 지역</span>
-              <div className="flex flex-wrap gap-1">
-                {expert.regions.map((region: string, idx: number) => (
-                  <Badge key={idx} variant="outline" className="bg-neutral-50">
-                    {region}
-                  </Badge>
-                ))}
-              </div>
+      {expert.regions && expert.regions.length > 0 && (
+        <div className="flex items-start gap-3 mb-4">
+          <div className="bg-primary-50 p-2 rounded-md shrink-0">
+            <MapPin className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <span className="font-medium block mb-1 text-sm">활동 지역</span>
+            <div className="flex flex-wrap gap-1">
+              {expert.regions.map((region: string, idx: number) => (
+                <Badge key={idx} variant="outline" className="bg-neutral-50 text-xs">
+                  {region}
+                </Badge>
+              ))}
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
       
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         <CustomButton 
           variant={isExpertSelected ? "secondary" : "primary"} 
-          className="w-full"
+          className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150"
           onClick={onSelectExpert}
         >
           {isExpertSelected ? '전문가 선택 취소' : '전문가 선택하기'}
         </CustomButton>
         
-        <CustomButton variant="outline" className="w-full" asChild>
+        <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" asChild>
           <Link to="/experts">
             다른 전문가 보기
           </Link>
@@ -77,4 +66,3 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
 };
 
 export default ExpertSidebar;
-
