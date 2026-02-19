@@ -43,17 +43,16 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
   };
 
   const getBgColor = () => {
-    // Add safety check for category
     if (!service.category) {
-      return 'bg-primary-100';
+      return 'bg-primary-50';
     }
     
     switch(service.category) {
-      case 'planning': return 'bg-primary-100';
-      case 'implementation': return 'bg-secondary-100';
-      case 'equipment': return 'bg-accent-100';
-      case 'operation': return 'bg-primary-100';
-      default: return 'bg-primary-100';
+      case 'planning': return 'bg-primary-50';
+      case 'implementation': return 'bg-secondary-50';
+      case 'equipment': return 'bg-accent-50';
+      case 'operation': return 'bg-primary-50';
+      default: return 'bg-primary-50';
     }
   };
 
