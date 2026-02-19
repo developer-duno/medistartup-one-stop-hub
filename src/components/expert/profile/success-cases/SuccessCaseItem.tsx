@@ -1,5 +1,6 @@
 
 import React from 'react';
+import LazyImage from '@/components/LazyImage';
 import { CheckCircle } from 'lucide-react';
 import SuccessCaseResults from './SuccessCaseResults';
 
@@ -31,7 +32,7 @@ const SuccessCaseItem: React.FC<SuccessCaseItemProps> = ({
       </div>
       {image && (
         <div className="aspect-video w-full">
-          <img 
+          <LazyImage 
             src={image} 
             alt={title} 
             className="w-full h-full object-cover"

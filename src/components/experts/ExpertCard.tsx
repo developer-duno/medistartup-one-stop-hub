@@ -1,5 +1,6 @@
 
 import React from 'react';
+import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Clock, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
@@ -28,11 +29,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
     >
       <div className="relative">
         <div className="h-32 md:h-48 overflow-hidden bg-primary/5">
-          <img 
+          <LazyImage 
             src={expert.image || "/placeholder.svg"} 
             alt={expert.name} 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
             onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
           />
         </div>
