@@ -32,7 +32,7 @@ const ExpertActionBar: React.FC<ExpertActionBarProps> = ({ setViewMode, viewMode
           ? 'bg-white text-foreground border-border hover:bg-muted' 
           : 'bg-green-600 text-white border-green-600 hover:bg-green-700'}
       >
-        {isCompare ? "그리드보기" : `비교보기 (${selectedExperts.length}/3)`}
+        {isCompare ? "그리드보기" : `비교보기 ${selectedExperts.length}명`}
       </CustomButton>
 
       <CustomButton 
