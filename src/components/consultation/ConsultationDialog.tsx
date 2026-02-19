@@ -121,7 +121,7 @@ const ConsultationDialog: React.FC = () => {
           <div className="p-6">
             <DialogHeader>
               <DialogTitle className="text-2xl font-pretendard font-bold text-center">
-                무료 상담 신청
+                무료 상담
               </DialogTitle>
             </DialogHeader>
             
@@ -309,7 +309,7 @@ const ConsultationDialog: React.FC = () => {
                 fullWidth
                 disabled={isSubmitting}
               >
-                {isSubmitting ? '신청 중...' : '무료 상담 신청하기'}
+                {isSubmitting ? '접수 중...' : '무료 상담하기'}
               </CustomButton>
             </form>
           </div>

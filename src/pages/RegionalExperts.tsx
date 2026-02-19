@@ -135,7 +135,11 @@ const RegionalExperts = () => {
                         <Badge variant="default" className="text-[9px] md:text-[10px] px-1 md:px-1.5 py-0">총괄</Badge>
                       )}
                     </div>
-                    <p className="text-[10px] md:text-xs text-muted-foreground truncate">{expert.specialty}</p>
+                    <p className="text-[10px] md:text-xs text-muted-foreground line-clamp-2">
+                      {expert.services && expert.services.length > 0 
+                        ? expert.services.join(' · ') 
+                        : expert.specialty}
+                    </p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     <Button

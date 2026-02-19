@@ -42,7 +42,7 @@ const MobileSelectionBar: React.FC<MobileSelectionBarProps> = ({
             onClick={openConsultation}
             className="text-xs py-1.5 px-2 bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
           >
-            상담신청
+            무료상담
           </CustomButton>
         </div>
       </div>

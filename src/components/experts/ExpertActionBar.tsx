@@ -40,7 +40,7 @@ const ExpertActionBar: React.FC<ExpertActionBarProps> = ({ setViewMode, viewMode
         onClick={openConsultation}
         className="bg-[hsl(var(--cta))] hover:bg-[hsl(24,95%,45%)] text-[hsl(var(--cta-foreground))]"
       >
-        상담신청
+        무료상담
       </CustomButton>
     </div>
   );

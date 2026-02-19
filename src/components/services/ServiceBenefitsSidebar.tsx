@@ -53,7 +53,7 @@ const ServiceBenefitsSidebar: React.FC<ServiceBenefitsSidebarProps> = ({
           asChild
         >
           <Link to={`/experts?service=${serviceUrlName}&consultation=true`}>
-            전문 상담 신청하기
+            무료 상담하기
           </Link>
         </CustomButton>
       </div>
