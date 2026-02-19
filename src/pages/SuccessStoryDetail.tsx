@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Calendar, MapPin, Tag, User } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Tag, User, Share2, Link as LinkIcon, MessageCircle } from 'lucide-react';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { generateSeoData } from '@/utils/seoUtils';
 import { generateSuccessStorySchema } from '@/utils/schemaUtils';
+import { toast } from '@/hooks/use-toast';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -94,7 +96,75 @@ const SuccessStoryDetail = () => {
               </div>
             </div>
           </div>
-          
+
+          {/* SNS 공유 버튼 */}
+          <div className="flex items-center gap-2 mb-4 md:mb-6">
+            <span className="text-xs md:text-sm text-muted-foreground mr-1">공유하기</span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      const url = `https://medistartup.co.kr/success-stories/${story.id}`;
+                      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(220,46%,48%)] text-white hover:opacity-80 transition-opacity"
+                    aria-label="Facebook 공유"
+                  >
+                    <span className="text-xs font-bold">f</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Facebook</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      const url = `https://medistartup.co.kr/success-stories/${story.id}`;
+                      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(story.title)}`, '_blank', 'width=600,height=400');
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-foreground text-background hover:opacity-80 transition-opacity"
+                    aria-label="X(Twitter) 공유"
+                  >
+                    <span className="text-xs font-bold">𝕏</span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>X (Twitter)</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      const url = `https://medistartup.co.kr/success-stories/${story.id}`;
+                      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(story.title + ' ' + url)}`, '_blank');
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(142,70%,40%)] text-white hover:opacity-80 transition-opacity"
+                    aria-label="WhatsApp 공유"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>WhatsApp</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      const url = `https://medistartup.co.kr/success-stories/${story.id}`;
+                      navigator.clipboard.writeText(url);
+                      toast({ title: '링크가 복사되었습니다', description: url });
+                    }}
+                    className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-muted text-muted-foreground hover:bg-accent transition-colors"
+                    aria-label="링크 복사"
+                  >
+                    <LinkIcon className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>링크 복사</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
           <div className="aspect-video w-full rounded-lg overflow-hidden mb-4 md:mb-8">
             <img 
               src={story.imageUrl} 

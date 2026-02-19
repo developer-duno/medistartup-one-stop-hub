@@ -39,12 +39,12 @@ const SuccessStories = () => {
         ) : visibleStories.length > 0 ? (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
             {visibleStories.map((story) => (
-              <div key={story.id} className="bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden">
-                <div className="aspect-video bg-neutral-100 relative">
+              <div key={story.id} className="group bg-white rounded-lg shadow-sm border border-neutral-100 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div className="aspect-video bg-neutral-100 relative overflow-hidden">
                   <img 
                     src={story.imageUrl} 
                     alt={story.title} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   {story.featured && (
                     <div className="absolute top-2 left-2 bg-green-100 text-green-800 px-1.5 md:px-2 py-0.5 md:py-1 rounded text-[10px] md:text-xs font-medium">
@@ -53,7 +53,7 @@ const SuccessStories = () => {
                   )}
                 </div>
                 <div className="p-3 md:p-5">
-                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2">
+                  <h3 className="font-pretendard font-bold text-base md:text-lg mb-1 md:mb-2 group-hover:text-primary transition-colors duration-300">
                     {story.title}
                   </h3>
                   <div className="flex items-center mb-2 md:mb-3 text-[10px] md:text-sm text-neutral-500">
