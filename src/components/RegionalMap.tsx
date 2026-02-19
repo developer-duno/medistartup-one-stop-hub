@@ -6,7 +6,7 @@ import { MapPin, Users, User, ArrowRight, X, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import CustomButton from '@/components/ui/CustomButton';
 import { Link } from 'react-router-dom';
 import { useRegionGroups } from '@/hooks/useRegionGroups';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -111,22 +111,22 @@ const RegionalMap = () => {
                     <p className="text-[10px] md:text-xs text-muted-foreground truncate">{expert.specialty}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <Button
+                    <CustomButton
+                      variant={isSelected ? "secondary" : "outline"}
                       size="sm"
-                      variant={isSelected ? "secondary" : "default"}
-                      className="h-7 px-2 text-[10px] md:text-xs touch-manipulation"
+                      className="h-7 px-2 text-[10px] md:text-xs active:scale-95 transition-transform duration-150 touch-manipulation select-none"
                       onClick={() => selectExpert(expert.id)}
                     >
                       {isSelected ? <><CheckCircle2 className="h-3 w-3 mr-0.5" />선택됨</> : '선택'}
-                    </Button>
-                    <Button
+                    </CustomButton>
+                    <CustomButton
+                      variant="primary"
                       size="sm"
-                      variant="outline"
-                      className="h-7 px-2 text-[10px] md:text-xs touch-manipulation"
+                      className="h-7 px-2 text-[10px] md:text-xs active:scale-95 transition-transform duration-150 touch-manipulation select-none"
                       asChild
                     >
                       <Link to={`/experts/${expert.id}`}>프로필</Link>
-                    </Button>
+                    </CustomButton>
                   </div>
                 </div>
               );
@@ -135,11 +135,11 @@ const RegionalMap = () => {
         )}
         {regionExperts.length > 0 && (
           <div className="mt-3 pt-3 border-t">
-            <Button asChild variant="outline" className="w-full" size="sm">
+            <CustomButton variant="outline" size="sm" className="w-full active:scale-95 transition-transform duration-150 touch-manipulation select-none" asChild>
               <Link to={`/experts?region=${encodeURIComponent(activeRegion)}`}>
                 전체 전문가 보기
               </Link>
-            </Button>
+            </CustomButton>
           </div>
         )}
       </CardContent>
