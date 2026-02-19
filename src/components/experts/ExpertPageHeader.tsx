@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CustomButton from '../ui/CustomButton';
 
 interface ExpertPageHeaderProps {
   filteredExperts: any[];
@@ -15,6 +15,8 @@ const ExpertPageHeader: React.FC<ExpertPageHeaderProps> = ({
   setViewMode,
   selectedExperts
 }) => {
+  const isCompare = viewMode === "compare";
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
       <div>
@@ -26,23 +28,20 @@ const ExpertPageHeader: React.FC<ExpertPageHeaderProps> = ({
         </p>
       </div>
       
-      <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="hidden md:block">
-        <TabsList className="bg-neutral-100 border border-neutral-200 p-1 rounded-lg shadow-sm">
-          <TabsTrigger 
-            value="grid"
-            className="px-4 py-2 font-pretendard font-medium text-sm data-[state=active]:bg-white data-[state=active]:text-foreground data-[state=active]:shadow-md"
+      {selectedExperts.length >= 2 && (
+        <div className="hidden md:block">
+          <CustomButton
+            variant="outline"
+            size="sm"
+            onClick={() => setViewMode(isCompare ? "grid" : "compare")}
+            className={isCompare 
+              ? 'bg-white text-foreground border-border hover:bg-muted' 
+              : 'bg-green-600 text-white border-green-600 hover:bg-green-700'}
           >
-            그리드 보기
-          </TabsTrigger>
-          <TabsTrigger 
-            value="compare" 
-            disabled={selectedExperts.length < 2}
-            className="px-4 py-2 font-pretendard font-medium text-sm data-[state=active]:bg-green-600 data-[state=active]:text-white data-[state=active]:shadow-md"
-          >
-            비교 보기 ({selectedExperts.length}/3)
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+            {isCompare ? `그리드보기` : `비교보기 (${selectedExperts.length}/3)`}
+          </CustomButton>
+        </div>
+      )}
     </div>
   );
 };
