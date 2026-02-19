@@ -17,7 +17,7 @@ const SuccessCaseItem: React.FC<SuccessCaseItemProps> = ({
   image
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden animate-fade-in">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden animate-fade-in touch-manipulation select-none transition-all duration-150 active:scale-[0.98] active:shadow-inner">
       <div className="p-6">
         <h3 className="font-pretendard font-bold text-xl mb-3">
           {title}

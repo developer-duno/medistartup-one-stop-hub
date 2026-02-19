@@ -35,7 +35,7 @@ const SuccessStoriesSection = () => {
               to={`/success-stories/${story.id}`}
               className="group"
             >
-              <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-neutral-100 h-full transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+              <div className="bg-white rounded-lg overflow-hidden shadow-sm border border-neutral-100 h-full transition-all duration-150 group-hover:shadow-lg group-hover:-translate-y-1 active:scale-[0.98] active:shadow-inner touch-manipulation select-none">
                 <div className="aspect-video relative overflow-hidden">
                   <img 
                     src={story.imageUrl} 
