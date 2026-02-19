@@ -217,8 +217,9 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
           </CustomButton>
           
           <CustomButton 
-            variant="secondary"
+            variant="outline"
             onClick={() => setViewMode("grid")}
+            className="bg-white border-border text-foreground hover:bg-muted"
           >
             그리드보기
           </CustomButton>
