@@ -97,7 +97,7 @@ const ServicesSection = () => {
                 </Link>
                 <Link 
                   to={`/experts?service=${getServiceUrlParam(service.title)}`}
-                  className="text-sm text-secondary-foreground hover:text-primary transition-colors"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-accent/10 text-accent-700 font-medium hover:bg-accent/20 transition-colors"
                 >
                   전문가 찾기
                 </Link>
