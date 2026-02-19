@@ -77,27 +77,13 @@ const ServicesSection = () => {
               <div className="p-3 md:p-4 border-t border-neutral-100 flex justify-between items-center gap-2">
                 <Link 
                   to={service.path} 
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors inline-flex items-center"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1"
                 >
                   더 알아보기
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="14" 
-                    height="14" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    className="ml-1 transition-transform group-hover:translate-x-1"
-                  >
-                    <path d="m9 18 6-6-6-6"/>
-                  </svg>
                 </Link>
                 <Link 
                   to={`/experts?service=${getServiceUrlParam(service.title)}`}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors"
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1"
                 >
                   전문가
                 </Link>
