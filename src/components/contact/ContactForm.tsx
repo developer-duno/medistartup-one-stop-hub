@@ -288,7 +288,7 @@ const ContactForm: React.FC<ContactFormProps> = ({ experts }) => {
         variant="accent" 
         fullWidth
       >
-        무료 상담 신청하기
+        무료 상담하기
       </CustomButton>
     </form>
   );
