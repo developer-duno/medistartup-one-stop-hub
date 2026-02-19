@@ -29,7 +29,7 @@ const RegionalExperts = () => {
   const { experts } = useExperts();
   const { selectedExperts, selectExpert } = useConsultation();
   const { regionGroupsCompat, loading: regionsLoading } = useRegionGroups();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [displayRegions, setDisplayRegions] = useState(regions);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [activeGroupRegions, setActiveGroupRegions] = useState<string[]>([]);
@@ -77,10 +77,31 @@ const RegionalExperts = () => {
     return experts.filter(expert => expert.regions.includes(activeRegion));
   }, [activeRegion, activeGroup, activeGroupRegions, experts]);
 
+  // Restore popup state from URL params on mount
+  useEffect(() => {
+    const groupParam = searchParams.get('group');
+    const regionParam = searchParams.get('region');
+    if (groupParam && isMobile) {
+      const group = regionGroupsCompat.find(g => g.name === groupParam);
+      if (group) {
+        setActiveGroup(group.name);
+        setActiveGroupRegions(group.regions);
+        setActiveRegion('');
+        setShowMobilePanel(true);
+      }
+    } else if (regionParam && isMobile) {
+      setActiveGroup(null);
+      setActiveGroupRegions([]);
+      setActiveRegion(regionParam);
+      setShowMobilePanel(true);
+    }
+  }, [searchParams, isMobile, regionGroupsCompat]);
+
   const handleGroupClick = (group: { name: string; regions: string[] }) => {
     setActiveGroup(group.name);
     setActiveGroupRegions(group.regions);
     setActiveRegion('');
+    setSearchParams({ group: group.name }, { replace: true });
     if (isMobile) setShowMobilePanel(true);
   };
 
@@ -88,6 +109,7 @@ const RegionalExperts = () => {
     setActiveGroup(null);
     setActiveGroupRegions([]);
     setActiveRegion(regionName);
+    setSearchParams({ region: regionName }, { replace: true });
     if (isMobile) setShowMobilePanel(true);
   };
 
