@@ -28,11 +28,11 @@ const MobileSelectionBar: React.FC<MobileSelectionBarProps> = ({
         </div>
         <div className="grid grid-cols-2 gap-2 w-auto min-w-[160px]">
           <CustomButton 
-            variant={isCompare ? "outline" : "secondary"}
+            variant="outline"
             size="sm"
             onClick={() => setViewMode(isCompare ? "grid" : "compare")}
             disabled={!isCompare && selectedExperts.length < 2}
-            className={`text-xs py-1.5 px-2 ${isCompare ? 'border-white text-white hover:bg-white/10' : ''}`}
+            className={`text-xs py-1.5 px-2 ${isCompare ? 'bg-white text-foreground border-white hover:bg-muted' : 'border-white text-white hover:bg-white/10'}`}
           >
             {isCompare ? "그리드보기" : "비교하기"}
           </CustomButton>
