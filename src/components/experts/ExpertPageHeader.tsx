@@ -1,6 +1,7 @@
 
 import React from 'react';
 import CustomButton from '../ui/CustomButton';
+import { useConsultation } from '@/contexts/ConsultationContext';
 
 interface ExpertPageHeaderProps {
   filteredExperts: any[];
@@ -15,6 +16,7 @@ const ExpertPageHeader: React.FC<ExpertPageHeaderProps> = ({
   setViewMode,
   selectedExperts
 }) => {
+  const { clearSelectedExperts } = useConsultation();
   const isCompare = viewMode === "compare";
 
   return (
@@ -29,7 +31,14 @@ const ExpertPageHeader: React.FC<ExpertPageHeaderProps> = ({
       </div>
       
       {selectedExperts.length >= 2 && (
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-2">
+          <CustomButton
+            variant="outline"
+            size="sm"
+            onClick={clearSelectedExperts}
+          >
+            초기화
+          </CustomButton>
           <CustomButton
             variant="outline"
             size="sm"
