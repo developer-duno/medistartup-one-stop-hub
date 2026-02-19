@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, MapPin, Tag, User, Share2, Link as LinkIcon, MessageCircle } from 'lucide-react';
+import { useKakaoSDK, shareToKakao } from '@/hooks/useKakaoSDK';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,7 @@ const SuccessStoryDetail = () => {
   const { successStories } = useSuccessStories();
   const { experts } = useExperts();
   const navigate = useNavigate();
+  const kakaoReady = useKakaoSDK();
   
   const story = successStories.find(s => s.id === Number(id) && s.visible);
   
@@ -151,7 +153,19 @@ const SuccessStoryDetail = () => {
                   <button
                     onClick={() => {
                       const url = `https://medistartup.co.kr/success-stories/${story.id}`;
-                      window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                      if (kakaoReady) {
+                        const success = shareToKakao({
+                          title: story.title,
+                          description: story.summary,
+                          imageUrl: story.imageUrl,
+                          linkUrl: url,
+                        });
+                        if (!success) {
+                          window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                        }
+                      } else {
+                        window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                      }
                     }}
                     className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(48,97%,52%)] text-[hsl(0,0%,15%)] hover:opacity-80 transition-opacity"
                     aria-label="카카오톡 공유"
