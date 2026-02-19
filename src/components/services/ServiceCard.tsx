@@ -44,15 +44,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
 
   const getBgColor = () => {
     if (!service.category) {
-      return 'bg-primary-50';
+      return 'bg-primary-100/75';
     }
     
     switch(service.category) {
-      case 'planning': return 'bg-primary-50';
-      case 'implementation': return 'bg-secondary-50';
-      case 'equipment': return 'bg-accent-50';
-      case 'operation': return 'bg-primary-50';
-      default: return 'bg-primary-50';
+      case 'planning': return 'bg-primary-100/75';
+      case 'implementation': return 'bg-secondary-100/75';
+      case 'equipment': return 'bg-accent-100/75';
+      case 'operation': return 'bg-primary-100/75';
+      default: return 'bg-primary-100/75';
     }
   };
 
@@ -78,14 +78,14 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
         <div className="flex justify-between items-center mt-auto pt-3 border-t border-neutral-100 gap-2">
           <Link 
             to={service.path} 
-            className="text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1"
+            className="text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1 shadow-sm"
           >
             자세히
           </Link>
           
           <Link 
             to={`/experts?service=${getServiceParam(service.title)}`}
-            className="text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1"
+            className="text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1 shadow-sm"
           >
             전문가
           </Link>
