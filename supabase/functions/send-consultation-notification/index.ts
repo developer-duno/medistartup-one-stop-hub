@@ -4,6 +4,7 @@ const ALLOWED_ORIGINS = [
   "https://medistartup.co.kr",
   "https://www.medistartup.co.kr",
   "https://medistartup-one-stop-hub.lovable.app",
+  "https://64fce14a-0e1b-4daa-ad7e-1c308b56b378.lovableproject.com",
 ];
 
 function getCorsHeaders(req: Request) {
