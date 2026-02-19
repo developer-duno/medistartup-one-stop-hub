@@ -79,7 +79,7 @@ const ServicesSection = () => {
                   to={service.path} 
                   className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1"
                 >
-                  더 알아보기
+                  자세히
                 </Link>
                 <Link 
                   to={`/experts?service=${getServiceUrlParam(service.title)}`}
