@@ -14,7 +14,7 @@ const ExpertSuccessCases: React.FC<ExpertSuccessCasesProps> = ({ expert }) => {
 
   return (
     <section>
-      <h2 className="font-pretendard font-bold text-2xl mb-6">성공 사례</h2>
+      <h2 className="font-pretendard font-bold text-xl md:text-2xl mb-4 md:mb-6">성공 사례</h2>
       <div className="space-y-8">
         {expert.successCases.map((caseItem, idx) => (
           <SuccessCaseItem

@@ -1,10 +1,11 @@
 
-import React from 'react';
-import { MapPin, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Info, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '@/components/ui/CustomButton';
 import { Expert } from '@/types/expert';
+import { cn } from '@/lib/utils';
 
 const useBelowLg = () => {
   const [below, setBelow] = React.useState(window.innerWidth < 1024);
@@ -30,39 +31,65 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
 }) => {
   const isBelowLg = useBelowLg();
   const navigate = useNavigate();
+  const [mobileExpanded, setMobileExpanded] = useState(false);
+
+  const sidebarContent = (
+    <>
+      {expert.regions && expert.regions.length > 0 && (
+        <div className="flex items-start gap-3 mb-4">
+          <div className="bg-primary-50 p-2 rounded-md shrink-0">
+            <MapPin className="h-4 w-4 text-primary" />
+          </div>
+          <div>
+            <span className="font-medium block mb-1 text-sm">활동 지역</span>
+            <div className="flex flex-wrap gap-1">
+              {expert.regions.map((region: string, idx: number) => (
+                <Badge key={idx} variant="outline" className="bg-neutral-50 text-xs">
+                  {region}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 md:p-6 sticky top-24">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="bg-primary/10 p-1.5 rounded-md">
-            <Info className="h-4 w-4 text-primary" />
+        {/* Mobile: collapsible header */}
+        <button
+          className={cn(
+            "flex items-center justify-between w-full",
+            "lg:pointer-events-none"
+          )}
+          onClick={() => isBelowLg && setMobileExpanded(!mobileExpanded)}
+        >
+          <div className="flex items-center gap-2">
+            <div className="bg-primary/10 p-1.5 rounded-md">
+              <Info className="h-4 w-4 text-primary" />
+            </div>
+            <p className="font-pretendard font-bold text-base md:text-lg">
+              전문가 정보
+            </p>
           </div>
-          <p className="font-pretendard font-bold text-base md:text-lg">
-            전문가 정보
-          </p>
+          <ChevronDown className={cn(
+            "h-4 w-4 text-muted-foreground transition-transform lg:hidden",
+            mobileExpanded && "rotate-180"
+          )} />
+        </button>
+        
+        {/* Content: always visible on desktop, collapsible on mobile */}
+        <div className={cn(
+          "overflow-hidden transition-all duration-300 lg:!max-h-none lg:!mt-4",
+          mobileExpanded ? "max-h-96 mt-4" : "max-h-0 mt-0 lg:max-h-none"
+        )}>
+          {sidebarContent}
         </div>
         
-        {expert.regions && expert.regions.length > 0 && (
-          <div className="flex items-start gap-3 mb-4">
-            <div className="bg-primary-50 p-2 rounded-md shrink-0">
-              <MapPin className="h-4 w-4 text-primary" />
-            </div>
-            <div>
-              <span className="font-medium block mb-1 text-sm">활동 지역</span>
-              <div className="flex flex-wrap gap-1">
-                {expert.regions.map((region: string, idx: number) => (
-                  <Badge key={idx} variant="outline" className="bg-neutral-50 text-xs">
-                    {region}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-        
         {/* Desktop buttons inside card */}
-        <div className="hidden lg:block space-y-2.5">
+        <div className="hidden lg:block space-y-2.5 mt-4">
           <CustomButton 
             variant={isExpertSelected ? "secondary" : "primary"} 
             className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150"

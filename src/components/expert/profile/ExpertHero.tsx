@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Briefcase, FolderOpen, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Expert } from '@/types/expert';
@@ -10,13 +10,14 @@ interface ExpertHeroProps {
 }
 
 const ExpertHero: React.FC<ExpertHeroProps> = ({ expert }) => {
+  const navigate = useNavigate();
   return (
     <section className="relative bg-gradient-to-r from-primary-700 to-primary-900 overflow-hidden pt-20 md:pt-24 pb-8 md:pb-10">
       <HeroBackground expert={expert} />
       <HeroOverlay />
       
       <div className="container mx-auto px-4 relative z-30">
-        <BackLink />
+        <BackLink onBack={() => navigate(-1)} />
         
         <div className="flex items-end gap-4 md:gap-6">
           <ExpertImage image={expert.image} name={expert.name} />
@@ -58,11 +59,11 @@ const HeroOverlay: React.FC = () => (
   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-primary-900/70 z-20"></div>
 );
 
-const BackLink: React.FC = () => (
-  <Link to="/experts" className="inline-flex items-center text-white/80 hover:text-white mb-4 md:mb-8 transition-colors text-sm">
+const BackLink: React.FC<{onBack: () => void}> = ({ onBack }) => (
+  <button onClick={onBack} className="inline-flex items-center text-white/80 hover:text-white mb-4 md:mb-8 transition-colors text-sm">
     <ChevronLeft className="h-4 w-4 mr-1" />
     모든 전문가 보기
-  </Link>
+  </button>
 );
 
 const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) => (
@@ -78,11 +79,16 @@ const ExpertImage: React.FC<{image?: string; name: string}> = ({ image, name }) 
 
 const ServiceTags: React.FC<{services?: string[]}> = ({ services = [] }) => (
   <div className="flex flex-wrap gap-1.5 md:gap-2 mb-2 md:mb-3">
-    {services.map((service: string, idx: number) => (
+    {services.slice(0, 3).map((service: string, idx: number) => (
       <Badge key={idx} variant="secondary" className="bg-white/20 hover:bg-white/30 text-white text-[10px] md:text-xs px-2 py-0.5">
         {service}
       </Badge>
     ))}
+    {services.length > 3 && (
+      <Badge variant="secondary" className="bg-white/10 text-white/70 text-[10px] md:text-xs px-2 py-0.5">
+        +{services.length - 3}
+      </Badge>
+    )}
   </div>
 );
 
