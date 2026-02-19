@@ -44,8 +44,12 @@ const Services = () => {
           className="w-full mb-12"
           onValueChange={(value) => handleCategoryChange(value as ServiceCategory | 'all')}
         >
-          <CategorySelector categories={categories} />
 
+          <CategoryImage 
+            category={selectedCategory} 
+            categoryName={activeCategory.name}
+            categoryDescription={activeCategory.description}
+          />
 
 
           <ServiceGrid services={displayServices} />
