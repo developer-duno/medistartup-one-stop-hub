@@ -108,7 +108,7 @@ const SuccessStoryDetail = () => {
                   <button
                     onClick={() => {
                       const url = `https://medistartup.co.kr/success-stories/${story.id}`;
-                      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
                     }}
                     className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(220,46%,48%)] text-white hover:opacity-80 transition-opacity"
                     aria-label="Facebook 공유"
@@ -123,7 +123,7 @@ const SuccessStoryDetail = () => {
                   <button
                     onClick={() => {
                       const url = `https://medistartup.co.kr/success-stories/${story.id}`;
-                      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(story.title)}`, '_blank', 'width=600,height=400');
+                      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(story.title)}`, '_blank');
                     }}
                     className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-foreground text-background hover:opacity-80 transition-opacity"
                     aria-label="X(Twitter) 공유"
@@ -161,10 +161,10 @@ const SuccessStoryDetail = () => {
                           linkUrl: url,
                         });
                         if (!success) {
-                          window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                          window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank');
                         }
                       } else {
-                        window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank', 'width=600,height=400');
+                        window.open(`https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(url)}`, '_blank');
                       }
                     }}
                     className="inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-full bg-[hsl(48,97%,52%)] text-[hsl(0,0%,15%)] hover:opacity-80 transition-opacity"
