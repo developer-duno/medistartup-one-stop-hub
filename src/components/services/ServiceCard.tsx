@@ -29,67 +29,61 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
   }
 
   const getIcon = () => {
+    const size = "h-8 w-8";
     switch(service.icon) {
-      case 'MapPin': return <MapPin className="h-5 w-5 text-primary" />;
-      case 'BarChart3': return <BarChart3 className="h-5 w-5 text-secondary" />;
-      case 'Building2': return <Building2 className="h-5 w-5 text-accent" />;
-      case 'FileCheck': return <FileCheck className="h-5 w-5 text-primary" />;
-      case 'Users': return <Users className="h-5 w-5 text-secondary" />;
-      case 'Briefcase': return <Briefcase className="h-5 w-5 text-accent" />;
-      case 'Package': return <Package className="h-5 w-5 text-primary" />;
-      case 'Trash2': return <Trash2 className="h-5 w-5 text-secondary" />;
-      default: return <MapPin className="h-5 w-5 text-primary" />;
+      case 'MapPin': return <MapPin className={`${size} text-primary`} />;
+      case 'BarChart3': return <BarChart3 className={`${size} text-secondary`} />;
+      case 'Building2': return <Building2 className={`${size} text-accent`} />;
+      case 'FileCheck': return <FileCheck className={`${size} text-primary`} />;
+      case 'Users': return <Users className={`${size} text-secondary`} />;
+      case 'Briefcase': return <Briefcase className={`${size} text-accent`} />;
+      case 'Package': return <Package className={`${size} text-primary`} />;
+      case 'Trash2': return <Trash2 className={`${size} text-secondary`} />;
+      default: return <MapPin className={`${size} text-primary`} />;
     }
   };
 
-  const getBgColor = () => {
+  const getGradientColor = () => {
     if (!service.category) {
-      return 'bg-primary-100/75';
+      return 'from-primary-100/75 to-primary-50/75';
     }
-    
     switch(service.category) {
-      case 'planning': return 'bg-primary-100/75';
-      case 'implementation': return 'bg-secondary-100/75';
-      case 'equipment': return 'bg-accent-100/75';
-      case 'operation': return 'bg-primary-100/75';
-      default: return 'bg-primary-100/75';
+      case 'planning': return 'from-primary-100/75 to-primary-50/75';
+      case 'implementation': return 'from-secondary-100/75 to-secondary-50/75';
+      case 'equipment': return 'from-accent-100/75 to-accent-50/75';
+      case 'operation': return 'from-primary-100/75 to-primary-50/75';
+      default: return 'from-primary-100/75 to-primary-50/75';
     }
   };
 
-  // Safety check for getServiceUrlParam
   const getServiceParam = getServiceUrlParam || (() => '');
 
   return (
-    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-      <div className={`p-5 ${getBgColor()} h-full flex flex-col`}>
-        <div className="flex items-center mb-3">
-          <div className="mr-3 bg-white p-2 rounded-full shadow-sm">
-            {getIcon()}
-          </div>
-          <h3 className="font-pretendard font-semibold text-lg text-neutral-800 line-clamp-1">
-            {service.title}
-          </h3>
+    <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+      <div className={`p-3 md:p-6 bg-gradient-to-br ${getGradientColor()}`}>
+        <div className="bg-white rounded-full w-10 h-10 md:w-16 md:h-16 flex items-center justify-center shadow-sm mb-2 md:mb-4">
+          {getIcon()}
         </div>
-        
-        <p className="font-noto text-neutral-600 text-sm mb-4 flex-grow">
+        <h3 className="font-pretendard font-bold text-sm md:text-xl text-neutral-900 mb-1 md:mb-2">
+          {service.title}
+        </h3>
+        <p className="font-noto text-neutral-600 text-xs md:text-base line-clamp-2 md:line-clamp-none">
           {service.description}
         </p>
-        
-        <div className="flex justify-between items-center mt-auto pt-3 border-t border-neutral-100 gap-2">
-          <Link 
-            to={service.path} 
-            className="text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1 shadow-sm"
-          >
-            자세히
-          </Link>
-          
-          <Link 
-            to={`/experts?service=${getServiceParam(service.title)}`}
-            className="text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1 shadow-sm"
-          >
-            전문가
-          </Link>
-        </div>
+      </div>
+      <div className="p-3 md:p-4 border-t border-neutral-100 flex justify-between items-center gap-2">
+        <Link 
+          to={service.path} 
+          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1 shadow-sm"
+        >
+          자세히
+        </Link>
+        <Link 
+          to={`/experts?service=${getServiceParam(service.title)}`}
+          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1 shadow-sm"
+        >
+          전문가
+        </Link>
       </div>
     </div>
   );
