@@ -10,12 +10,12 @@ import { Service } from '@/types/service';
 interface ServiceCardProps {
   service?: Service;
   getServiceUrlParam?: (title: string) => string;
+  index?: number;
   children?: React.ReactNode;
 }
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, children }) => {
+const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, index = 0, children }) => {
   if (children) {
-    // When used as a container for other content (in ServiceFAQs and ServiceFeatures)
     return (
       <div className="bg-white rounded-lg shadow-sm p-5 hover:shadow-md transition-shadow duration-200">
         {children}
@@ -23,7 +23,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
     );
   }
 
-  // Safety check to ensure service exists
   if (!service) {
     return null;
   }
@@ -44,16 +43,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
   };
 
   const getGradientColor = () => {
-    if (!service.category) {
-      return 'from-primary-100/75 to-primary-50/75';
-    }
-    switch(service.category) {
-      case 'planning': return 'from-primary-100/75 to-primary-50/75';
-      case 'implementation': return 'from-secondary-100/75 to-secondary-50/75';
-      case 'equipment': return 'from-accent-100/75 to-accent-50/75';
-      case 'operation': return 'from-primary-100/75 to-primary-50/75';
-      default: return 'from-primary-100/75 to-primary-50/75';
-    }
+    const colors = ['from-primary-100/75 to-primary-50/75', 'from-secondary-100/75 to-secondary-50/75', 'from-accent-100/75 to-accent-50/75'];
+    return colors[index % colors.length];
   };
 
   const getServiceParam = getServiceUrlParam || (() => '');
