@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Maximize2 } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
 import { useConsultation } from '@/contexts/ConsultationContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,6 +16,7 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
 }) => {
   const { selectedExperts, clearSelectedExperts, getSelectedExpertsData, openConsultation } = useConsultation();
   const isMobile = useIsMobile();
+  const [forceDesktop, setForceDesktop] = useState(false);
 
   if (selectedExperts.length < 2) {
     return (
@@ -39,76 +40,9 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
   }
 
   const selectedExpertsData = getSelectedExpertsData();
+  const showMobile = isMobile && !forceDesktop;
 
-  const MobileCardView = () => (
-    <div className="space-y-4">
-      {selectedExpertsData.map((expert) => expert && (
-        <div key={expert.id} className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="flex items-center gap-3 p-4 border-b border-neutral-100 bg-neutral-50">
-            <div className="w-12 h-12 rounded-full overflow-hidden bg-primary/5 shrink-0">
-              <img 
-                src={expert.image || "/placeholder.svg"} 
-                alt={expert.name}
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
-              />
-            </div>
-            <div>
-              <h4 className="font-pretendard font-bold text-base">{expert.name}</h4>
-              <p className="text-sm text-muted-foreground">{expert.role}</p>
-            </div>
-          </div>
-          
-          <div className="divide-y divide-neutral-100">
-            <div className="px-4 py-3">
-              <span className="text-xs font-medium text-muted-foreground">전문 서비스</span>
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {expert.services.map((service, i) => (
-                  <Badge key={i} variant="secondary" className="text-xs">{service}</Badge>
-                ))}
-              </div>
-            </div>
-            
-            <div className="px-4 py-3 flex justify-between">
-              <div>
-                <span className="text-xs font-medium text-muted-foreground">경력</span>
-                <p className="text-sm mt-0.5">{expert.experience}</p>
-              </div>
-              <div className="text-right">
-                <span className="text-xs font-medium text-muted-foreground">프로젝트</span>
-                <p className="text-sm mt-0.5">{expert.projects}</p>
-              </div>
-            </div>
-            
-            <div className="px-4 py-3">
-              <span className="text-xs font-medium text-muted-foreground">활동 지역</span>
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {expert.regions.map((region, i) => (
-                  <Badge key={i} variant="outline" className="text-xs">{region}</Badge>
-                ))}
-              </div>
-            </div>
-            
-            <div className="px-4 py-3">
-              <span className="text-xs font-medium text-muted-foreground">소개</span>
-              <p className="text-sm mt-1 text-foreground/80 line-clamp-3">{expert.description}</p>
-            </div>
-            
-            <div className="px-4 py-3">
-              <Link 
-                to={`/expert/${expert.id}`}
-                className="text-primary hover:text-primary/80 text-sm font-medium"
-              >
-                상세 프로필 보기 →
-              </Link>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
-  const DesktopTableView = () => (
+  const ComparisonTable = () => (
     <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-neutral-200">
@@ -192,11 +126,80 @@ const ExpertComparisonView: React.FC<ExpertComparisonViewProps> = ({
     </div>
   );
 
+  const MobileSummaryView = () => (
+    <div className="space-y-3 mb-6">
+      {/* Summary cards - compact comparison */}
+      <div className="grid grid-cols-2 gap-3">
+        {selectedExpertsData.map((expert) => expert && (
+          <div key={expert.id} className="bg-white rounded-xl shadow-md p-4 text-center">
+            <div className="w-16 h-16 rounded-full overflow-hidden bg-primary/5 mx-auto mb-2">
+              <img 
+                src={expert.image || "/placeholder.svg"} 
+                alt={expert.name}
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.src = '/placeholder.svg'; }}
+              />
+            </div>
+            <h4 className="font-pretendard font-bold text-sm">{expert.name}</h4>
+            <p className="text-xs text-muted-foreground mt-0.5">{expert.role}</p>
+            <div className="mt-2 space-y-1 text-left">
+              <div className="flex justify-between text-xs">
+                <span className="text-muted-foreground">경력</span>
+                <span className="font-medium">{expert.experience}</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-muted-foreground">프로젝트</span>
+                <span className="font-medium">{expert.projects}</span>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-1 mt-2 justify-center">
+              {expert.regions.slice(0, 2).map((r, i) => (
+                <Badge key={i} variant="outline" className="text-[10px] px-1.5 py-0">{r}</Badge>
+              ))}
+              {expert.regions.length > 2 && (
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0">+{expert.regions.length - 2}</Badge>
+              )}
+            </div>
+            <Link 
+              to={`/expert/${expert.id}`}
+              className="text-primary text-xs font-medium mt-2 inline-block"
+            >
+              상세보기 →
+            </Link>
+          </div>
+        ))}
+      </div>
+
+      {/* Expand to full table button */}
+      <button
+        onClick={() => setForceDesktop(true)}
+        className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-neutral-200 bg-white text-sm font-medium text-foreground/70 active:scale-[0.98] transition-transform"
+      >
+        <Maximize2 className="w-4 h-4" />
+        자세히 비교하기 (PC 버전)
+      </button>
+    </div>
+  );
+
   return (
     <div>
-      {isMobile ? <MobileCardView /> : <DesktopTableView />}
+      {showMobile ? (
+        <MobileSummaryView />
+      ) : (
+        <>
+          {isMobile && forceDesktop && (
+            <button
+              onClick={() => setForceDesktop(false)}
+              className="mb-3 text-sm text-muted-foreground underline"
+            >
+              ← 간단히 보기
+            </button>
+          )}
+          <ComparisonTable />
+        </>
+      )}
       
-      <div className={`flex justify-center gap-4 mt-8 ${isMobile ? 'flex-col' : ''}`}>
+      <div className={`flex justify-center gap-4 ${showMobile ? '' : 'mt-0'} ${isMobile ? 'flex-col' : ''}`}>
         <CustomButton 
           variant="outline"
           onClick={clearSelectedExperts}
