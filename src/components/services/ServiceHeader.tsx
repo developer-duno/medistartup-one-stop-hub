@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface ServiceHeaderProps {
   title: string;
@@ -16,13 +16,14 @@ const ServiceHeader: React.FC<ServiceHeaderProps> = ({
   icon,
   color
 }) => {
+  const navigate = useNavigate();
   return (
     <div className="theme-services theme-page-header">
       <div className="container mx-auto px-3 md:px-4">
-        <Link to="/services" className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-3 md:mb-4 text-xs md:text-sm">
+        <button onClick={() => navigate(-1)} className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-3 md:mb-4 text-xs md:text-sm">
           <ArrowLeft className="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-2" />
-          서비스로 돌아가기
-        </Link>
+          서비스 목록
+        </button>
         
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-1 md:mb-2">
