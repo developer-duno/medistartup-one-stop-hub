@@ -2,16 +2,25 @@
 import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import HeroSection from '../components/HeroSection';
-import ServicesSection from '../components/ServicesSection';
-import RegionalMap from '../components/RegionalMap';
-import ExpertsSection from '../components/ExpertsSection';
-import NewsInsightsSection from '../components/home/NewsInsightsSection';
-import SuccessStoriesSection from '../components/home/SuccessStoriesSection';
-import SimulatorSection from '../components/simulator/SimulatorSection';
-import ExpertApplicationCTA from '../components/expert/ExpertApplicationCTA';
+import LazySection from '../components/LazySection';
 import { Helmet } from 'react-helmet-async';
 import { generateSeoData } from '@/utils/seo/metaUtils';
 import { generateOrganizationSchema } from '@/utils/schema/organizationSchema';
+
+// Lazy-load below-fold sections
+const ServicesSection = React.lazy(() => import('../components/ServicesSection'));
+const RegionalMap = React.lazy(() => import('../components/RegionalMap'));
+const ExpertsSection = React.lazy(() => import('../components/ExpertsSection'));
+const NewsInsightsSection = React.lazy(() => import('../components/home/NewsInsightsSection'));
+const SuccessStoriesSection = React.lazy(() => import('../components/home/SuccessStoriesSection'));
+const SimulatorSection = React.lazy(() => import('../components/simulator/SimulatorSection'));
+const ExpertApplicationCTA = React.lazy(() => import('../components/expert/ExpertApplicationCTA'));
+
+const SectionFallback = () => (
+  <div className="min-h-[300px] flex items-center justify-center">
+    <div className="h-6 w-6 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 const Index = () => {
   const seoData = generateSeoData({
@@ -31,15 +40,50 @@ const Index = () => {
       </Helmet>
       
       <HeroSection />
-      <ServicesSection />
-      <SimulatorSection />
-      <RegionalMap />
-      <div className="bg-gray-50">
-        <ExpertsSection />
-      </div>
-      <NewsInsightsSection />
-      <SuccessStoriesSection />
-      <ExpertApplicationCTA />
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <ServicesSection />
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <SimulatorSection />
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <RegionalMap />
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <div className="bg-gray-50">
+            <ExpertsSection />
+          </div>
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <NewsInsightsSection />
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <SuccessStoriesSection />
+        </React.Suspense>
+      </LazySection>
+      
+      <LazySection>
+        <React.Suspense fallback={<SectionFallback />}>
+          <ExpertApplicationCTA />
+        </React.Suspense>
+      </LazySection>
     </MainLayout>
   );
 };
