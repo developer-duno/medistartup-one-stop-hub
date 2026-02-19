@@ -67,7 +67,8 @@ const ExpertList = () => {
       </div>
 
       <MobileSelectionBar 
-        setViewMode={setViewMode} 
+        setViewMode={setViewMode}
+        viewMode={viewMode}
       />
 
       {viewMode === "grid" ? (
