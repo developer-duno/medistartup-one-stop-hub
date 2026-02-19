@@ -19,6 +19,7 @@ const HeroVideo: React.FC<HeroVideoProps> = ({ videoUrl }) => {
         autoPlay
         muted
         loop
+        playsInline
         controls={isVideoPlaying}
         onClick={handleVideoPlay}
         src={videoUrl}
