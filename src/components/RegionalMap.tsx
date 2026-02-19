@@ -20,6 +20,14 @@ const RegionalMap = () => {
   const { selectedExperts, selectExpert } = useConsultation();
   const { regionGroupsCompat, loading } = useRegionGroups();
   const isMobile = useIsMobile();
+  const [isBelowLg, setIsBelowLg] = React.useState(window.innerWidth < 1024);
+
+  React.useEffect(() => {
+    const mql = window.matchMedia('(max-width: 1023px)');
+    const handler = () => setIsBelowLg(window.innerWidth < 1024);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
   
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [activeGroupRegions, setActiveGroupRegions] = useState<string[]>([]);
@@ -52,14 +60,14 @@ const RegionalMap = () => {
     setActiveGroup(group.name);
     setActiveGroupRegions(group.regions);
     setActiveRegion('');
-    if (isMobile) setShowMobilePanel(true);
+    if (isBelowLg) setShowMobilePanel(true);
   };
 
   const handleRegionClick = (regionName: string) => {
     setActiveGroup(null);
     setActiveGroupRegions([]);
     setActiveRegion(regionName);
-    if (isMobile) setShowMobilePanel(true);
+    if (isBelowLg) setShowMobilePanel(true);
   };
 
   const panelTitle = activeGroup || activeRegion || '지역 선택';
@@ -76,7 +84,7 @@ const RegionalMap = () => {
           </h3>
           <p className="text-[11px] md:text-sm opacity-90 mt-0.5 md:mt-1">{regionExperts.length}명의 전문가</p>
         </div>
-        {isMobile && (
+        {isBelowLg && (
           <button onClick={() => setShowMobilePanel(false)} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
             <X className="h-5 w-5" />
           </button>
@@ -218,7 +226,7 @@ const RegionalMap = () => {
       </div>
 
       {/* Mobile: overlay popup */}
-      {isMobile && showMobilePanel && (
+      {isBelowLg && showMobilePanel && (
         <div 
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm"
           onClick={(e) => {
