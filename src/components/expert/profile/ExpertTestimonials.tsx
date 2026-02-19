@@ -18,7 +18,7 @@ const ExpertTestimonials: React.FC<ExpertTestimonialsProps> = ({ expert }) => {
   
   return (
     <section>
-      <h2 className="font-pretendard font-bold text-2xl mb-6">고객 추천사</h2>
+      <h2 className="font-pretendard font-bold text-xl md:text-2xl mb-4 md:mb-6">고객 추천사</h2>
       <TestimonialGrid testimonials={expert.testimonials} />
     </section>
   );

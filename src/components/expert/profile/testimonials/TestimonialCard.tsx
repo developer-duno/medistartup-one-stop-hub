@@ -14,12 +14,12 @@ interface TestimonialCardProps {
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ testimonial }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 flex flex-col touch-manipulation select-none transition-all duration-150 active:scale-[0.98] active:shadow-inner">
-      <div className="mb-4">
-        <Quote className="h-8 w-8 text-primary opacity-40" />
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 md:p-6 flex flex-col touch-manipulation select-none transition-all duration-150 active:scale-[0.98] active:shadow-inner">
+      <div className="mb-3 md:mb-4">
+        <Quote className="h-6 w-6 md:h-8 md:w-8 text-primary opacity-40" />
       </div>
       
-      <p className="text-neutral-700 italic flex-grow mb-6">
+      <p className="text-neutral-700 italic flex-grow mb-4 md:mb-6 text-sm md:text-base">
         "{testimonial.content}"
       </p>
       
