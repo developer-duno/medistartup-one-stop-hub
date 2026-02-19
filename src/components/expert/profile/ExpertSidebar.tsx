@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { MapPin, Info } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '@/components/ui/CustomButton';
 import { Expert } from '@/types/expert';
@@ -29,6 +29,7 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
   onSelectExpert,
 }) => {
   const isBelowLg = useBelowLg();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -70,10 +71,8 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
             {isExpertSelected ? '전문가 선택 취소' : '전문가 선택'}
           </CustomButton>
           
-          <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" asChild>
-            <Link to="/experts">
+          <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => navigate(-1)}>
               다른 전문가 보기
-            </Link>
           </CustomButton>
         </div>
       </div>
@@ -89,10 +88,8 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
             {isExpertSelected ? '선택 취소' : '전문가 선택'}
           </CustomButton>
           
-          <CustomButton variant="outline" className="flex-1 touch-manipulation select-none active:scale-95 transition-transform duration-150" asChild>
-            <Link to="/experts">
+          <CustomButton variant="outline" className="flex-1 touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => navigate(-1)}>
               다른 전문가
-            </Link>
           </CustomButton>
         </div>
       )}
