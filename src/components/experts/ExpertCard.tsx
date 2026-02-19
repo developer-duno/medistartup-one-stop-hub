@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, Award, Clock, MapPin } from 'lucide-react';
+import { CheckCircle, Award, Clock, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '../ui/CustomButton';
 import { Expert } from '@/types/expert';
@@ -86,6 +86,10 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
           <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
             <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
             <span className="truncate">{expert.regions.join(', ')}</span>
+          </div>
+          <div className="flex items-center gap-1 text-xs md:text-sm text-neutral-500">
+            <Eye className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+            <span>{expert.profileViews ?? 0}회</span>
           </div>
         </div>
 
