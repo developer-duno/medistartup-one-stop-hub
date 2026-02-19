@@ -27,9 +27,18 @@ const ExpertPageHeader: React.FC<ExpertPageHeaderProps> = ({
       </div>
       
       <Tabs defaultValue="grid" value={viewMode} onValueChange={setViewMode} className="hidden md:block">
-        <TabsList>
-          <TabsTrigger value="grid">그리드 보기</TabsTrigger>
-          <TabsTrigger value="compare" disabled={selectedExperts.length < 2}>
+        <TabsList className="bg-neutral-100 border border-neutral-200 p-1 rounded-lg shadow-sm">
+          <TabsTrigger 
+            value="grid"
+            className="px-4 py-2 font-pretendard font-medium text-sm data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md"
+          >
+            그리드 보기
+          </TabsTrigger>
+          <TabsTrigger 
+            value="compare" 
+            disabled={selectedExperts.length < 2}
+            className="px-4 py-2 font-pretendard font-medium text-sm data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md"
+          >
             비교 보기 ({selectedExperts.length}/3)
           </TabsTrigger>
         </TabsList>
