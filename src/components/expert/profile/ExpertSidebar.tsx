@@ -5,7 +5,17 @@ import { Link } from 'react-router-dom';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '@/components/ui/CustomButton';
 import { Expert } from '@/types/expert';
-import { useIsMobile } from '@/hooks/use-mobile';
+
+const useBelowLg = () => {
+  const [below, setBelow] = React.useState(window.innerWidth < 1024);
+  React.useEffect(() => {
+    const mql = window.matchMedia('(max-width: 1023px)');
+    const handler = () => setBelow(window.innerWidth < 1024);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
+  return below;
+};
 
 interface ExpertSidebarProps {
   expert: Expert;
@@ -18,7 +28,7 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
   isExpertSelected,
   onSelectExpert,
 }) => {
-  const isMobile = useIsMobile();
+  const isBelowLg = useBelowLg();
 
   return (
     <>
@@ -69,7 +79,7 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
       </div>
 
       {/* Mobile: fixed bottom bar */}
-      {isMobile && (
+      {isBelowLg && (
         <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-neutral-200 px-4 py-3 flex gap-2 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
           <CustomButton 
             variant={isExpertSelected ? "secondary" : "primary"} 
