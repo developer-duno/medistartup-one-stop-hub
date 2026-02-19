@@ -50,7 +50,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
   const getServiceParam = getServiceUrlParam || (() => '');
 
   return (
-    <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+    <div className="group bg-white rounded-xl shadow-sm hover:shadow-md active:shadow-inner active:scale-[0.98] transition-all duration-150 overflow-hidden touch-manipulation select-none">
       <div className={`p-3 md:p-6 bg-gradient-to-br ${getGradientColor()}`}>
         <div className="bg-white rounded-full w-10 h-10 md:w-16 md:h-16 flex items-center justify-center shadow-sm mb-2 md:mb-4">
           {getIcon()}
@@ -65,13 +65,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, getServiceUrlParam, 
       <div className="p-3 md:p-4 border-t border-neutral-100 flex justify-between items-center gap-2">
         <Link 
           to={service.path} 
-          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 transition-colors text-center flex-1 shadow-sm"
+          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-primary/10 text-primary font-medium hover:bg-primary/20 active:bg-primary/30 active:scale-95 transition-all duration-150 text-center flex-1 shadow-sm touch-manipulation select-none"
         >
           자세히
         </Link>
         <Link 
           to={`/experts?service=${getServiceParam(service.title)}`}
-          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 transition-colors text-center flex-1 shadow-sm"
+          className="text-xs md:text-sm px-3 py-1.5 rounded-md bg-secondary/10 text-secondary-700 font-medium hover:bg-secondary/20 active:bg-secondary/30 active:scale-95 transition-all duration-150 text-center flex-1 shadow-sm touch-manipulation select-none"
         >
           전문가
         </Link>
