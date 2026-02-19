@@ -37,7 +37,7 @@ const SimulatorCardHeader: React.FC<SimulatorCardHeaderProps> = ({
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-1"
         >
-          {isExpanded ? '접기' : '시작하기'} 
+          {isExpanded ? '접기' : '시작'} 
           <ChevronRight className={`h-4 w-4 ml-1 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
         </Button>
       </div>

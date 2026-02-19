@@ -76,7 +76,9 @@ const ExpertCard: React.FC<ExpertCardProps> = ({ expert }) => {
         </div>
         
         <p className="font-noto text-neutral-700 text-xs md:text-sm mb-2 md:mb-4 line-clamp-2 hidden md:block">
-          {expert.specialty}
+          {expert.services && expert.services.length > 0 
+            ? expert.services.join(' · ') 
+            : expert.specialty}
         </p>
         
         <div className="hidden md:flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-5">
