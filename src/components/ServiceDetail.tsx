@@ -2,6 +2,8 @@
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { getServiceUrlName } from '@/utils/serviceUrlMapping';
+import Navbar from './Navbar';
+import Footer from './Footer';
 import ServiceHeader from './services/ServiceHeader';
 import ServiceFeatures from './services/ServiceFeatures';
 import ServiceProcess from './services/ServiceProcess';
@@ -44,7 +46,6 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
   const serviceUrlName = getServiceUrlName(title);
   const isMobile = useIsMobile();
   
-  // Generate service schema for SEO
   const serviceSchema = generateServiceSchema({
     serviceName: title,
     serviceDescription: description,
@@ -58,6 +59,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
           {JSON.stringify(serviceSchema)}
         </script>
       </Helmet>
+      
+      <Navbar />
       
       <ServiceHeader 
         title={title}
@@ -97,6 +100,8 @@ const ServiceDetail: React.FC<ServiceDetailProps> = ({
           )}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
