@@ -35,7 +35,7 @@ const LazySection: React.FC<LazySectionProps> = ({
   }, [rootMargin]);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={{ contentVisibility: isVisible ? 'visible' : 'auto', containIntrinsicSize: '0 400px' }}>
       {isVisible ? children : (fallback || <div className="min-h-[200px]" />)}
     </div>
   );
