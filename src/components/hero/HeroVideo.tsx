@@ -13,7 +13,7 @@ const HeroVideo: React.FC<HeroVideoProps> = ({ videoUrl }) => {
   };
 
   return (
-    <div className="aspect-[5/4] relative z-10">
+    <div className="aspect-[5/4] relative z-10" style={{ aspectRatio: '5/4' }}>
       <video 
         className="w-full h-full object-cover rounded-2xl shadow-xl"
         autoPlay
@@ -23,6 +23,9 @@ const HeroVideo: React.FC<HeroVideoProps> = ({ videoUrl }) => {
         controls={isVideoPlaying}
         onClick={handleVideoPlay}
         src={videoUrl}
+        width={640}
+        height={512}
+        preload="metadata"
       />
       {!isVideoPlaying && (
         <div className="absolute inset-0 flex items-center justify-center cursor-pointer" onClick={handleVideoPlay}>
