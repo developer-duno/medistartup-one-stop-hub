@@ -4,7 +4,7 @@ import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Maximize2 } from 'lucide-react';
 import CustomButton from '../ui/CustomButton';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
 

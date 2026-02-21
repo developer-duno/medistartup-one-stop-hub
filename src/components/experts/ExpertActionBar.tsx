@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CustomButton from '../ui/CustomButton';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExpertActionBarProps {

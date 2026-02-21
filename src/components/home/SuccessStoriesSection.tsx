@@ -3,7 +3,7 @@ import React from 'react';
 import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { useSuccessStories } from '@/domains/success-story/context';
 
 const SuccessStoriesSection = () => {
   const { getFeaturedStories } = useSuccessStories();

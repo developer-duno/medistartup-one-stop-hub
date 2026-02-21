@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import LazyImage from '@/components/LazyImage';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
-import { useInsights } from '@/contexts/InsightsContext';
+import { useInsights } from '@/domains/insight/context';
 
 const NewsInsightsSection = () => {
   const { insights } = useInsights();

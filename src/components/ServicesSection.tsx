@@ -3,8 +3,8 @@ import React from 'react';
 import { MapPin, BarChart3, Building2, FileCheck, Users, Briefcase, Package, Trash2 } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
-import { useServices } from '@/contexts/ServicesContext';
-import { Service } from '@/types/service';
+import { useServices } from '@/domains/service/context';
+import { Service } from '@/domains/service/types';
 
 const ServicesSection = () => {
   const { services } = useServices();

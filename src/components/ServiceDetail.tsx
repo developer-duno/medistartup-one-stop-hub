@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { getServiceUrlName } from '@/utils/serviceUrlMapping';
+import { getServiceUrlName } from '@/domains/service/urlMapping';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ServiceHeader from './services/ServiceHeader';
@@ -10,7 +10,7 @@ import ServiceProcess from './services/ServiceProcess';
 import ServiceFAQs from './services/ServiceFAQs';
 import ServiceBenefitsSidebar from './services/ServiceBenefitsSidebar';
 import { Helmet } from 'react-helmet-async';
-import { generateServiceSchema } from '@/utils/schemaUtils';
+import { generateServiceSchema } from '@/domains/service/schema';
 
 interface ServiceDetailProps {
   title: string;

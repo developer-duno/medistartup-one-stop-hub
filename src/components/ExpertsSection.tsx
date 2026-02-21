@@ -3,7 +3,7 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import CustomButton from './ui/CustomButton';
 import { Link } from 'react-router-dom';
-import { useExperts } from '@/contexts/ExpertsContext';
+import { useExperts } from '@/domains/expert/context';
 import ExpertCard from '@/components/experts/ExpertCard';
 
 const ExpertsSection = () => {

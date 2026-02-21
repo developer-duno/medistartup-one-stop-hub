@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 import ExpertApplicationButton from './expert/ExpertApplicationButton';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

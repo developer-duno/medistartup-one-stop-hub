@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useExperts } from '@/contexts/ExpertsContext';
+import { useExperts } from '@/domains/expert/context';
 import ExpertFilters from '@/components/experts/ExpertFilters';
 import ExpertPageHeader from '@/components/experts/ExpertPageHeader';
 import MobileSelectionBar from '@/components/experts/MobileSelectionBar';
@@ -11,7 +11,7 @@ import ExpertCTA from '@/components/experts/ExpertCTA';
 import ExpertPageLayout from '@/components/experts/ExpertPageLayout';
 import ExpertCategoryBar from '@/components/experts/ExpertCategoryBar';
 import { useExpertFiltering } from '@/hooks/useExpertFiltering';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 
 const ExpertList = () => {
   const { experts: expertsData } = useExperts();

@@ -3,7 +3,7 @@ import React from 'react';
 import { Search } from 'lucide-react';
 import ExpertCard from './ExpertCard';
 import CustomButton from '../ui/CustomButton';
-import { Expert } from '@/types/expert';
+import { Expert } from '@/domains/expert/types';
 
 interface ExpertGridViewProps {
   filteredExperts: Expert[];

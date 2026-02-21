@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { useServices } from '@/contexts/ServicesContext';
+import { useServices } from '@/domains/service/context';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { ServiceCategory } from '@/types/service';
+import { ServiceCategory } from '@/domains/service/types';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import SimulatorSection from '@/components/simulator/SimulatorSection';
 

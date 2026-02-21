@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Region } from './types';
-import { useRegions } from '@/contexts/RegionsContext';
+import { useRegions } from '@/domains/region/context';
 
 interface MapSvgProps {
   regions: Region[];
