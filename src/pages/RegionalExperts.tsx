@@ -36,6 +36,14 @@ const RegionalExperts = () => {
   const [showMobilePanel, setShowMobilePanel] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  
+  // Use lg breakpoint (1024px) for panel display logic to match CSS hidden lg:block
+  const [isCompact, setIsCompact] = useState(window.innerWidth < 1024);
+  useEffect(() => {
+    const handleResize = () => setIsCompact(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const initializedRef = useRef(false);
   const regionGroupsRef = useRef(regionGroupsCompat);
   regionGroupsRef.current = regionGroupsCompat;
@@ -56,7 +64,7 @@ const RegionalExperts = () => {
         setActiveGroup(group.name);
         setActiveGroupRegions(group.regions);
         setActiveRegion('');
-        if (isMobile) setShowMobilePanel(true);
+        if (isCompact) setShowMobilePanel(true);
       }
     } else if (regionParam) {
       const regionExists = activeRegions.some(r => r.name === regionParam);
@@ -65,7 +73,7 @@ const RegionalExperts = () => {
       } else if (activeRegions.length > 0) {
         setActiveRegion(activeRegions[0].name);
       }
-      if (isMobile) setShowMobilePanel(true);
+      if (isCompact) setShowMobilePanel(true);
     }
 
     initializedRef.current = true;
@@ -108,7 +116,7 @@ const RegionalExperts = () => {
     setActiveGroupRegions(group.regions);
     setActiveRegion('');
     setSearchParams({ group: group.name }, { replace: true });
-    if (isMobile) setShowMobilePanel(true);
+    if (isCompact) setShowMobilePanel(true);
   };
 
   const handleRegionClick = (regionName: string) => {
@@ -116,7 +124,7 @@ const RegionalExperts = () => {
     setActiveGroupRegions([]);
     setActiveRegion(regionName);
     setSearchParams({ region: regionName }, { replace: true });
-    if (isMobile) setShowMobilePanel(true);
+    if (isCompact) setShowMobilePanel(true);
   };
 
   const panelTitle = activeGroup || activeRegion || '지역 선택';
@@ -131,7 +139,7 @@ const RegionalExperts = () => {
           </h3>
           <p className="text-[11px] md:text-sm opacity-90 mt-0.5 md:mt-1">{regionExperts.length}명의 전문가</p>
         </div>
-        {isMobile && (
+        {isCompact && (
           <button onClick={() => { setShowMobilePanel(false); setSearchParams({}, { replace: true }); }} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
             <X className="h-5 w-5" />
           </button>
@@ -280,8 +288,8 @@ const RegionalExperts = () => {
         </div>
       </div>
 
-      {/* Mobile: overlay popup */}
-      {isMobile && showMobilePanel && (
+      {/* Compact (< 1024px): overlay popup */}
+      {isCompact && showMobilePanel && (
         <div 
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm"
           onClick={(e) => {
