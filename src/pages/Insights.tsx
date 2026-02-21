@@ -22,7 +22,7 @@ import { generateInsightSchema } from '@/domains/insight/schema';
 const Insights = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { insights } = useInsights();
+  const { insights, loading } = useInsights();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'all' | 'news' | 'trends'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,12 +31,12 @@ const Insights = () => {
 
   // Handle direct URL access to an insight
   useEffect(() => {
-    if (id) {
+    if (id && !loading) {
       const insight = insights.find(item => item.id.toString() === id);
       if (insight) {
         setViewingInsight(insight);
         setIsDialogOpen(true);
-      } else {
+      } else if (insights.length > 0) {
         navigate('/insights');
         toast({
           title: "찾을 수 없는 인사이트",
@@ -45,7 +45,7 @@ const Insights = () => {
         });
       }
     }
-  }, [id, insights, navigate, toast]);
+  }, [id, insights, loading, navigate, toast]);
 
   const filteredInsights = filterInsights(insights, activeTab, searchQuery);
   const allTags = getAllTags(insights);
