@@ -7,12 +7,12 @@ import { AuthProvider } from '@/hooks/useAuth';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
 
 // Provider components
-import { ExpertsProvider } from './contexts/ExpertsContext';
-import { ServicesProvider } from './contexts/ServicesContext';
-import { RegionsProvider } from './contexts/RegionsContext';
-import { InsightsProvider } from './contexts/InsightsContext';
-import { SuccessStoriesProvider } from './contexts/SuccessStoriesContext';
-import { ConsultationProvider } from './contexts/ConsultationContext';
+import { ExpertsProvider } from '@/domains/expert/context';
+import { ServicesProvider } from '@/domains/service/context';
+import { RegionsProvider } from '@/domains/region/context';
+import { InsightsProvider } from '@/domains/insight/context';
+import { SuccessStoriesProvider } from '@/domains/success-story/context';
+import { ConsultationProvider } from '@/domains/consultation/context';
 
 // Consultation components (always visible)
 import FloatingConsultButton from './components/consultation/FloatingConsultButton';

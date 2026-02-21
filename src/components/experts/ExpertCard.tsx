@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Clock, MapPin, Eye } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import CustomButton from '../ui/CustomButton';
-import { Expert } from '@/types/expert';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { Expert } from '@/domains/expert/types';
+import { useConsultation } from '@/domains/consultation/context';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ExpertCardProps {

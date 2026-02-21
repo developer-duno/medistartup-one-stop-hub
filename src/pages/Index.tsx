@@ -4,8 +4,8 @@ import MainLayout from '../components/layout/MainLayout';
 import HeroSection from '../components/HeroSection';
 import LazySection from '../components/LazySection';
 import { Helmet } from 'react-helmet-async';
-import { generateSeoData } from '@/utils/seo/metaUtils';
-import { generateOrganizationSchema } from '@/utils/schema/organizationSchema';
+import { generateSeoData } from '@/domains/common/seo';
+import { generateOrganizationSchema } from '@/domains/common/schema';
 
 // Lazy-load below-fold sections
 const ServicesSection = React.lazy(() => import('../components/ServicesSection'));

@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from 'react';
-import { Expert } from '@/types/expert';
+import { Expert } from '@/domains/expert/types';
 import { useSearchParams } from 'react-router-dom';
-import { useConsultation } from '@/contexts/ConsultationContext';
-import { useRegions } from '@/contexts/RegionsContext';
+import { useConsultation } from '@/domains/consultation/context';
+import { useRegions } from '@/domains/region/context';
 import { useRegionGroups } from '@/hooks/useRegionGroups';
 
 export function useExpertFiltering(expertsData: Expert[]) {

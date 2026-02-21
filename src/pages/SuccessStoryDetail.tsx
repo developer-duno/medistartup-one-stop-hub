@@ -4,13 +4,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, MapPin, Tag, User, Share2, Link as LinkIcon, MessageCircle } from 'lucide-react';
 import { useKakaoSDK, shareToKakao } from '@/hooks/useKakaoSDK';
-import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
-import { useExperts } from '@/contexts/ExpertsContext';
+import { useSuccessStories } from '@/domains/success-story/context';
+import { useExperts } from '@/domains/expert/context';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { generateSeoData } from '@/utils/seoUtils';
-import { generateSuccessStorySchema } from '@/utils/schemaUtils';
+import { generateSeoData } from '@/domains/common/seo';
+import { generateSuccessStorySchema } from '@/domains/success-story/schema';
 import { toast } from '@/hooks/use-toast';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 

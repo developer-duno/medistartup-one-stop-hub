@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CustomButton from '../ui/CustomButton';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 import { CheckCircle } from 'lucide-react';
 
 interface MobileSelectionBarProps {

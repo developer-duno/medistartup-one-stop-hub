@@ -12,12 +12,12 @@ import ExpertCareer from '@/components/expert/profile/ExpertCareer';
 import ExpertSuccessCases from '@/components/expert/profile/ExpertSuccessCases';
 import ExpertTestimonials from '@/components/expert/profile/ExpertTestimonials';
 import ExpertSidebar from '@/components/expert/profile/ExpertSidebar';
-import { useExperts } from '@/contexts/ExpertsContext';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useExperts } from '@/domains/expert/context';
+import { useConsultation } from '@/domains/consultation/context';
 import { useToast } from '@/hooks/use-toast';
 import { toast } from "sonner";
-import { generateSeoData } from '@/utils/seoUtils';
-import { generateExpertSchema } from '@/utils/schemaUtils';
+import { generateSeoData } from '@/domains/common/seo';
+import { generateExpertSchema } from '@/domains/expert/schema';
 import { supabase } from '@/integrations/supabase/client';
 
 const ExpertProfile = () => {

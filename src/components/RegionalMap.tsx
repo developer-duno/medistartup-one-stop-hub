@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { useRegions } from '@/contexts/RegionsContext';
-import { useExperts } from '@/contexts/ExpertsContext';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useRegions } from '@/domains/region/context';
+import { useExperts } from '@/domains/expert/context';
+import { useConsultation } from '@/domains/consultation/context';
 import { MapPin, Users, User, ArrowRight, X, CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';

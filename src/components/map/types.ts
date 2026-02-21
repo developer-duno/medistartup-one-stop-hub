@@ -1,5 +1,5 @@
 
-import { Expert } from '@/types/expert';
+import { Expert } from '@/domains/expert/types';
 
 export interface Region {
   id: string;

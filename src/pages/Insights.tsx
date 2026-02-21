@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft } from 'lucide-react';
-import { useInsights } from '@/contexts/InsightsContext';
+import { useInsights } from '@/domains/insight/context';
 import { Dialog } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import InsightsList from '@/components/insights/InsightsList';
@@ -16,8 +16,8 @@ import {
 } from '@/components/insights/insightUtils';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { generateSeoData } from '@/utils/seoUtils';
-import { generateInsightSchema } from '@/utils/schemaUtils';
+import { generateSeoData } from '@/domains/common/seo';
+import { generateInsightSchema } from '@/domains/insight/schema';
 
 const Insights = () => {
   const { id } = useParams();

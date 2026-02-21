@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, Users, User, Briefcase, X, CheckCircle2 } from 'lucide-react';
-import { useRegions } from '@/contexts/RegionsContext';
-import { useExperts } from '@/contexts/ExpertsContext';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useRegions } from '@/domains/region/context';
+import { useExperts } from '@/domains/expert/context';
+import { useConsultation } from '@/domains/consultation/context';
 
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';

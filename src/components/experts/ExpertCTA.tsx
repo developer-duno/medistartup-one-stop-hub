@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 import CustomButton from '../ui/CustomButton';
 
 const ExpertCTA: React.FC = () => {

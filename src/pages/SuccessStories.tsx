@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { useSuccessStories } from '@/domains/success-story/context';
 import { LoadingState } from '@/components/ui/loading-state';
 
 const SuccessStories = () => {

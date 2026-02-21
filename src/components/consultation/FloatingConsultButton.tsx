@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, CheckCircle } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { useConsultation } from '@/contexts/ConsultationContext';
+import { useConsultation } from '@/domains/consultation/context';
 import { cn } from '@/lib/utils';
 
 const FloatingConsultButton: React.FC = () => {

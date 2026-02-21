@@ -1,14 +1,2 @@
-
-export type ServiceCategory = 'planning' | 'implementation' | 'equipment' | 'operation';
-
-export interface Service {
-  id: number;
-  title: string;
-  description: string;
-  icon: string;
-  path: string;
-  category: ServiceCategory;
-  order?: number;
-}
-
-export type NewService = Omit<Service, 'id'>;
+// Re-export from new domain location for backward compatibility
+export type { Service, ServiceCategory, NewService } from '@/domains/service/types';

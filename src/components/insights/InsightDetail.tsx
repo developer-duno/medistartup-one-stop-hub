@@ -5,8 +5,8 @@ import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
 import { InsightType } from '@/components/admin/insights/types';
 import { Helmet } from 'react-helmet-async';
-import { generateSeoData } from '@/utils/seo/metaUtils';
-import { generateInsightSchema } from '@/utils/schema/insightSchema';
+import { generateSeoData } from '@/domains/common/seo';
+import { generateInsightSchema } from '@/domains/insight/schema';
 
 interface InsightDetailProps {
   insight: InsightType;
