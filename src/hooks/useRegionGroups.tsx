@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface RegionGroup {
@@ -49,13 +49,12 @@ export function useRegionGroups() {
   useEffect(() => { fetchGroups(); }, [fetchGroups]);
 
   // Derived flat arrays for backward compat
-  const regionOptions = groups.flatMap(g => g.regions.map(r => r.name));
+  const regionOptions = useMemo(() => groups.flatMap(g => g.regions.map(r => r.name)), [groups]);
 
-  // Legacy-compatible format
-  const regionGroupsCompat = groups.map(g => ({
+  const regionGroupsCompat = useMemo(() => groups.map(g => ({
     name: g.name,
     regions: g.regions.map(r => r.name),
-  }));
+  })), [groups]);
 
   // Admin mutations
   const addGroup = async (name: string) => {
