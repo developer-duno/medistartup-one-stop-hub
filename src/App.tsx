@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/useAuth';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Provider components
 import { ExpertsProvider } from '@/domains/expert/context';
@@ -51,49 +52,51 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <AppProviders>
-          <ScrollToTop />
-          <Toaster />
-          <FloatingConsultButton />
-          <ConsultationDialog />
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              
-              {/* Service routes */}
-              <Route path="/services" element={<Services />} />
-              <Route path="/services/licensing" element={<Licensing />} />
-              <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
-              <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
-              <Route path="/services/location-analysis" element={<LocationAnalysis />} />
-              <Route path="/services/design-interior" element={<DesignInterior />} />
-              <Route path="/services/waste-management" element={<WasteManagement />} />
-              <Route path="/services/recruitment" element={<Recruitment />} />
-              <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
-              
-              {/* Expert routes */}
-              <Route path="/experts" element={<ExpertList />} />
-              <Route path="/experts/:id" element={<ExpertProfile />} />
-              <Route path="/regions/:regionCode?" element={<RegionalExperts />} />
-              
-              {/* Content routes */}
-              <Route path="/insights/:id?" element={<Insights />} />
-              <Route path="/success-stories" element={<SuccessStories />} />
-              <Route path="/success-stories/:id" element={<SuccessStoryDetail />} />
-              
-              {/* Admin routes */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-              
-              {/* 404 route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </AppProviders>
-      </AuthProvider>
-    </HelmetProvider>
+    <ErrorBoundary>
+      <HelmetProvider>
+        <AuthProvider>
+          <AppProviders>
+            <ScrollToTop />
+            <Toaster />
+            <FloatingConsultButton />
+            <ConsultationDialog />
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                
+                {/* Service routes */}
+                <Route path="/services" element={<Services />} />
+                <Route path="/services/licensing" element={<Licensing />} />
+                <Route path="/services/financial-consulting" element={<FinancialConsulting />} />
+                <Route path="/services/marketing-strategy" element={<MarketingStrategy />} />
+                <Route path="/services/location-analysis" element={<LocationAnalysis />} />
+                <Route path="/services/design-interior" element={<DesignInterior />} />
+                <Route path="/services/waste-management" element={<WasteManagement />} />
+                <Route path="/services/recruitment" element={<Recruitment />} />
+                <Route path="/services/medical-equipment" element={<MedicalEquipment />} />
+                
+                {/* Expert routes */}
+                <Route path="/experts" element={<ExpertList />} />
+                <Route path="/experts/:id" element={<ExpertProfile />} />
+                <Route path="/regions/:regionCode?" element={<RegionalExperts />} />
+                
+                {/* Content routes */}
+                <Route path="/insights/:id?" element={<Insights />} />
+                <Route path="/success-stories" element={<SuccessStories />} />
+                <Route path="/success-stories/:id" element={<SuccessStoryDetail />} />
+                
+                {/* Admin routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+                
+                {/* 404 route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </AppProviders>
+        </AuthProvider>
+      </HelmetProvider>
+    </ErrorBoundary>
   );
 }
 
