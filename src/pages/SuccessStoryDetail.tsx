@@ -16,12 +16,24 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 const SuccessStoryDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { successStories } = useSuccessStories();
+  const { successStories, loading } = useSuccessStories();
   const { experts } = useExperts();
   const navigate = useNavigate();
   const kakaoReady = useKakaoSDK();
   
   const story = successStories.find(s => s.id === Number(id) && s.visible);
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <Navbar />
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">로딩 중...</p>
+        </div>
+      </div>
+    );
+  }
   
   if (!story) {
     return (

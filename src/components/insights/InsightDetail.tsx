@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import LazyImage from '@/components/LazyImage';
 import { Calendar } from 'lucide-react';
 import { DialogContent } from '@/components/ui/dialog';
@@ -63,8 +64,8 @@ const InsightDetail: React.FC<InsightDetailProps> = ({
           <span>조회수 {insight.views}</span>
         </div>
         
-        <div className="font-noto text-neutral-700 leading-relaxed whitespace-pre-line">
-          {insight.content}
+        <div className="font-noto text-neutral-700 leading-relaxed prose prose-sm md:prose-base max-w-none">
+          <ReactMarkdown>{insight.content.replace(/\\n/g, '\n')}</ReactMarkdown>
         </div>
       </div>
     </DialogContent>
