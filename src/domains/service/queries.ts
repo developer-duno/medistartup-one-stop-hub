@@ -30,7 +30,7 @@ export const useServicesQuery = () => {
     queryFn: fetchServices,
     staleTime: 10 * 60 * 1000, // Services change rarely
     gcTime: 30 * 60 * 1000,
-    refetchOnWindowFocus: false,
+    
   });
 };
 
