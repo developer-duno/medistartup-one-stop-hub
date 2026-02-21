@@ -115,55 +115,11 @@ const Insights = () => {
       </div>
 
       <div className="container mx-auto px-3 md:px-4 py-6 md:py-12">
-        <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-          <main className="md:w-2/3">
-            <div className="flex mb-4 md:mb-6 border-b border-neutral-200">
-              <button
-                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
-                  activeTab === 'all'
-                    ? 'theme-text border-b-2 theme-border'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
-                onClick={() => setActiveTab('all')}
-              >
-                전체
-              </button>
-              <button
-                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
-                  activeTab === 'news'
-                    ? 'theme-text border-b-2 theme-border'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
-                onClick={() => setActiveTab('news')}
-              >
-                의료법 개정 소식
-              </button>
-              <button
-                className={`px-2 md:px-4 py-2 md:py-3 font-pretendard font-medium text-xs md:text-base ${
-                  activeTab === 'trends'
-                    ? 'theme-text border-b-2 theme-border'
-                    : 'text-neutral-600 hover:text-neutral-900'
-                }`}
-                onClick={() => setActiveTab('trends')}
-              >
-                트렌드 리포트
-              </button>
-            </div>
-
-            <InsightsList 
-              filteredInsights={filteredInsights}
-              getCategoryDisplayName={getCategoryDisplayName}
-              onViewInsight={handleViewInsight}
-            />
-          </main>
-
-          <InsightsSidebar 
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            setActiveTab={setActiveTab}
-            allTags={allTags}
-          />
-        </div>
+        <InsightsList 
+          filteredInsights={filteredInsights}
+          getCategoryDisplayName={getCategoryDisplayName}
+          onViewInsight={handleViewInsight}
+        />
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={(open) => {
