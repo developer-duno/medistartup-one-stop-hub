@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, Users, User, Briefcase, X, CheckCircle2 } from 'lucide-react';
 import { useRegions } from '@/domains/region/context';
@@ -36,22 +36,48 @@ const RegionalExperts = () => {
   const [showMobilePanel, setShowMobilePanel] = useState(false);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  
+  const initializedRef = useRef(false);
+  const regionGroupsRef = useRef(regionGroupsCompat);
+  regionGroupsRef.current = regionGroupsCompat;
+
+  // Single effect: read URL params on mount only
   useEffect(() => {
+    if (initializedRef.current) return;
+    
     const activeRegions = regions.filter(region => region.active !== false);
     setDisplayRegions(activeRegions);
-    
+
+    const groupParam = searchParams.get('group');
     const regionParam = searchParams.get('region');
-    if (regionParam) {
+
+    if (groupParam) {
+      const group = regionGroupsRef.current.find(g => g.name === groupParam);
+      if (group) {
+        setActiveGroup(group.name);
+        setActiveGroupRegions(group.regions);
+        setActiveRegion('');
+        if (isMobile) setShowMobilePanel(true);
+      }
+    } else if (regionParam) {
       const regionExists = activeRegions.some(r => r.name === regionParam);
       if (regionExists) {
         setActiveRegion(regionParam);
       } else if (activeRegions.length > 0) {
         setActiveRegion(activeRegions[0].name);
       }
+      if (isMobile) setShowMobilePanel(true);
     }
-  }, [searchParams, setActiveRegion, regions]);
-  
+
+    initializedRef.current = true;
+  }, [regions, regionsLoading]); // only re-run when regions data loads
+
+  // Keep displayRegions in sync when regions change after init
+  useEffect(() => {
+    if (!initializedRef.current) return;
+    const activeRegions = regions.filter(region => region.active !== false);
+    setDisplayRegions(activeRegions);
+  }, [regions]);
+
   const activeRegionInfo = getActiveRegionInfo();
 
   const getManagerForRegion = (regionName: string) => {
@@ -76,26 +102,6 @@ const RegionalExperts = () => {
     if (!activeRegion) return [];
     return experts.filter(expert => expert.regions.includes(activeRegion));
   }, [activeRegion, activeGroup, activeGroupRegions, experts]);
-
-  // Restore popup state from URL params on mount
-  useEffect(() => {
-    const groupParam = searchParams.get('group');
-    const regionParam = searchParams.get('region');
-    if (groupParam && isMobile) {
-      const group = regionGroupsCompat.find(g => g.name === groupParam);
-      if (group) {
-        setActiveGroup(group.name);
-        setActiveGroupRegions(group.regions);
-        setActiveRegion('');
-        setShowMobilePanel(true);
-      }
-    } else if (regionParam && isMobile) {
-      setActiveGroup(null);
-      setActiveGroupRegions([]);
-      setActiveRegion(regionParam);
-      setShowMobilePanel(true);
-    }
-  }, [searchParams, isMobile, regionGroupsCompat]);
 
   const handleGroupClick = (group: { name: string; regions: string[] }) => {
     setActiveGroup(group.name);
@@ -126,7 +132,7 @@ const RegionalExperts = () => {
           <p className="text-[11px] md:text-sm opacity-90 mt-0.5 md:mt-1">{regionExperts.length}명의 전문가</p>
         </div>
         {isMobile && (
-          <button onClick={() => setShowMobilePanel(false)} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
+          <button onClick={() => { setShowMobilePanel(false); setSearchParams({}, { replace: true }); }} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
             <X className="h-5 w-5" />
           </button>
         )}
@@ -279,7 +285,7 @@ const RegionalExperts = () => {
         <div 
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setShowMobilePanel(false);
+            if (e.target === e.currentTarget) { setShowMobilePanel(false); setSearchParams({}, { replace: true }); }
           }}
         >
           <div className="w-full max-h-[75vh] bg-white rounded-t-2xl shadow-2xl animate-slide-up overflow-hidden">
