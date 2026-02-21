@@ -53,9 +53,6 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
               e.currentTarget.src = '/placeholder.svg';
             }}
           />
-          <Badge className={`absolute top-3 left-3 ${badgeClass}`}>
-            {categoryName}
-          </Badge>
         </div>
         
         <div className="p-2 md:p-4">
@@ -73,15 +70,6 @@ const InsightCard = ({ insight, getCategoryDisplayName, onClick, useThemeStyles 
               <span>{formattedDate}</span>
             </div>
             
-            {insight.tags && insight.tags.length > 0 && (
-              <div className="flex items-center gap-1">
-                <Tag className="h-3.5 w-3.5" />
-                <span className="truncate max-w-[150px]">
-                  {insight.tags.slice(0, 2).join(', ')}
-                  {insight.tags.length > 2 ? ` +${insight.tags.length - 2}` : ''}
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </CardContent>
