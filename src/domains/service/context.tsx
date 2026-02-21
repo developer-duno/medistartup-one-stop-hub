@@ -1,8 +1,8 @@
 
-import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, ReactNode, useCallback } from 'react';
 import { Service, NewService } from './types';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import { useServicesQuery, useAddService, useUpdateService, useDeleteService } from './queries';
 
 interface ServicesContextType {
   services: Service[];
@@ -17,118 +17,49 @@ interface ServicesContextType {
 
 const ServicesContext = createContext<ServicesContextType | undefined>(undefined);
 
-const mapRow = (row: any): Service => ({
-  id: row.id,
-  title: row.title,
-  description: row.description,
-  icon: row.icon,
-  path: row.path,
-  category: row.category,
-  order: row.display_order,
-});
-
 export const ServicesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { data: services = [], isLoading: loading, refetch } = useServicesQuery();
+  const addMutation = useAddService();
+  const updateMutation = useUpdateService();
+  const deleteMutation = useDeleteService();
 
-  const fetchServices = useCallback(async () => {
+  const addService = useCallback(async (newService: NewService) => {
     try {
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .order('display_order', { ascending: true });
-
-      if (error) throw error;
-      setServices((data || []).map(mapRow));
-    } catch (err) {
-      console.error('Error fetching services:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchServices();
-  }, [fetchServices]);
-
-  const addService = async (newService: NewService) => {
-    try {
-      const { data, error } = await supabase
-        .from('services')
-        .insert({
-          title: newService.title,
-          description: newService.description,
-          icon: newService.icon,
-          path: newService.path,
-          category: newService.category,
-          display_order: newService.order || services.length + 1,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      if (data) {
-        setServices(prev => [...prev, mapRow(data)]);
-        toast({ title: "서비스 추가", description: `'${newService.title}' 서비스가 추가되었습니다.` });
-      }
-    } catch (err) {
-      console.error('Error adding service:', err);
+      await addMutation.mutateAsync(newService);
+      toast({ title: "서비스 추가", description: `'${newService.title}' 서비스가 추가되었습니다.` });
+    } catch {
       toast({ title: "오류", description: "서비스 추가에 실패했습니다.", variant: "destructive" });
     }
-  };
+  }, [addMutation, toast]);
 
-  const updateService = async (updatedService: Service) => {
+  const updateService = useCallback(async (updatedService: Service) => {
     try {
-      const { error } = await supabase
-        .from('services')
-        .update({
-          title: updatedService.title,
-          description: updatedService.description,
-          icon: updatedService.icon,
-          path: updatedService.path,
-          category: updatedService.category,
-          display_order: updatedService.order || 0,
-        })
-        .eq('id', updatedService.id);
-
-      if (error) throw error;
-
-      setServices(prev => prev.map(s => s.id === updatedService.id ? updatedService : s));
+      await updateMutation.mutateAsync(updatedService);
       toast({ title: "서비스 업데이트", description: `'${updatedService.title}' 서비스가 업데이트되었습니다.` });
-    } catch (err) {
-      console.error('Error updating service:', err);
+    } catch {
       toast({ title: "오류", description: "서비스 업데이트에 실패했습니다.", variant: "destructive" });
     }
-  };
+  }, [updateMutation, toast]);
 
-  const deleteService = async (id: number) => {
+  const deleteService = useCallback(async (id: number) => {
     const serviceToDelete = services.find(s => s.id === id);
     try {
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      setServices(prev => prev.filter(s => s.id !== id));
+      await deleteMutation.mutateAsync(id);
       if (serviceToDelete) {
         toast({ title: "서비스 삭제", description: `'${serviceToDelete.title}' 서비스가 삭제되었습니다.` });
       }
-    } catch (err) {
-      console.error('Error deleting service:', err);
+    } catch {
       toast({ title: "오류", description: "서비스 삭제에 실패했습니다.", variant: "destructive" });
     }
-  };
+  }, [deleteMutation, services, toast]);
 
-  const getServicesByCategory = (category: string) => {
+  const getServicesByCategory = useCallback((category: string) => {
     if (category === 'all') return services;
     return services.filter(service => service.category === category);
-  };
+  }, [services]);
 
-  const getAllServices = () => services;
+  const getAllServices = useCallback(() => services, [services]);
 
   return (
     <ServicesContext.Provider value={{
@@ -139,7 +70,7 @@ export const ServicesProvider: React.FC<{ children: ReactNode }> = ({ children }
       deleteService,
       getServicesByCategory,
       getAllServices,
-      refetch: fetchServices,
+      refetch: async () => { await refetch(); },
     }}>
       {children}
     </ServicesContext.Provider>

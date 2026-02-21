@@ -1,6 +1,8 @@
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useCallback } from 'react';
+import { useSuccessStoriesQuery, useAddSuccessStory, useUpdateSuccessStory, useDeleteSuccessStory } from './queries';
 import { supabase } from '@/integrations/supabase/client';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface SuccessStory {
   id: number;
@@ -31,102 +33,41 @@ interface SuccessStoriesContextType {
 
 const SuccessStoriesContext = createContext<SuccessStoriesContextType | undefined>(undefined);
 
-const mapRow = (row: any): SuccessStory => ({
-  id: row.id,
-  title: row.title,
-  hospital: row.hospital,
-  location: row.location,
-  services: row.services || [],
-  date: row.date,
-  imageUrl: row.image_url,
-  featured: row.featured,
-  visible: row.visible,
-  content: row.content,
-  summary: row.summary,
-});
-
 export const SuccessStoriesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [successStories, setSuccessStories] = useState<SuccessStory[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { data: successStories = [], isLoading: loading, refetch } = useSuccessStoriesQuery();
+  const addMutation = useAddSuccessStory();
+  const updateMutation = useUpdateSuccessStory();
+  const deleteMutation = useDeleteSuccessStory();
 
-  const fetchStories = useCallback(async () => {
-    try {
-      const { data, error } = await supabase
-        .from('success_stories')
-        .select('*')
-        .order('id', { ascending: true });
-      
-      if (error) throw error;
-      setSuccessStories((data || []).map(mapRow));
-    } catch (err) {
-      console.error('Failed to fetch success stories:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const addSuccessStory = useCallback(async (story: Omit<SuccessStory, 'id'>) => {
+    await addMutation.mutateAsync(story);
+  }, [addMutation]);
 
-  useEffect(() => {
-    fetchStories();
-  }, [fetchStories]);
+  const updateSuccessStory = useCallback(async (story: SuccessStory) => {
+    await updateMutation.mutateAsync(story);
+  }, [updateMutation]);
 
-  const addSuccessStory = async (story: Omit<SuccessStory, 'id'>) => {
-    const { error } = await supabase.from('success_stories').insert({
-      title: story.title,
-      hospital: story.hospital,
-      location: story.location,
-      services: story.services,
-      date: story.date,
-      image_url: story.imageUrl,
-      featured: story.featured,
-      visible: story.visible,
-      content: story.content,
-      summary: story.summary,
-    });
-    if (error) throw error;
-    await fetchStories();
-  };
+  const deleteSuccessStory = useCallback(async (id: number) => {
+    await deleteMutation.mutateAsync(id);
+  }, [deleteMutation]);
 
-  const updateSuccessStory = async (story: SuccessStory) => {
-    const { error } = await supabase.from('success_stories').update({
-      title: story.title,
-      hospital: story.hospital,
-      location: story.location,
-      services: story.services,
-      date: story.date,
-      image_url: story.imageUrl,
-      featured: story.featured,
-      visible: story.visible,
-      content: story.content,
-      summary: story.summary,
-    }).eq('id', story.id);
-    if (error) throw error;
-    await fetchStories();
-  };
-
-  const deleteSuccessStory = async (id: number) => {
-    const { error } = await supabase.from('success_stories').delete().eq('id', id);
-    if (error) throw error;
-    await fetchStories();
-  };
-
-  const toggleVisibility = async (id: number) => {
+  const toggleVisibility = useCallback(async (id: number) => {
     const story = successStories.find(s => s.id === id);
     if (!story) return;
     const { error } = await supabase.from('success_stories').update({ visible: !story.visible }).eq('id', id);
-    if (error) throw error;
-    await fetchStories();
-  };
+    if (!error) queryClient.invalidateQueries({ queryKey: ['success-stories'] });
+  }, [successStories, queryClient]);
 
-  const toggleFeatured = async (id: number) => {
+  const toggleFeatured = useCallback(async (id: number) => {
     const story = successStories.find(s => s.id === id);
     if (!story) return;
     const { error } = await supabase.from('success_stories').update({ featured: !story.featured }).eq('id', id);
-    if (error) throw error;
-    await fetchStories();
-  };
+    if (!error) queryClient.invalidateQueries({ queryKey: ['success-stories'] });
+  }, [successStories, queryClient]);
 
-  const getVisibleStories = () => successStories.filter(s => s.visible);
-  const getFeaturedStories = () => successStories.filter(s => s.visible && s.featured);
+  const getVisibleStories = useCallback(() => successStories.filter(s => s.visible), [successStories]);
+  const getFeaturedStories = useCallback(() => successStories.filter(s => s.visible && s.featured), [successStories]);
 
   return (
     <SuccessStoriesContext.Provider value={{
@@ -139,7 +80,7 @@ export const SuccessStoriesProvider: React.FC<{ children: React.ReactNode }> = (
       toggleFeatured,
       getVisibleStories,
       getFeaturedStories,
-      refetch: fetchStories,
+      refetch: async () => { await refetch(); },
     }}>
       {children}
     </SuccessStoriesContext.Provider>
