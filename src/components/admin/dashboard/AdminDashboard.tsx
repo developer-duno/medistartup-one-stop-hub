@@ -7,9 +7,10 @@ import RecentItems from './RecentItems';
 import { useExperts } from '@/contexts/ExpertsContext';
 import { useInsights } from '@/contexts/InsightsContext';
 import { useSuccessStories } from '@/contexts/SuccessStoriesContext';
+import { useServices } from '@/contexts/ServicesContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Users, Trophy, FileText, ClipboardList, Eye, TrendingUp } from 'lucide-react';
+import { Users, Trophy, FileText, ClipboardList, Eye, TrendingUp, Briefcase } from 'lucide-react';
 import { StatItem } from './dashboardTypes';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -21,6 +22,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ setActiveSection }) => 
   const { experts } = useExperts();
   const { insights } = useInsights();
   const { successStories } = useSuccessStories();
+  const { services } = useServices();
   const [consultationCount, setConsultationCount] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
   const [expertConsultationStats, setExpertConsultationStats] = useState<Record<number, number>>({});
@@ -85,6 +87,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ setActiveSection }) => 
       change: `노출 ${successStories.filter(s => s.visible).length}건`,
       icon: <Trophy className="h-8 w-8 text-green-500" />,
       section: 'success',
+    },
+    {
+      title: '서비스',
+      value: `${services.length}건`,
+      change: `총 ${services.length}개 등록`,
+      icon: <Briefcase className="h-8 w-8 text-primary" />,
+      section: 'services',
     },
   ];
 
