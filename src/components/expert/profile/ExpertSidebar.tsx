@@ -98,8 +98,8 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
             {isExpertSelected ? '전문가 선택 취소' : '전문가 선택'}
           </CustomButton>
           
-          <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => navigate(-1)}>
-              뒤로가기
+          <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/experts')}>
+              전문가 목록
           </CustomButton>
         </div>
       </div>
@@ -115,8 +115,8 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
             {isExpertSelected ? '선택 취소' : '전문가 선택'}
           </CustomButton>
           
-          <CustomButton variant="outline" className="flex-1 touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => navigate(-1)}>
-              뒤로가기
+          <CustomButton variant="outline" className="flex-1 touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/experts')}>
+              전문가 목록
           </CustomButton>
         </div>
       )}

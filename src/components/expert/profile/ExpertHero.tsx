@@ -18,7 +18,7 @@ const ExpertHero: React.FC<ExpertHeroProps> = ({ expert }) => {
       <HeroOverlay />
       
       <div className="container mx-auto px-4 relative z-30">
-        <BackLink onBack={() => navigate(-1)} />
+        <BackLink onBack={() => window.history.length > 1 ? navigate(-1) : navigate('/experts')} />
         
         <div className="flex items-end gap-4 md:gap-6">
           <ExpertImage image={expert.image} name={expert.name} />
@@ -63,7 +63,7 @@ const HeroOverlay: React.FC = () => (
 const BackLink: React.FC<{onBack: () => void}> = ({ onBack }) => (
   <button onClick={onBack} className="inline-flex items-center text-white/80 hover:text-white mb-4 md:mb-8 transition-colors text-sm">
     <ChevronLeft className="h-4 w-4 mr-1" />
-    모든 전문가 보기
+    전문가 목록으로
   </button>
 );
 
