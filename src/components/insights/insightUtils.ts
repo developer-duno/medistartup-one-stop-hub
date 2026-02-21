@@ -36,18 +36,16 @@ export const filterInsights = (
   activeTab: 'all' | 'news' | 'trends',
   searchQuery: string
 ): InsightType[] => {
-  return insights.filter(insight => {
-    // Filter by tab
-    if (activeTab !== 'all' && getCategoryType(insight.category) !== activeTab) return false;
-    
-    // Filter by search
-    if (searchQuery && !insight.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
-        !insight.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) {
-      return false;
-    }
-    
-    return true;
-  });
+  return insights
+    .filter(insight => {
+      if (activeTab !== 'all' && getCategoryType(insight.category) !== activeTab) return false;
+      if (searchQuery && !insight.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
+          !insight.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return false;
+      }
+      return true;
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 // Get all unique tags from insights
