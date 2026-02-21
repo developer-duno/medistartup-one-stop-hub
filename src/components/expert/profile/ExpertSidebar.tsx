@@ -99,7 +99,7 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
           </CustomButton>
           
           <CustomButton variant="outline" className="w-full touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/experts')}>
-              전문가 목록
+              뒤로가기
           </CustomButton>
         </div>
       </div>
@@ -116,7 +116,7 @@ const ExpertSidebar: React.FC<ExpertSidebarProps> = ({
           </CustomButton>
           
           <CustomButton variant="outline" className="flex-1 touch-manipulation select-none active:scale-95 transition-transform duration-150" onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/experts')}>
-              전문가 목록
+              뒤로가기
           </CustomButton>
         </div>
       )}

@@ -63,7 +63,7 @@ const HeroOverlay: React.FC = () => (
 const BackLink: React.FC<{onBack: () => void}> = ({ onBack }) => (
   <button onClick={onBack} className="inline-flex items-center text-white/80 hover:text-white mb-4 md:mb-8 transition-colors text-sm">
     <ChevronLeft className="h-4 w-4 mr-1" />
-    전문가 목록으로
+    뒤로가기
   </button>
 );
 
