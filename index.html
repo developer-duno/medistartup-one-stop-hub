@@ -7,12 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>메디스타트업 - 병원창업 원스톱 허브</title>
 
-    <!-- Preload critical fonts to avoid render-blocking -->
+    <!-- DNS prefetch & preconnect for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" as="style" />
-    <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable.css" as="style" />
+
+    <!-- Load fonts asynchronously to avoid render-blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" /></noscript>
+    <link rel="preload" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/variable/pretendardvariable.css" /></noscript>
+
     <meta name="description" content="병원창업 전문지식과 경험을 한 곳에서. 의료인을 위한 맞춤형 창업 컨설팅 서비스." />
     <meta name="keywords" content="병원창업, 의료컨설팅, 개원 컨설팅, 의사 창업, 의료 마케팅, 병원 인테리어" />
     <meta name="author" content="메디스타트업" />
