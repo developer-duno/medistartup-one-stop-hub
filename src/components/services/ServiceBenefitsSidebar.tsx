@@ -43,7 +43,7 @@ const ServiceBenefitsSidebar: React.FC<ServiceBenefitsSidebarProps> = ({
           asChild
         >
           <Link to={`/experts?service=${serviceUrlName}`}>
-            {title} 전문가 보기
+            전문가 보기
           </Link>
         </CustomButton>
         <CustomButton 
