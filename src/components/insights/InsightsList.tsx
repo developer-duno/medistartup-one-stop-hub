@@ -42,7 +42,7 @@ const InsightsList: React.FC<InsightsListProps> = ({
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-2 gap-3 md:gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4">
       {filteredInsights.map((insight) => (
         <InsightCard
           key={insight.id}
