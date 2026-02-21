@@ -13,11 +13,29 @@ const HeroSection = () => {
 
   // Domain action - handle feasibility analysis request
   const handleFeasibilityAnalysis = () => {
-    // Scroll to simulator section
-    const simulatorSection = document.getElementById('simulators');
-    if (simulatorSection) {
-      simulatorSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    const scrollToSimulator = () => {
+      const simulatorSection = document.getElementById('simulators');
+      if (simulatorSection) {
+        simulatorSection.scrollIntoView({ behavior: 'smooth' });
+        return true;
+      }
+      return false;
+    };
+
+    // If element exists, scroll immediately
+    if (scrollToSimulator()) return;
+
+    // Element not yet rendered (lazy-loaded) — scroll down to trigger IntersectionObserver,
+    // then retry finding the element
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      if (scrollToSimulator() || attempts > 20) {
+        clearInterval(interval);
+      }
+    }, 200);
   };
 
   return (
