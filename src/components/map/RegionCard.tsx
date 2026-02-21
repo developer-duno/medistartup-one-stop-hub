@@ -77,7 +77,7 @@ const RegionCard: React.FC<RegionCardProps> = ({ activeRegion, getFilteredUrl })
           <div className="grid grid-cols-1 gap-3">
             <Button asChild>
               <Link to={expertFilterUrl} className="w-full">
-                {name} 전문가 보기
+                전문가 보기
               </Link>
             </Button>
           </div>
