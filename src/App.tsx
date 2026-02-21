@@ -54,12 +54,8 @@ const WasteManagement = lazy(() => import('./pages/services/WasteManagement'));
 const Recruitment = lazy(() => import('./pages/services/Recruitment'));
 const MedicalEquipment = lazy(() => import('./pages/services/MedicalEquipment'));
 
-// Minimal loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="h-8 w-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-  </div>
-);
+// Minimal loading fallback - null to keep current page visible during transitions
+const PageLoader = () => null;
 
 function App() {
   return (
