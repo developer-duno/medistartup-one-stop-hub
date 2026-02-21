@@ -266,6 +266,48 @@ export type Database = {
         }
         Relationships: []
       }
+      insights: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string
+          date: string
+          excerpt: string
+          id: number
+          image: string
+          title: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: number
+          image?: string
+          title: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: number
+          image?: string
+          title?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
       region_groups: {
         Row: {
           created_at: string
@@ -324,6 +366,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      services: {
+        Row: {
+          category: string
+          created_at: string
+          description: string
+          display_order: number
+          icon: string
+          id: number
+          path: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string
+          display_order?: number
+          icon?: string
+          id?: number
+          path?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string
+          display_order?: number
+          icon?: string
+          id?: number
+          path?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       simulators: {
         Row: {
