@@ -44,15 +44,14 @@ const RegionalExperts = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  const initializedRef = useRef(false);
   const regionGroupsRef = useRef(regionGroupsCompat);
   regionGroupsRef.current = regionGroupsCompat;
 
-  // Single effect: read URL params on mount only
+  // Read URL params on mount and when navigating back
   useEffect(() => {
-    if (initializedRef.current) return;
-    
     const activeRegions = regions.filter(region => region.active !== false);
+    if (activeRegions.length === 0) return; // Wait for regions to load
+    
     setDisplayRegions(activeRegions);
 
     const groupParam = searchParams.get('group');
@@ -70,21 +69,14 @@ const RegionalExperts = () => {
       const regionExists = activeRegions.some(r => r.name === regionParam);
       if (regionExists) {
         setActiveRegion(regionParam);
-      } else if (activeRegions.length > 0) {
-        setActiveRegion(activeRegions[0].name);
       }
       if (isCompact) setShowMobilePanel(true);
+    } else {
+      setShowMobilePanel(false);
+      setActiveGroup(null);
+      setActiveGroupRegions([]);
     }
-
-    initializedRef.current = true;
-  }, [regions, regionsLoading]); // only re-run when regions data loads
-
-  // Keep displayRegions in sync when regions change after init
-  useEffect(() => {
-    if (!initializedRef.current) return;
-    const activeRegions = regions.filter(region => region.active !== false);
-    setDisplayRegions(activeRegions);
-  }, [regions]);
+  }, [regions, searchParams]);
 
   const activeRegionInfo = getActiveRegionInfo();
 
@@ -140,7 +132,7 @@ const RegionalExperts = () => {
           <p className="text-[11px] md:text-sm opacity-90 mt-0.5 md:mt-1">{regionExperts.length}명의 전문가</p>
         </div>
         {isCompact && (
-          <button onClick={() => { setShowMobilePanel(false); setSearchParams({}, { replace: true }); }} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
+          <button onClick={() => setShowMobilePanel(false)} className="p-1.5 rounded-full hover:bg-white/20 transition-colors">
             <X className="h-5 w-5" />
           </button>
         )}
@@ -293,7 +285,7 @@ const RegionalExperts = () => {
         <div 
           className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm"
           onClick={(e) => {
-            if (e.target === e.currentTarget) { setShowMobilePanel(false); setSearchParams({}, { replace: true }); }
+            if (e.target === e.currentTarget) { setShowMobilePanel(false); }
           }}
         >
           <div className="w-full max-h-[75vh] bg-white rounded-t-2xl shadow-2xl animate-slide-up overflow-hidden">
