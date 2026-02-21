@@ -75,6 +75,10 @@ const UnifiedSimulator: React.FC = () => {
 
   const handleReset = () => {
     setResults(null);
+    const section = document.getElementById('simulators');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   // Mobile compact inputs
