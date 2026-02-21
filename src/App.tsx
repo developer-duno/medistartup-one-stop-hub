@@ -3,7 +3,12 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+const ReactQueryDevtoolsProduction = lazy(() =>
+  import('@tanstack/react-query-devtools/production').then((d) => ({
+    default: d.ReactQueryDevtools,
+  }))
+);
+const isDev = import.meta.env.DEV || window.location.hostname.includes('lovableproject.com');
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/useAuth';
 import ProtectedRoute from '@/components/admin/ProtectedRoute';
@@ -66,7 +71,11 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {isDev && (
+          <Suspense fallback={null}>
+            <ReactQueryDevtoolsProduction initialIsOpen={false} buttonPosition="bottom-left" />
+          </Suspense>
+        )}
         <HelmetProvider>
           <AuthProvider>
             <AppProviders>
